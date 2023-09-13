@@ -93,8 +93,8 @@ def list_files():
 
     return contents
 
-@app.route("/myitp")
-def myITP():
+@app.route("/test")
+def test():
     contents = list_files()
     return render_template('ProgressReport.html', contents=contents)
 
