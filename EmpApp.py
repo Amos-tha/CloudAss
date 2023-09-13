@@ -127,8 +127,8 @@ def preview(filename):
         s3 = boto3.resource('s3')
         file = s3.Object(custombucket, filename).get()
         response = make_response(file['Body'].read())
-        # response.headers['Content-Type'] = 'application/pdf','application/xlsx', 'application/pptx', 'application/docx'
-        response.headers['Content-Type'] = 'application/pdf'
+        response.headers['Content-Type'] = 'application/pdf','application/xlsx', 'application/pptx', 'application/docx'
+        # response.headers['Content-Type'] = 'application/pdf'
         return response
     
 @app.route('/download/<filename>', methods=['GET'])
