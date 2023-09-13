@@ -87,8 +87,8 @@ def list_files():
     """
     s3 = boto3.client('s3')
     contents = []
-    for image in s3.list_objects(Bucket=custombucket):
-        contents.append(image.key)
+    for image in s3.list_objects(Bucket=custombucket)['Contents']:
+        contents.append(image)
         # contents.append(f'https://{custombucket}.s3.amazonaws.com/{image}')
 
     return contents
