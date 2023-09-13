@@ -126,8 +126,8 @@ def previewReport(id=None):
 def download(filename):
     if request.method == 'GET':
         s3 = boto3.resource('s3')
-        output = f"/Downloads/{filename}"
-        s3.Bucket(bucket).download_file(filename, output)
+        output = f"/media/{filename}"
+        s3.Bucket(bucket).download_file(Key=filename, Filename=output)
         return send_file(output, as_attachment=True)
 
 if __name__ == '__main__':
