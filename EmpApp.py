@@ -110,11 +110,11 @@ def previewReport(id=None):
     #     list_file.append(item)
     # return list_file
 
-@app.route('/download/<filename>', methods=['GET'])
-def download(upload_id):
-    upload = Upload.query.filter_by(id=upload_id).first()
-    return send_file(BytesIO(upload.data),
-                     download_name=upload.filename, as_attachment=True)
+# @app.route('/download/<filename>', methods=['GET'])
+# def download(upload_id):
+#     upload = Upload.query.filter_by(id=upload_id).first()
+#     return send_file(BytesIO(upload.data),
+#                      download_name=upload.filename, as_attachment=True)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
