@@ -80,26 +80,26 @@ def AddEmp():
     print("all modification done...")
     return render_template('AddEmpOutput.html', name=emp_name)
 
-@app.route("/myITP", method=['POST'])
-def getStudents():
-    cursor = db_conn.cursor()
-    cursor.execute("SELECT * FROM Student")
-    students = cursor.fetchall()
-    cursor.close()
+# @app.route("/myITP", method=['POST'])
+# def getStudents():
+#     cursor = db_conn.cursor()
+#     cursor.execute("SELECT * FROM Student")
+#     students = cursor.fetchall()
+#     cursor.close()
 
-    return render_template("ViewReport.html", maxStud = len(), students = students)
+#     return render_template("ViewReport.html", maxStud = len(), students = students)
 
 
-@app.route("/preview/<filename>")
-def previewReport(id=None):
-    if id is not None:
-        s3 = boto3.resource('s3')
-        test = s3.Bucket(custombucket).get_object(Bucket=custombucket, Key="test.pdf")
-        response = make_response(test)
-        response.headers['Content-Type'] = 'application/pdf'
-        response.headers['Content-Disposition'] = \
-            'inline; filename=%s.pdf' % 'yourfilename'
-        return response  
+# @app.route("/preview/<filename>")
+# def previewReport(id=None):
+#     if id is not None:
+#         s3 = boto3.resource('s3')
+#         test = s3.Bucket(custombucket).get_object(Bucket=custombucket, Key="test.pdf")
+#         response = make_response(test)
+#         response.headers['Content-Type'] = 'application/pdf'
+#         response.headers['Content-Disposition'] = \
+#             'inline; filename=%s.pdf' % 'yourfilename'
+#         return response  
     
     # list_file = []
     # stud_id = request.form['stud_id']
