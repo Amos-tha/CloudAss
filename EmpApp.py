@@ -29,8 +29,7 @@ def home():
 
 @app.route("/about")
 def about():
-
-    return render_template('ProgressReport.html')
+    return render_template('ViewMyStudent.html')
 
 
 @app.route("/addemp", methods=['POST'])
@@ -93,10 +92,10 @@ def list_files():
 
     return contents
 
-@app.route("/test")
+@app.route("/viewmystud")
 def test():
     contents = list_files()
-    return render_template('ProgressReport.html', contents=contents)
+    return render_template('ViewMyStudent.html', contents=contents)
 
 # @app.route("/myITP", method=['POST'])
 # def getStudents():
