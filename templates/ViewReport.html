@@ -1,5 +1,50 @@
 {% extends "layout.html" %} {% block content %}
 <div class="container">
+  <div class="my-student-table">
+    <div class="my-student-table-header">
+      <div class="my-student-table-header-item">
+        <a id="name" class="filter__link" href="#">No</a>
+      </div>
+      <div class="my-student-table-header-item">
+        <a id="wins" class="filter__link filter__link--number" href="#"
+          >Student Name</a
+        >
+      </div>
+      <div class="my-student-table-header-item">
+        <a id="draws" class="filter__link filter__link--number" href="#"
+          >Gender</a
+        >
+      </div>
+      <div class="my-student-table-header-item">
+        <a id="losses" class="filter__link filter__link--number" href="#"
+          >Programme</a
+        >
+      </div>
+      <div class="my-student-table-header-item">
+        <a id="total" class="filter__link filter__link--number" href="#"
+          >Contact</a
+        >
+      </div>
+      <div class="my-student-table-header-item">
+        <a id="total" class="filter__link filter__link--number" href="#"
+          >Company Name</a
+        >
+      </div>
+      <div class="my-student-table-header-item">
+        <a id="total" class="filter__link filter__link--number" href="#"
+          >Action</a
+        >
+      </div>
+      <div class="my-student-table-header-item">
+        <a id="total" class="filter__link filter__link--number" href="#"
+          >Report</a
+        >
+      </div>
+    </div>
+    <div class="my-student-table-content">
+      <a href="/view">test</a>
+    </div>
+  </div>
   {% for f in contents %}
   <td>
     <a href="/preview/{{ f }}">{{ f }}</a>
