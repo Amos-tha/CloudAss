@@ -112,8 +112,6 @@ def previewReport(id=None):
     # test = s3.Object(custombucket, "test.pdf").get()
     # response = make_response(test['Body'].read())
     # response.headers['Content-Type'] = 'application/pdf'
-    # response.headers['Content-Disposition'] = \
-    #     'inline; filename=test.pdf' % 'test.pd'
     contents = list_files()
     return render_template('ViewReport.html', contents=contents)  
     
@@ -128,7 +126,8 @@ def preview(filename):
         file = s3.Object(custombucket, filename).get()
         response = make_response(file['Body'].read())
         response.headers['Content-Type'] = 'application/pdf'
-        # response.headers['Content-Type'] = 'application/pdf'
+        response.headers['Content-Disposition'] = \
+        'inline; filename=test.pdf' % 'test.pd'
         return response
     
 @app.route('/download/<filename>', methods=['GET'])
