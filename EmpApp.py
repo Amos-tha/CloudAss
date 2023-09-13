@@ -126,7 +126,7 @@ def previewReport(id=None):
 def download(filename):
     if request.method == 'GET':
         s3 = boto3.resource('s3')
-        output = f"downloads/{filename}"
+        output = f"/Downloads/{filename}"
         s3.Bucket(bucket).download_file(filename, output)
         return send_file(output, as_attachment=True)
 
