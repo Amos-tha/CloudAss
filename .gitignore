@@ -119,6 +119,10 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+cloud/
+
+# Node modules
+node_modules/
 
 # Spyder project settings
 .spyderproject
