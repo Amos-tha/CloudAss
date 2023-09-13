@@ -23,12 +23,13 @@ table = 'employee'
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
-    return render_template('AddEmp.html')
+    return render_template('index.html')
+    # return render_template('AddEmp.html')
 
 
-@app.route("/about", methods=['POST'])
+@app.route("/about")
 def about():
-    return render_template('www.tarc.edu.my')
+    return render_template('ProgressReport.html')
 
 
 @app.route("/addemp", methods=['POST'])
@@ -90,16 +91,25 @@ def AddEmp():
 #     return render_template("ViewReport.html", maxStud = len(), students = students)
 
 
-# @app.route("/preview/<filename>")
-# def previewReport(id=None):
-#     if id is not None:
-#         s3 = boto3.resource('s3')
-#         test = s3.Bucket(custombucket).get_object(Bucket=custombucket, Key="test.pdf")
-#         response = make_response(test)
-#         response.headers['Content-Type'] = 'application/pdf'
-#         response.headers['Content-Disposition'] = \
-#             'inline; filename=%s.pdf' % 'yourfilename'
-#         return response  
+@app.route("/view")
+def previewReport(id=None):
+    s3 = boto3.resource('s3')
+    my_bucket = s3.Bucket(custombucket)
+    bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+    s3_location = (bucket_location['LocationConstraint'])
+    summaries = my_bucket.objects.all()
+    contents = []
+    for image in summaries:
+        contents.append(image.key)
+
+    return render_template('ViewReport.html', my_bucket=bucket, list_of_files=contents)
+
+    test = s3.Object(custombucket, "test.pdf").get()
+    response = make_response(test['Body'].read())
+    response.headers['Content-Type'] = 'application/pdf'
+    # response.headers['Content-Disposition'] = \
+    #     'inline; filename=test.pdf' % 'test.pd'
+    return render_template('ViewReport.html', test=test)  
     
     # list_file = []
     # stud_id = request.form['stud_id']

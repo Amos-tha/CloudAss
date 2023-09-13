@@ -1,52 +1,62 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>FOCS Industrial Training Programme</title>
+    <link rel="stylesheet" href="../static/steller.css" />
+  </head>
 
-<head>
-	<title>FOCS Industrial Training Programme</title>
-	<link rel="stylesheet" href="../static/steller.css">
-</head>
-
-<body>
-	<!-- Page navigation -->
-	<nav class="navbar navbar-expand-sm navbar-dark bg-dark rounded shadow mb-3">
-		<div class="container">
-			<a class="navbar-brand" href="#">FOCS</a>
-			<button class="navbar-toggler ml-auto" type="button" data-toggle="collapse"
-				data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-				aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav ml-auto">
-					<li class="nav-item">
-						<a class="nav-link" href="#about">Home</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#service">Comittee</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#team">Uni Supervisor</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#team">Student</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
-	<!-- End of page navibation -->
-	<center>
-		{% block content %}{% endblock %}
-	</center>
-	<footer class="page-footer">
-		<div class="container">
-			<div class="row align-items-center">
-				<div class="col-sm-6">
-					<p>
-						&copy; <script>document.write(new Date().getFullYear())</script> - TARUMT FOCS ITP
-					</p>
-		</div>
-	</footer>
-</body>
-
+  <body>
+    <!-- Page navigation -->
+    <nav
+      class="navbar navbar-expand-sm navbar-dark bg-dark rounded shadow mb-3"
+    >
+      <div class="container">
+        <a class="navbar-brand" href="#">FOCS</a>
+        <button
+          class="navbar-toggler ml-auto"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#about">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#service">Comittee</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#team">Uni Supervisor</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#team">Student</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- End of page navibation -->
+    {% block content %}{% endblock %}
+    <footer class="page-footer">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-sm-6">
+            <p>
+              &copy;
+              <script>
+                document.write(new Date().getFullYear());
+              </script>
+              - TARUMT FOCS ITP
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
 </html>

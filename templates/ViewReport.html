@@ -44,64 +44,9 @@
     </nav>
     <!-- End of page navibation -->
     <div class="container">
-      <div class="my-student-table">
-        <div class="my-student-table-header">
-          <div class="my-student-table-header-item">
-            <a id="name" class="filter__link" href="#">No</a>
-          </div>
-          <div class="my-student-table-header-item">
-            <a id="wins" class="filter__link filter__link--number" href="#"
-              >Student Name</a
-            >
-          </div>
-          <div class="my-student-table-header-item">
-            <a id="draws" class="filter__link filter__link--number" href="#"
-              >Gender</a
-            >
-          </div>
-          <div class="my-student-table-header-item">
-            <a id="losses" class="filter__link filter__link--number" href="#"
-              >Programme</a
-            >
-          </div>
-          <div class="my-student-table-header-item">
-            <a id="total" class="filter__link filter__link--number" href="#"
-              >Contact</a
-            >
-          </div>
-          <div class="my-student-table-header-item">
-            <a id="total" class="filter__link filter__link--number" href="#"
-              >Company Name</a
-            >
-          </div>
-          <div class="my-student-table-header-item">
-            <a id="total" class="filter__link filter__link--number" href="#"
-              >Action</a
-            >
-          </div>
-          <div class="my-student-table-header-item">
-            <a id="total" class="filter__link filter__link--number" href="#"
-              >Report</a
-            >
-          </div>
-        </div>
-        <div class="my-student-table-content">
-          {%for i in range(0, maxStud) %}
-          <div class="my-student-table-row">
-            <div class="my-student-table-data">{{++i}}</div>
-            <div class="my-student-table-data">{{students[i].name}}</div>
-            <div class="my-student-table-data">{{students[i].gender}}</div>
-            <div class="my-student-table-data">{{students[i].programme}}</div>
-            <div class="my-student-table-data">{{students[i].contact}}</div>
-            <div class="my-student-table-data">{{students[i].company}}</div>
-            <div class="my-student-table-data">
-              <a href="ProgressReport.html">Detail</a>
-            </div>
-            <div class="my-student-table-data">{{students[i].report}}</div>
-          </div>
-          {%endfor%}
-        </div>
-      </div>
+      {% for f in list_of_files %}
+      <td><img src="{{ f }}" /></td>
+      {% endfor %}
     </div>
     <footer class="page-footer">
       <div class="container">
