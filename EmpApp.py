@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, make_response
+from flask import Flask, render_template, request, make_response, send_file
 from pymysql import connections
 import os
 import boto3
@@ -29,6 +29,7 @@ def home():
 
 @app.route("/about")
 def about():
+
     return render_template('ProgressReport.html')
 
 
@@ -81,6 +82,22 @@ def AddEmp():
     print("all modification done...")
     return render_template('AddEmpOutput.html', name=emp_name)
 
+def list_files():
+    """
+    Function to list files in a given S3 bucket
+    """
+    s3 = boto3.client('s3')
+    contents = []
+    for image in s3.list_objects(Bucket=custombucket)['Contents']:
+        contents.append(f'https://{custombucket}.s3.amazonaws.com/{image.key}')
+
+    return contents
+
+@app.route("/myitp")
+def myITP():
+    contents = list_files()
+    return render_template('ProgressReport.html', contents=contents)
+
 # @app.route("/myITP", method=['POST'])
 # def getStudents():
 #     cursor = db_conn.cursor()
@@ -90,41 +107,28 @@ def AddEmp():
 
 #     return render_template("ViewReport.html", maxStud = len(), students = students)
 
-
 @app.route("/view")
 def previewReport(id=None):
-    s3 = boto3.resource('s3')
-    my_bucket = s3.Bucket(custombucket)
-    bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
-    s3_location = (bucket_location['LocationConstraint'])
-    summaries = my_bucket.objects.all()
-    contents = []
-    for image in summaries:
-        contents.append(image.key)
+#     return render_template('ViewReport.html', my_bucket=bucket, list_of_files=contents)
 
-    return render_template('ViewReport.html', my_bucket=bucket, list_of_files=contents)
-
-    test = s3.Object(custombucket, "test.pdf").get()
-    response = make_response(test['Body'].read())
-    response.headers['Content-Type'] = 'application/pdf'
-    # response.headers['Content-Disposition'] = \
-    #     'inline; filename=test.pdf' % 'test.pd'
-    return render_template('ViewReport.html', test=test)  
+#     test = s3.Object(custombucket, "test.pdf").get()
+#     response = make_response(test['Body'].read())
+#     response.headers['Content-Type'] = 'application/pdf'
+#     # response.headers['Content-Disposition'] = \
+#     #     'inline; filename=test.pdf' % 'test.pd'
+    return render_template('ViewReport.html')  
     
-    # list_file = []
-    # stud_id = request.form['stud_id']
-    # filename = stud_id + " "
+#     # list_file = []
+#     # stud_id = request.form['stud_id']
+#     # filename = stud_id + " "
 
-    # s3 = boto3.resource('s3')
-    # for item in s3.Bucket(custombucket).get_object(Bucket=custombucket, Key=filename)['Contents']:
-    #     list_file.append(item)
-    # return list_file
-
-# @app.route('/download/<filename>', methods=['GET'])
-# def download(upload_id):
-#     upload = Upload.query.filter_by(id=upload_id).first()
-#     return send_file(BytesIO(upload.data),
-#                      download_name=upload.filename, as_attachment=True)
+@app.route('/download/<filename>', methods=['GET'])
+def download(filename):
+    if request.method == 'GET':
+        s3 = boto3.resource('s3')
+        output = f"downloads/{filename}"
+        s3.Bucket(bucket).download_file(filename, output)
+        return send_file(output, as_attachment=True)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
