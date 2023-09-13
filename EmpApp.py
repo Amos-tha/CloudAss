@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, make_response
 from pymysql import connections
 import os
 import boto3
@@ -80,6 +80,41 @@ def AddEmp():
     print("all modification done...")
     return render_template('AddEmpOutput.html', name=emp_name)
 
+@app.route("/myITP", method=['POST'])
+def getStudents():
+    cursor = db_conn.cursor()
+    cursor.execute("SELECT * FROM Student")
+    students = cursor.fetchall()
+    cursor.close()
+
+    return render_template("ViewReport.html", maxStud = len(), students = students)
+
+
+@app.route("/preview/<filename>")
+def previewReport(id=None):
+    if id is not None:
+        s3 = boto3.resource('s3')
+        test = s3.Bucket(custombucket).get_object(Bucket=custombucket, Key="test.pdf")
+        response = make_response(test)
+        response.headers['Content-Type'] = 'application/pdf'
+        response.headers['Content-Disposition'] = \
+            'inline; filename=%s.pdf' % 'yourfilename'
+        return response  
+    
+    # list_file = []
+    # stud_id = request.form['stud_id']
+    # filename = stud_id + " "
+
+    # s3 = boto3.resource('s3')
+    # for item in s3.Bucket(custombucket).get_object(Bucket=custombucket, Key=filename)['Contents']:
+    #     list_file.append(item)
+    # return list_file
+
+@app.route('/download/<filename>', methods=['GET'])
+def download(upload_id):
+    upload = Upload.query.filter_by(id=upload_id).first()
+    return send_file(BytesIO(upload.data),
+                     download_name=upload.filename, as_attachment=True)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)

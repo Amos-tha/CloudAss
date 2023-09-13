@@ -1,0 +1,59 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
+/* .container {
+  max-width: 1000px;
+  margin-right: auto;
+  margin-left: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+} */
+
+.my-student-table {
+  width: 100%;
+  border: 1px solid black;
+}
+
+.my-student-table-header {
+  display: flex;
+  width: 100%;
+  background: #000;
+}
+
+.my-student-table-row {
+  display: flex;
+  width: 100%;
+}
+
+.my-student-table-data,
+.my-student-table-header-item {
+  flex: 1 1 20%;
+  text-align: center;
+}
+
+.my-student-table-header-item {
+  text-transform: uppercase;
+}
+
+.filter__link {
+  color: white;
+  text-decoration: none;
+  position: relative;
+  display: inline-block;
+
+  &.desc::after {
+    content: "(desc)";
+  }
+
+  &.asc::after {
+    content: "(asc)";
+  }
+}

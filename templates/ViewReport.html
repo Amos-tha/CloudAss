@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>FOCS Industrial Training Programme</title>
+    <link rel="stylesheet" href="../static/steller.css" />
+    <link rel="stylesheet" href="../static/supervisor.css" />
+  </head>
+
+  <body>
+    <!-- Page navigation -->
+    <nav
+      class="navbar navbar-expand-sm navbar-dark bg-dark rounded shadow mb-3"
+    >
+      <div class="container">
+        <a class="navbar-brand" href="#">FOCS</a>
+        <button
+          class="navbar-toggler ml-auto"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#about">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#service">Comittee</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#team">Uni Supervisor</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#team">Student</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- End of page navibation -->
+    <div class="container">
+      <div class="my-student-table">
+        <div class="my-student-table-header">
+          <div class="my-student-table-header-item">
+            <a id="name" class="filter__link" href="#">No</a>
+          </div>
+          <div class="my-student-table-header-item">
+            <a id="wins" class="filter__link filter__link--number" href="#"
+              >Student Name</a
+            >
+          </div>
+          <div class="my-student-table-header-item">
+            <a id="draws" class="filter__link filter__link--number" href="#"
+              >Gender</a
+            >
+          </div>
+          <div class="my-student-table-header-item">
+            <a id="losses" class="filter__link filter__link--number" href="#"
+              >Programme</a
+            >
+          </div>
+          <div class="my-student-table-header-item">
+            <a id="total" class="filter__link filter__link--number" href="#"
+              >Contact</a
+            >
+          </div>
+          <div class="my-student-table-header-item">
+            <a id="total" class="filter__link filter__link--number" href="#"
+              >Company Name</a
+            >
+          </div>
+          <div class="my-student-table-header-item">
+            <a id="total" class="filter__link filter__link--number" href="#"
+              >Action</a
+            >
+          </div>
+          <div class="my-student-table-header-item">
+            <a id="total" class="filter__link filter__link--number" href="#"
+              >Report</a
+            >
+          </div>
+        </div>
+        <div class="my-student-table-content">
+          {%for i in range(0, maxStud) %}
+          <div class="my-student-table-row">
+            <div class="my-student-table-data">{{++i}}</div>
+            <div class="my-student-table-data">{{students[i].name}}</div>
+            <div class="my-student-table-data">{{students[i].gender}}</div>
+            <div class="my-student-table-data">{{students[i].programme}}</div>
+            <div class="my-student-table-data">{{students[i].contact}}</div>
+            <div class="my-student-table-data">{{students[i].company}}</div>
+            <div class="my-student-table-data">
+              <a href="ProgressReport.html">Detail</a>
+            </div>
+            <div class="my-student-table-data">{{students[i].report}}</div>
+          </div>
+          {%endfor%}
+        </div>
+      </div>
+    </div>
+    <footer class="page-footer">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-sm-6">
+            <p>
+              &copy;
+              <script>
+                document.write(new Date().getFullYear());
+              </script>
+              - TARUMT FOCS ITP
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
