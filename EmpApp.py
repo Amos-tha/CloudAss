@@ -88,7 +88,8 @@ def list_files():
     s3 = boto3.client('s3')
     contents = []
     for image in s3.list_objects(Bucket=custombucket)['Contents']:
-        contents.append(image['Key'])
+        if(image.endswith('.pdf')):
+            contents.append(image['Key'])
         # contents.append(f'https://{custombucket}.s3.amazonaws.com/{image}')
 
     return contents
@@ -108,10 +109,6 @@ def test():
 
 @app.route("/view")
 def previewReport(id=None):
-
-    # test = s3.Object(custombucket, "test.pdf").get()
-    # response = make_response(test['Body'].read())
-    # response.headers['Content-Type'] = 'application/pdf'
     contents = list_files()
     return render_template('ViewReport.html', contents=contents)  
     
@@ -126,8 +123,6 @@ def preview(filename):
         file = s3.Object(custombucket, filename).get()
         response = make_response(file['Body'].read())
         response.headers['Content-Type'] = 'application/pdf'
-        response.headers['Content-Disposition'] = \
-        'inline; filename=test.pdf' % 'test.pd'
         return response
     
 @app.route('/download/<filename>', methods=['GET'])
