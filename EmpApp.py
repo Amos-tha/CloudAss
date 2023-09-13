@@ -94,8 +94,7 @@ def list_files():
 
 @app.route("/viewmystud")
 def test():
-    contents = list_files()
-    return render_template('ViewMyStudent.html', contents=contents)
+    return render_template('ViewMyStudent.html')
 
 # @app.route("/myITP", method=['POST'])
 # def getStudents():
@@ -115,7 +114,8 @@ def previewReport(id=None):
 #     response.headers['Content-Type'] = 'application/pdf'
 #     # response.headers['Content-Disposition'] = \
 #     #     'inline; filename=test.pdf' % 'test.pd'
-    return render_template('ViewReport.html')  
+    contents = list_files()
+    return render_template('ViewReport.html', contents=contents)  
     
 #     # list_file = []
 #     # stud_id = request.form['stud_id']

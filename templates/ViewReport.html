@@ -1,6 +1,6 @@
 {% extends "layout.html" %} {% block content %}
 <div class="container">
-  {% for f in list_of_files %}
+  {% for f in contents %}
   <td>
     <a href="/download/{{ f }}"><img src="{{ f }}" /></a>
   </td>
