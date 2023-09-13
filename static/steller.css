@@ -2304,6 +2304,7 @@ textarea.form-control {
 
 .form-group {
   margin-bottom: 1rem;
+  text-align: left;
 }
 
 .form-text {
@@ -11247,7 +11248,6 @@ pre {
   -webkit-flex-grow: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
-  border-right: 1px solid #dee2e6;
   padding: 35px 30px 35px 0;
 }
 
