@@ -8,6 +8,7 @@ customregion = "us-east-1"
 # customuser = "aws_user"
 # custompass = "Bait3273"
 # customdb = "database-1"
-custombucket = "tarumt-itp-bucket"
+# custombucket = "tarumt-itp-bucket"
+custombucket = "leongjingen-employee"
 # customregion = "us-east-1"
 
