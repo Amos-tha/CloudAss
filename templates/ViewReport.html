@@ -3,6 +3,7 @@
   <div class="card-header">Feature</div>
   <div class="card-body">
     <form class="row g-2">
+
       <div class="d-flex flex-row">
         <label class="fw-bold">Status: </label>
         <div class="px-2">
@@ -29,7 +30,7 @@
       </div>
 
       <label class="fw-bold"
-        >Report: <a href="/preview/{{ report }}" target="_blank">{{report}}</a></label
+        >Report: <a href="/preview/{{ report }}" target="_blank" class="fw-normal">{{report}}</a></label
       >
       <label class="fw-bold">Submitted Date: </label>
       <label class="fw-bold">Supervisor Remark: </label>
@@ -37,7 +38,7 @@
         <textarea class="form-control" id="supervisorRemark" row="5"></textarea>
         <div class="d-flex flex-row justify-content-between">
           <span class="small">[Maximum 500 characters] </span>
-          <a href="" class="small link-underline-light">Clear Text</a>
+          <a href="" class="small text-decoration-none">Clear Text</a>
         </div>
       </div>
     </form>
