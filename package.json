@@ -1,0 +1,23 @@
+{
+  "name": "cloudass",
+  "version": "1.0.0",
+  "description": "dnf install git -y\r git clone https://github.com/lowchoonkeat/aws-live.git\r cd aws-live\r dnf install python-pip -y\r pip3 install flask pymysql boto3\r python3 EmpApp.py",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Amos-tha/CloudAss.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Amos-tha/CloudAss/issues"
+  },
+  "homepage": "https://github.com/Amos-tha/CloudAss#readme",
+  "dependencies": {
+    "@popperjs/core": "^2.11.8",
+    "bootstrap": "^5.3.1"
+  }
+}
