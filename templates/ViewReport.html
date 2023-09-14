@@ -1,54 +1,44 @@
 {% extends "layout.html" %} {% block content %}
-<div class="container">
-  <div class="my-student-table">
-    <div class="my-student-table-header">
-      <div class="my-student-table-header-item">
-        <a id="name" class="filter__link" href="#">No</a>
+<div class="card" style="margin: 10px">
+  <div class="card-header">Feature</div>
+  <div class="card-body">
+    <form class="row g-2">
+      <div class="d-flex flex-row">
+        <label class="fw-bold">Status: </label>
+        <div class="px-2">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="reportStatus"
+            id="reportApproveStatus"
+          />
+          <label class="form-label" for="reportApproveStatus"> Approve </label>
+        </div>
+        <div class="px-2">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="reportStatus"
+            id="reportRejectStatus"
+          />
+          <label class="form-label" for="reportRejectStatus"> Reject </label>
+        </div>
+        <div class="col d-flex flex-row justify-content-end">
+          <button type="submit" class="btn btn-primary btn-sm">Save</button>
+        </div>
       </div>
-      <div class="my-student-table-header-item">
-        <a id="wins" class="filter__link filter__link--number" href="#"
-          >Student Name</a
-        >
+
+      <label class="fw-bold">Report: </label>
+      <label class="fw-bold">Submitted Date: </label>
+      <label class="fw-bold">Supervisor Remark: </label>
+      <div class="form-check">
+        <textarea class="form-control" id="supervisorRemark" row="8"></textarea>
+        <div class="d-flex flex-row justify-content-between">
+          <span class="small">[Maximum 500 characters] </span>
+          <a href="" class="small link-underline-light">Clear Text</a>
+        </div>
       </div>
-      <div class="my-student-table-header-item">
-        <a id="draws" class="filter__link filter__link--number" href="#"
-          >Gender</a
-        >
-      </div>
-      <div class="my-student-table-header-item">
-        <a id="losses" class="filter__link filter__link--number" href="#"
-          >Programme</a
-        >
-      </div>
-      <div class="my-student-table-header-item">
-        <a id="total" class="filter__link filter__link--number" href="#"
-          >Contact</a
-        >
-      </div>
-      <div class="my-student-table-header-item">
-        <a id="total" class="filter__link filter__link--number" href="#"
-          >Company Name</a
-        >
-      </div>
-      <div class="my-student-table-header-item">
-        <a id="total" class="filter__link filter__link--number" href="#"
-          >Action</a
-        >
-      </div>
-      <div class="my-student-table-header-item">
-        <a id="total" class="filter__link filter__link--number" href="#"
-          >Report</a
-        >
-      </div>
-    </div>
-    <div class="my-student-table-content">
-      <a href="/view">test</a>
-    </div>
+    </form>
   </div>
-  {% for f in contents %}
-  <td>
-    <a href="/preview/{{ f }}">{{ f }}</a>
-  </td>
-  {% endfor %}
 </div>
 {% endblock %}

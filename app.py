@@ -35,6 +35,59 @@ def StudLogin():
 def RegisterComp():
     return render_template('RegisterComp.html')
 
+def list_files():
+    """
+    Function to list files in a given S3 bucket
+    """
+    s3 = boto3.client('s3')
+    contents = []
+    for image in s3.list_objects(Bucket=custombucket)['Contents']:
+        file = image['Key']
+        if(file.endswith('.pdf')):
+            contents.append(file)
+        # contents.append(f'https://{custombucket}.s3.amazonaws.com/{image}')
+
+    return contents
+
+@app.route("/viewmystud")
+def test():
+    return render_template('ViewMyStudent.html')
+
+# @app.route("/myITP", method=['POST'])
+# def getStudents():
+#     cursor = db_conn.cursor()
+#     cursor.execute("SELECT * FROM Student")
+#     students = cursor.fetchall()
+#     cursor.close()
+
+#     return render_template("ViewReport.html", maxStud = len(), students = students)
+
+@app.route("/view")
+def previewReport(id=None):
+    # contents = list_files()
+    return render_template('ViewReport.html', contents="test")  
+    
+#     # list_file = []
+#     # stud_id = request.form['stud_id']
+#     # filename = stud_id + " "
+
+@app.route('/preview/<filename>', methods=['GET'])
+def preview(filename):
+    if request.method == 'GET':
+        s3 = boto3.resource('s3')
+        file = s3.Object(custombucket, filename).get()
+        response = make_response(file['Body'].read())
+        response.headers['Content-Type'] = 'application/pdf'
+        return response
+    
+@app.route('/download/<filename>', methods=['GET'])
+def download(filename):
+    if request.method == 'GET':
+        s3 = boto3.resource('s3')
+        output = f"/media/{filename}"
+        s3.Bucket(bucket).download_file(Key=filename, Filename=output)
+        return send_file(output, as_attachment=True)
+
 
 #EXAMPLE UPDATE RDS AND S3
 @app.route("/addemp", methods=['GET','POST'])
@@ -84,59 +137,6 @@ def AddEmp():
 
     print("all modification done...")
     return render_template('AddEmpOutput.html', name=emp_name)
-
-def list_files():
-    """
-    Function to list files in a given S3 bucket
-    """
-    s3 = boto3.client('s3')
-    contents = []
-    for image in s3.list_objects(Bucket=custombucket)['Contents']:
-        file = image['Key']
-        if(file.endswith('.pdf')):
-            contents.append(file)
-        # contents.append(f'https://{custombucket}.s3.amazonaws.com/{image}')
-
-    return contents
-
-@app.route("/viewmystud")
-def test():
-    return render_template('ViewMyStudent.html')
-
-# @app.route("/myITP", method=['POST'])
-# def getStudents():
-#     cursor = db_conn.cursor()
-#     cursor.execute("SELECT * FROM Student")
-#     students = cursor.fetchall()
-#     cursor.close()
-
-#     return render_template("ViewReport.html", maxStud = len(), students = students)
-
-@app.route("/view")
-def previewReport(id=None):
-    contents = list_files()
-    return render_template('ViewReport.html', contents=contents)  
-    
-#     # list_file = []
-#     # stud_id = request.form['stud_id']
-#     # filename = stud_id + " "
-
-@app.route('/preview/<filename>', methods=['GET'])
-def preview(filename):
-    if request.method == 'GET':
-        s3 = boto3.resource('s3')
-        file = s3.Object(custombucket, filename).get()
-        response = make_response(file['Body'].read())
-        response.headers['Content-Type'] = 'application/pdf'
-        return response
-    
-@app.route('/download/<filename>', methods=['GET'])
-def download(filename):
-    if request.method == 'GET':
-        s3 = boto3.resource('s3')
-        output = f"/media/{filename}"
-        s3.Bucket(bucket).download_file(Key=filename, Filename=output)
-        return send_file(output, as_attachment=True)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)

@@ -1,87 +1,94 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
+    {% block head %}
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='bootstrapcss.css') }}"
+    />
+    <title>{% block title %}{% endblock %} - My Webpage</title>
+      {% endblock %}
     <style>
-        body {
-            font: roboto;
-            margin: 0;
-            padding: 0;
-        }
+      body {
+        font: Roboto;
+        margin: 0;
+        padding: 0;
+      }
 
-        .navbar {
-            background: rgba(53, 58, 64);
-            padding: 16px;
-            display: flex;
-        }
+      .navbar {
+        background: rgba(53, 58, 64);
+        padding: 16px;
+        display: flex;
+      }
 
-        .navleft {
-            float: left;
-            display: flex;
-            width: 60%;
-            margin: 5px;
-            padding: 5px;
-            font-size: 20px;
-            color: white;
-        }
+      .navleft {
+        float: left;
+        display: flex;
+        width: 60%;
+        margin: 5px;
+        padding: 5px;
+        font-size: 20px;
+        color: white;
+      }
 
-        .navright {
-            float: left;
-            display: flex;
-            margin: 5px;
-            padding: 5px;
-            font-size: 20px;
-            color: white;
-        }
+      .navright {
+        float: left;
+        display: flex;
+        margin: 5px;
+        padding: 5px;
+        font-size: 20px;
+        color: white;
+      }
 
-        .navleft>.nav-link {
-            margin: 5px;
-            padding: 5px;
-            color: white;
-            text-decoration: none;
-        }
+      .navleft > .nav-link {
+        margin: 5px;
+        padding: 5px;
+        color: white;
+        text-decoration: none;
+      }
 
-        .navright>.nav-link {
-            margin: 5px;
-            padding: 5px;
-            color: white;
-            text-decoration: none;
-        }
+      .navright > .nav-link {
+        margin: 5px;
+        padding: 5px;
+        color: white;
+        text-decoration: none;
+      }
 
-        .footercontainer {
-            border-top: 1px solid;
-        }
+      .footercontainer {
+        border-top: 1px solid;
+      }
 
-        .footer {
-            margin: 10px;
-        }
+      .footer {
+        margin: 10px;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <!-- Page navigation -->
     <div class="navbar">
-        <div class="navleft">
-            <a class="nav-link" href="#">TARUMT FOCS</a>
-        </div>
-        <div class="navright">
-            <a class="nav-link" href="#">Company</a> &nbsp;
-            <a class="nav-link" href="#">Comittee</a> &nbsp;
-            <a class="nav-link" href="#">Uni Supervisor</a> &nbsp;
-            <a class="nav-link" href="#">Student</a>
-        </div>
+      <div class="navleft">
+        <a class="nav-link" href="#">TARUMT FOCS</a>
+      </div>
+      <div class="navright">
+        <a class="nav-link" href="#">Company</a> &nbsp;
+        <a class="nav-link" href="#">Comittee</a> &nbsp;
+        <a class="nav-link" href="#">Uni Supervisor</a> &nbsp;
+        <a class="nav-link" href="#">Student</a>
+      </div>
     </div>
     <!-- End of page navibation -->
-    {% block content %}
-    {% endblock %}
+    {% block content %} {% endblock %}
     <div class="footercontainer">
-        <div class="footer">
-                <p>
-                    &copy;
-                    <script>document.write(new Date().getFullYear())</script> - TARUMT FOCS ITP
-                </p>
-        </div>
+      <div class="footer">
+        <p>
+          &copy;
+          <script>
+            document.write(new Date().getFullYear());
+          </script>
+          - TARUMT FOCS ITP
+        </p>
+      </div>
     </div>
-</body>
-
+  </body>
 </html>
