@@ -15,24 +15,29 @@ db_conn = connections.Connection(
     user=customuser,
     password=custompass,
     db=customdb
-
 )
 output = {}
 table = 'employee'
 
-
 @app.route("/", methods=['GET', 'POST'])
 def home():
     return render_template('Index.html')
-    # return render_template('AddEmp.html')
-
 
 @app.route("/about")
 def about():
     return render_template('ViewMyStudent.html')
 
+@app.route("/login", methods=['GET', 'POST'])
+def StudLogin():
+    return render_template('StudLogin.html')
 
-@app.route("/addemp", methods=['POST'])
+@app.route("/company/register", methods=['GET','POST'])
+def RegisterComp():
+    return render_template('RegisterComp.html')
+
+
+#EXAMPLE UPDATE RDS AND S3
+@app.route("/addemp", methods=['GET','POST'])
 def AddEmp():
     emp_id = request.form['emp_id']
     first_name = request.form['first_name']
@@ -48,7 +53,6 @@ def AddEmp():
         return "Please select a file"
 
     try:
-
         cursor.execute(insert_sql, (emp_id, first_name, last_name, pri_skill, location))
         db_conn.commit()
         emp_name = "" + first_name + " " + last_name
@@ -136,4 +140,3 @@ def download(filename):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
-

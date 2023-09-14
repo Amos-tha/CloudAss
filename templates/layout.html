@@ -1,62 +1,87 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>FOCS Industrial Training Programme</title>
-    <link rel="stylesheet" href="../static/steller.css" />
-  </head>
 
-  <body>
+<head>
+    <style>
+        body {
+            font: roboto;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background: rgba(53, 58, 64);
+            padding: 16px;
+            display: flex;
+        }
+
+        .navleft {
+            float: left;
+            display: flex;
+            width: 60%;
+            margin: 5px;
+            padding: 5px;
+            font-size: 20px;
+            color: white;
+        }
+
+        .navright {
+            float: left;
+            display: flex;
+            margin: 5px;
+            padding: 5px;
+            font-size: 20px;
+            color: white;
+        }
+
+        .navleft>.nav-link {
+            margin: 5px;
+            padding: 5px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .navright>.nav-link {
+            margin: 5px;
+            padding: 5px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .footercontainer {
+            border-top: 1px solid;
+        }
+
+        .footer {
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
     <!-- Page navigation -->
-    <nav
-      class="navbar navbar-expand-sm navbar-dark bg-dark rounded shadow mb-3"
-    >
-      <div class="container">
-        <a class="navbar-brand" href="#">FOCS</a>
-        <button
-          class="navbar-toggler ml-auto"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="#about">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#service">Comittee</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#team">Uni Supervisor</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#team">Student</a>
-            </li>
-          </ul>
+    <div class="navbar">
+        <div class="navleft">
+            <a class="nav-link" href="#">TARUMT FOCS</a>
         </div>
-      </div>
-    </nav>
+        <div class="navright">
+            <a class="nav-link" href="#">Company</a> &nbsp;
+            <a class="nav-link" href="#">Comittee</a> &nbsp;
+            <a class="nav-link" href="#">Uni Supervisor</a> &nbsp;
+            <a class="nav-link" href="#">Student</a>
+        </div>
+    </div>
     <!-- End of page navibation -->
-    {% block content %}{% endblock %}
-    <footer class="page-footer">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-sm-6">
-            <p>
-              &copy;
-              <script>
-                document.write(new Date().getFullYear());
-              </script>
-              - TARUMT FOCS ITP
-            </p>
-          </div>
+    {% block content %}
+    {% endblock %}
+    <div class="footercontainer">
+        <div class="footer">
+                <p>
+                    &copy;
+                    <script>document.write(new Date().getFullYear())</script> - TARUMT FOCS ITP
+                </p>
         </div>
-      </div>
-    </footer>
-  </body>
+    </div>
+</body>
+
 </html>
