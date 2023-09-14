@@ -1,4 +1,4 @@
-{% extends "layout.html" %} {% block content %}
+{% extends "layout.html" %} {% block content %} {% for report in contents %}
 <div class="card" style="margin: 10px">
   <div class="card-header">Feature</div>
   <div class="card-body">
@@ -28,7 +28,7 @@
         </div>
       </div>
 
-      <label class="fw-bold">Report: </label>
+      <label class="fw-bold">Report: {{report}}</label>
       <label class="fw-bold">Submitted Date: </label>
       <label class="fw-bold">Supervisor Remark: </label>
       <div class="form-check">
@@ -41,4 +41,4 @@
     </form>
   </div>
 </div>
-{% endblock %}
+{% endfor %} {% endblock %}

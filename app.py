@@ -63,9 +63,10 @@ def test():
 #     return render_template("ViewReport.html", maxStud = len(), students = students)
 
 @app.route("/view")
-def previewReport(id=None):
-    # contents = list_files()
-    return render_template('ViewReport.html', contents="test")  
+def previewReport():
+    contents = list_files()
+    return render_template('ViewReport.html', contents=contents)  
+    # return render_template('ViewReport.html', contents="test")  
     
 #     # list_file = []
 #     # stud_id = request.form['stud_id']
