@@ -67,6 +67,10 @@ def previewReport():
     contents = list_files()
     return render_template('ViewReport.html', contents=contents)  
     # return render_template('ViewReport.html', contents="test")  
+
+def clear():
+     response = request.form.get("response")
+     response = ""
     
 #     # list_file = []
 #     # stud_id = request.form['stud_id']
