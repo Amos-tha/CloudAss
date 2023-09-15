@@ -48,7 +48,15 @@ def Comp_Register():
     committeeID = None
     compLogo = request.files['inputLogo']
     businessLicense = request.files['inputLicense']
-
+    print(type(compName))
+    print(type(compEmail))
+    print(type(compPassword))
+    print(type(compPhoneNo))
+    print(type(compAddress))
+    print(type(compWebsite))
+    print(type(socialMedia))
+    print(type(registerStatus))
+    print(type(committeeID))
     insert_sql = "INSERT INTO company VALUES (%s, %s, %s, %s, %s, %s, %s)"
     cursor = db_conn.cursor()
 
