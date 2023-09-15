@@ -68,7 +68,7 @@ def previewReport(id):
         cursor = db_conn.cursor()
         cursor.execute("SELECT * FROM progressReport WHERE studID = %s", (id))
         reports = cursor.fetchall()
-        # contents = list_files()
+        contents = list_files()
 
     except Exception as e:
             return str(e)
@@ -76,7 +76,7 @@ def previewReport(id):
     finally:
         cursor.close()
 
-    return render_template('ViewReport.html', reports=reports, contents="contents")  
+    return render_template('ViewReport.html', reports=reports, contents=contents)  
     # return render_template('ViewReport.html', contents="test")  
 
 def clear():
@@ -88,7 +88,7 @@ def clear():
 #     # stud_id = request.form['stud_id']
 #     # filename = stud_id + " "
 
-@app.route('/view/report/<id>', methods=['GET', 'POST'])
+@app.route('/test/report/<id>', methods=['GET', 'POST'])
 def update(id):
     status = request.form['reportStatus']
     remark = request.form['remark']
