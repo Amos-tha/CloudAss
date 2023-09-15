@@ -48,16 +48,8 @@ def Comp_Register():
     committeeID = None
     compLogo = request.files['inputLogo']
     businessLicense = request.files['inputLicense']
-    print(type(compName))
-    print(type(compEmail))
-    print(type(compPassword))
-    print(type(compPhoneNo))
-    print(type(compAddress))
-    print(type(compWebsite))
-    print(type(socialMedia))
-    print(type(registerStatus))
-    print(type(committeeID))
-    insert_sql = "INSERT INTO company VALUES (%s, %s, %s, %s, %s, %s, %s, %s, NULL)"
+
+    insert_sql = "INSERT INTO company VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
     cursor = db_conn.cursor()
 
     if compLogo.filename == "":
@@ -67,7 +59,7 @@ def Comp_Register():
         return "Please select an image for license"
 
     try:
-        cursor.execute(insert_sql, (compName, compEmail, compPassword, compPhoneNo, compAddress, compWebsite, socialMedia, registerStatus))
+        cursor.execute(insert_sql, (compName, compEmail, compPassword, compPhoneNo, compAddress, compWebsite, socialMedia, registerStatus, committeeID))
         db_conn.commit()
         compID = db_conn.insert_id()
         # Uplaod image file in S3 #
