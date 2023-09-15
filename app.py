@@ -49,7 +49,7 @@ def list_files():
 
     return contents
 
-@app.route("/viewmystud")
+@app.route("/view/stud")
 def test():
     return render_template('ViewMyStudent.html')
 
@@ -62,7 +62,7 @@ def test():
 
 #     return render_template("ViewReport.html", maxStud = len(), students = students)
 
-@app.route("/view")
+@app.route("/view/report/<stud>")
 def previewReport():
     contents = list_files()
     return render_template('ViewReport.html', contents=contents)  
@@ -70,11 +70,30 @@ def previewReport():
 
 def clear():
      response = request.form.get("response")
-     response = ""
+     response = " "
+     return response
     
 #     # list_file = []
 #     # stud_id = request.form['stud_id']
 #     # filename = stud_id + " "
+
+@app.route('/view/report/<id>', methods=['GET', 'POST'])
+def update(id):
+    status = request.form['reportStatus']
+    remark = request.form['remark']
+    cursor = db_conn.cursor()
+
+    try:
+        cursor.execute("UPDATE progressReport SET status = %s, remark = %s WHERE reportID=%s", (status, remark, id))
+        db_conn.commit()
+
+    except Exception as e:
+            return str(e)
+
+    finally:
+        cursor.close()
+
+    return
 
 @app.route('/preview/<filename>', methods=['GET'])
 def preview(filename):
