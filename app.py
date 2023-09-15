@@ -67,7 +67,7 @@ def Comp_Register():
         return "Please select an image for license"
 
     try:
-        cursor.execute(insert_sql, (compName, compEmail, compPassword, compPhoneNo, compAddress, compWebsite, socialMedia, registerStatus, committeeID))
+        cursor.execute(insert_sql, (compName, compEmail, compPassword, compPhoneNo, compAddress, compWebsite, socialMedia, registerStatus))
         db_conn.commit()
         compID = db_conn.insert_id()
         # Uplaod image file in S3 #
