@@ -62,7 +62,7 @@ def test():
 
 #     return render_template("ViewReport.html", maxStud = len(), students = students)
 
-@app.route("/view/report/<stud>")
+@app.route("/view/report")
 def previewReport():
     contents = list_files()
     return render_template('ViewReport.html', contents=contents)  
