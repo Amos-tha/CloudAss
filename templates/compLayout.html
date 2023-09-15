@@ -2,9 +2,17 @@
 <html>
 
 <head>
+    {% block head %}
+    <link rel="stylesheet" href="../static/bootstrapcss.css">
+    <title>{% block title %}{% endblock %} - My Webpage</title>
+    {% endblock %}
+
     <style>
         body {
-            font: roboto;
+            font: Roboto;
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
             margin: 0;
             padding: 0;
         }
@@ -49,6 +57,7 @@
         }
 
         .footercontainer {
+            margin-top:auto;
             border-top: 1px solid;
         }
 
@@ -65,10 +74,9 @@
             <a class="nav-link" href="#">TARUMT FOCS</a>
         </div>
         <div class="navright">
-            <a class="nav-link" href="#">Company</a> &nbsp;
-            <a class="nav-link" href="#">Comittee</a> &nbsp;
-            <a class="nav-link" href="#">Uni Supervisor</a> &nbsp;
-            <a class="nav-link" href="#">Student</a>
+            <a class="nav-link" href="#">Applications</a> &nbsp;
+            <a class="nav-link" href="#">Offers</a> &nbsp;
+            <a class="nav-link" href="#">Account</a>
         </div>
     </div>
     <!-- End of page navibation -->
@@ -76,12 +84,13 @@
     {% endblock %}
     <div class="footercontainer">
         <div class="footer">
-                <p>
-                    &copy;
-                    <script>document.write(new Date().getFullYear())</script> - TARUMT FOCS ITP
-                </p>
+            <p>
+                &copy;
+                <script>document.write(new Date().getFullYear())</script> - TARUMT FOCS ITP
+            </p>
         </div>
     </div>
+    
 </body>
 
 </html>

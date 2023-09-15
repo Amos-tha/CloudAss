@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% block head %}
+    <link rel="stylesheet" href="../static/bootstrapcss.css">
+    <title>{% block title %}{% endblock %}</title>
+    {% endblock %}
+    <style>
+        body {
+            font: Roboto;
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background: rgba(53, 58, 64);
+            padding: 16px;
+            display: flex;
+        }
+
+        .navleft {
+            float: left;
+            display: flex;
+            width: 60%;
+            margin: 5px;
+            padding: 5px;
+            font-size: 20px;
+            color: white;
+        }
+
+        .navright {
+            float: left;
+            display: flex;
+            margin: 5px;
+            padding: 5px;
+            font-size: 20px;
+            color: white;
+        }
+
+        .navleft>.nav-link {
+            margin: 5px;
+            padding: 5px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .navright>.nav-link {
+            margin: 5px;
+            padding: 5px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .footercontainer {
+            margin-top: auto;
+            border-top: 1px solid;
+        }
+
+        .footer {
+            margin: 10px;
+        }
+    </style>
+    {% block style %}
+    {% endblock %}
+</head>
+
+<body>
+    <!-- Page navigation -->
+    <div class="navbar">
+        <div class="navleft">
+            <a class="nav-link" href="#">TARUMT FOCS</a>
+        </div>
+        <div class="navright">
+            <a class="nav-link" href="#">Company</a> &nbsp;
+            <a class="nav-link" href="#">Comittee</a> &nbsp;
+            <a class="nav-link" href="#">Uni Supervisor</a> &nbsp;
+            <a class="nav-link" href="#">Student</a>
+        </div>
+    </div>
+    <!-- End of page navibation -->
+    {% block content %}
+    {% endblock %}
+    <div class="footercontainer">
+        <div class="footer">
+                <p>
+                    &copy;
+                    <script>document.write(new Date().getFullYear())</script> - TARUMT FOCS ITP
+                </p>
+        </div>
+    </div>
+    <script src="../static/bootstrap.bundle.js"></script>
+    <script src="../static/popper.js"></script>
+</body>
+
+</html>
