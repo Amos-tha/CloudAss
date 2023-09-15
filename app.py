@@ -61,7 +61,7 @@ def Comp_Register():
     try:
         cursor.execute(insert_sql, (compName, compEmail, compPassword, compPhoneNo, compAddress, compWebsite, socialMedia, registerStatus, committeeID))
         db_conn.commit()
-        compID = db_conn.insert_id()
+        compID = cursor.lastrowid()
         # Uplaod image file in S3 #
         logo_file = "comp-id-" + str(compID) + "_logo"
         license_file = "comp-id-" + str(compID) + "_license"
