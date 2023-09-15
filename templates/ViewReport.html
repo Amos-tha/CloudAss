@@ -1,8 +1,15 @@
-{% extends "layout.html" %} {% block content %} {% for report in contents %}
+{% extends "layout.html" %} {% block content %} {% for report in reports %} {%
+for pdf in contents %}
 <div class="card" style="margin: 10px">
   <div class="card-header">Feature</div>
   <div class="card-body">
-    <form class="row g-2">
+    <form
+      class="row g-2"
+      action="/view/report/{{report}}"
+      autocomplete="on"
+      method="POST"
+      enctype="multipart/form-data"
+    >
       <div class="d-flex flex-row">
         <label class="fw-bold">Status: </label>
         <div class="px-2">
@@ -31,19 +38,23 @@
       <label class="fw-bold"
         >Report:
         <a href="/preview/{{ report }}" target="_blank" class="fw-normal"
-          >{{report}}</a
+          >{{pdf}}</a
         ></label
       >
-      <label class="fw-bold">Submitted Date: </label>
+      <label class="fw-bold">Submitted Date: {{report["handInDate"]}}</label>
       <label class="fw-bold">Supervisor Remark: </label>
       <div class="form-check">
-        <textarea class="form-control" id="supervisorRemark {{ report }}" row="5" name="remark"></textarea
-        >
+        <textarea
+          class="form-control"
+          id="supervisorRemark{{ report }}"
+          row="5"
+          name="remark"
+        ></textarea>
         <div class="d-flex flex-row justify-content-between">
           <span class="small">[Maximum 500 characters] </span>
           <a
             href=""
-            onclick="clearInput();return false;"
+            onclick="clearInput('supervisorRemark{{ report }}');return false;"
             class="small text-decoration-none"
             >Clear Text</a
           >
@@ -58,4 +69,4 @@
     document.getElementById("supervisorRemark {{ report }}").reset();
   }
 </script>
-{% endfor %} {% endblock %}
+{% endfor %} {% endfor %} {% endblock %}

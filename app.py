@@ -62,10 +62,21 @@ def test():
 
 #     return render_template("ViewReport.html", maxStud = len(), students = students)
 
-@app.route("/view/report")
-def previewReport():
-    contents = list_files()
-    return render_template('ViewReport.html', contents=contents)  
+@app.route("/view/report/<id>")
+def previewReport(id):
+    try:
+        cursor = db_conn.cursor()
+        cursor.execute("SELECT * FROM progressReport WHERE studID = %s", (id))
+        reports = cursor.fetchall()
+        contents = list_files()
+
+    except Exception as e:
+            return str(e)
+
+    finally:
+        cursor.close()
+
+    return render_template('ViewReport.html', reprots=reports, contents=contents)  
     # return render_template('ViewReport.html', contents="test")  
 
 def clear():
