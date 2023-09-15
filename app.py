@@ -35,6 +35,13 @@ def StudLogin():
 def RegisterComp():
     return render_template('RegisterComp.html')
 
+@app.route("/compregistration", methods=['GET'])
+def getCompany():
+    cursor = db_conn.cursor()
+    cursor.execute("SELECT first_name,last_name FROM employee")
+    employeeName = cursor.fetchall()
+    cursor.close()
+    return render_template("CompRegistration.html", emp = employeeName)
 
 #EXAMPLE UPDATE RDS AND S3
 @app.route("/addemp", methods=['GET','POST'])
