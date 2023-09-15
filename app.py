@@ -88,7 +88,7 @@ def clear():
 #     # stud_id = request.form['stud_id']
 #     # filename = stud_id + " "
 
-@app.route('/test/report/<id>', methods=['GET', 'POST'])
+@app.route('/update/report/<id>', methods=['GET', 'POST'])
 def update(id):
     status = request.form['reportStatus']
     remark = request.form['remark']
@@ -119,7 +119,7 @@ def preview(filename):
 def download(filename):
     if request.method == 'GET':
         s3 = boto3.resource('s3')
-        output = f"/media/{filename}"
+        output = f"/static/media/{filename}"
         s3.Bucket(bucket).download_file(Key=filename, Filename=output)
         return send_file(output, as_attachment=True)
 
