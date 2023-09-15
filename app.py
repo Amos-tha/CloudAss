@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from pymysql import connections
 import os
 import boto3
@@ -85,7 +85,7 @@ def Comp_Register():
     finally:
         cursor.close()
 
-    return render_template('Index.html')
+    return redirect("/")
 
 
 @app.route("/company/login", methods=['GET','POST'])
