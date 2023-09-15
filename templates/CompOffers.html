@@ -1,0 +1,39 @@
+{%extends "compLayout.html"%}
+
+{% block title %}Company Login{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column col-11 align-self-center">
+    <div>
+        <div class="fs-2 fw-bold mt-4 mb-3">Offers</div>
+    </div>
+    <div class="d-flex flex-row justify-content-end mb-4">
+        <button type="button" class="btn btn-primary btn-lg">Add New Offer</button>
+    </div>
+    <div>
+        <table class="table table-hover">
+            
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Date Posted</th>
+                    <th scope="col">Position</th>
+                    <th scope="col">Allowance</th>
+                    <th scope="col">Description</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>idk</td>
+                </tr>
+            </tbody>
+            <caption>List of users</caption>
+        </table>
+    </div>
+</div>
+
+{%endblock%}

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from pymysql import connections
 import os
 import boto3
@@ -32,9 +32,69 @@ def StudLogin():
     return render_template('StudLogin.html')
 
 @app.route("/company/register", methods=['GET','POST'])
-def RegisterComp():
+def comp_register():
     return render_template('RegisterComp.html')
 
+@app.route("/company/Register", methods=['GET','POST'])
+def Comp_Register():
+    compName = request.form['inputName']
+    compEmail = request.form['inputEmail']
+    compPassword = request.form['inputPassword']
+    compPhoneNo = request.form['inputPhoneNumber']
+    compAddress = request.form['inputAddress']
+    compWebsite = request.form['inputWebsite']
+    socialMedia = request.form['inputSocialMedia']
+    registerStatus = "pending"
+    committeeID = None
+    compLogo = request.files['inputLogo']
+    businessLicense = request.files['inputLicense']
+
+    insert_sql = "INSERT INTO company (compName, compEmail, compPassword, compPhoneNo, compAddress, compWebsite, socialMedia, registerStatus, committeeID)VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    cursor = db_conn.cursor()
+
+    if compLogo.filename == "":
+        return "Please select an image for logo"
+    
+    if businessLicense.filename == "":
+        return "Please select an image for license"
+
+    try:
+        cursor.execute(insert_sql, (compName, compEmail, compPassword, compPhoneNo, compAddress, compWebsite, socialMedia, registerStatus, committeeID))
+        db_conn.commit()
+        compID = cursor.lastrowid
+        # Uplaod image file in S3 #
+        logo_file = "comp-id-" + str(compID) + "_logo"
+        license_file = "comp-id-" + str(compID) + "_license"
+        s3 = boto3.resource('s3')
+
+        try:
+            print("Data inserted in MySQL RDS... uploading image to S3...")
+            s3.Bucket(custombucket).put_object(Key=logo_file, Body=compLogo)
+            s3.Bucket(custombucket).put_object(Key=license_file, Body=businessLicense)
+            bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+            s3_location = (bucket_location['LocationConstraint'])
+
+            if s3_location is None:
+                s3_location = ''
+            else:
+                s3_location = '-' + s3_location
+
+        except Exception as e:
+            return str(e)
+
+    finally:
+        cursor.close()
+
+    return redirect("/")
+
+
+@app.route("/company/login", methods=['GET','POST'])
+def comp_login():
+    return render_template('CompLogin.html')
+
+@app.route("/company/offers", methods=['GET','POST'])
+def comp_offers():
+    return render_template('CompOffers.html')
 
 #EXAMPLE UPDATE RDS AND S3
 @app.route("/addemp", methods=['GET','POST'])
