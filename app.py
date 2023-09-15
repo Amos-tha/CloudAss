@@ -57,7 +57,7 @@ def Comp_Register():
     print(type(socialMedia))
     print(type(registerStatus))
     print(type(committeeID))
-    insert_sql = "INSERT INTO company VALUES (%s, %s, %s, %s, %s, %s, %s)"
+    insert_sql = "INSERT INTO company VALUES (%s, %s, %s, %s, %s, %s, %s, %s, NULL)"
     cursor = db_conn.cursor()
 
     if compLogo.filename == "":
