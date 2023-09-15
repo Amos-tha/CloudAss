@@ -49,7 +49,7 @@ def Comp_Register():
     compLogo = request.files['inputLogo']
     businessLicense = request.files['inputLicense']
 
-    insert_sql = "INSERT INTO company VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    insert_sql = "INSERT INTO company (compName, compEmail, compPassword, compPhoneNo, compAddress, compWebsite, socialMedia, registerStatus, committeeID)VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
     cursor = db_conn.cursor()
 
     if compLogo.filename == "":
