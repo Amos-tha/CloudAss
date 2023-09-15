@@ -5,7 +5,7 @@ for pdf in contents %}
   <div class="card-body">
     <form
       class="row g-2"
-      action="/view/report/{{report}}"
+      action="/view/report/{{report[0]}}"
       autocomplete="on"
       method="POST"
       enctype="multipart/form-data"
@@ -37,11 +37,14 @@ for pdf in contents %}
 
       <label class="fw-bold"
         >Report:
-        <a href="/preview/{{ report }}" target="_blank" class="fw-normal"
+        <a href="/preview/{{ pdf }}" target="_blank" class="fw-normal"
           >{{pdf}}</a
         ></label
       >
-      <label class="fw-bold">Submitted Date: {{report["handInDate"]}}</label>
+      <div class="d-flex flex-row">
+        <label class="fw-bold">Submitted Date:</label>
+        <p class="ms-2">{{report[1]}}</p>
+      </div>
       <label class="fw-bold">Supervisor Remark: </label>
       <div class="form-check">
         <textarea
