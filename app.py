@@ -17,7 +17,7 @@ db_conn = connections.Connection(
     db=customdb
 )
 output = {}
-table = 'employee'
+table = 'company'
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
@@ -35,13 +35,25 @@ def StudLogin():
 def RegisterComp():
     return render_template('RegisterComp.html')
 
-@app.route("/compregistration", methods=['GET'])
-def getCompany():
+@app.route("/admin/compdetails", methods=['GET','POST'])
+def CompDetails():
+    return render_template('CompDetails.html')
+
+@app.route("/admin/registredcomp", methods=['GET'])
+def RegisteredComp():
     cursor = db_conn.cursor()
     cursor.execute("SELECT first_name,last_name FROM employee")
     employeeName = cursor.fetchall()
     cursor.close()
-    return render_template("CompRegistration.html", emp = employeeName)
+    return render_template("RegisteredComp.html", emp = employeeName)
+
+@app.route("/admin/compregistration", methods=['GET'])
+def CompRequest():
+    cursor = db_conn.cursor()
+    cursor.execute("SELECT compID,CompName,registerStatus FROM company")
+    company = cursor.fetchall()
+    cursor.close()
+    return render_template("CompRegistration.html", comp = company)
 
 #EXAMPLE UPDATE RDS AND S3
 @app.route("/addemp", methods=['GET','POST'])
