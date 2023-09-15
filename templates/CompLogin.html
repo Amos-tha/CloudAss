@@ -1,0 +1,24 @@
+{%extends "generalLayout.html"%}
+
+{% block title %}Company Login{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-row justify-content-center align-items-center mt-5">
+    <div class="col-5">
+        <div class="fs-2 fw-bold text-center mb-2">Company Login</div>
+        <form class="row g-3">
+            <div class="col-12">
+                <label for="inputEmail" class="form-label">Email</label>
+                <input type="email" class="form-control border-3" id="inputEmail" required>
+            </div>
+            <div class="col-12">
+                <label for="inputPassword" class="form-label">Password</label>
+                <input type="password" class="form-control border-3" id="inputPassword">
+            </div>
+            <div class="col-12 d-flex flex-row justify-content-end">
+                <button type="submit" class="btn btn-primary btn-lg">Sign in</button>
+            </div>
+        </form>
+    </div>
+</div>
+{%endblock%}
