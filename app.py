@@ -123,8 +123,10 @@ def Comp_Register():
 def preview(file):
     if request.method == 'GET':
         s3 = boto3.resource('s3')
-        file = s3.Object(custombucket, file).get()
-    return file['Body'].read()
+        # file = s3.Object(custombucket, file).get()
+    img = get_s3_image(custombucket, file)
+    return send_file(BytesIO(img), mimetype='image/jpeg')  
+    # return file['Body'].read()
 
 @app.route("/company/login", methods=['GET','POST'])
 def comp_login():
