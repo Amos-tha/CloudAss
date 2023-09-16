@@ -1,4 +1,15 @@
-{% extends "layout.html" %} {% block content %}
+{% extends "generalLayout.html" %} {% block title %} My ITP {% endblock %} {%
+block content %}
+
+<div class="d-flex flex-row justify-content-end">
+  <input
+    type="text"
+    class="live-search-box form-control my-2 me-4"
+    placeholder="Search here..."
+    style="width: 20%"
+  />
+</div>
+
 <table
   class="table table-hover table-bordered"
   style="margin: 10px; width: 98%"
@@ -15,8 +26,8 @@
       <th scope="col">Report</th>
     </tr>
   </thead>
-  <tbody>
-    {% for stud in students %}
+  <tbody class="stud-list">
+    {% if students | length != 0 %} {% for stud in students %}
     <tr>
       <th scope="row">{{loop.index}}</th>
       <td>{{stud[1]}}</td>
@@ -27,13 +38,39 @@
       <td>@mdo</td>
       <td>
         <a
-          href="/view/report/"
+          href="/view/report/{{stud[0]}}"
           class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
           >Details</a
         >
       </td>
     </tr>
-    {% endfor %}
+    {% endfor %} {% else %}
+    <tr>
+      No students found
+    </tr>
+    {% endif %}
   </tbody>
 </table>
+
+<script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"
+></script>
+
+<script type="text/javascript">
+  jQuery(document).ready(function ($) {
+    $(".stud-list tr").each(function () {
+      $(this).attr("data-search-term", $(this).text().toLowerCase());
+    });
+
+    $(".live-search-box").on("keyup", function () {
+      var searchTerm = $(this).val().toLowerCase();
+
+      $(".stud-list tr").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(searchTerm) > -1);
+      });
+    });
+  });
+</script>
 {% endblock %}

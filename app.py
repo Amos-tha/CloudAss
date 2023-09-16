@@ -4,11 +4,14 @@ from flask import (
     request,
     redirect,
     url_for,
+    make_response,
+    send_file,
     session,
     jsonify,
     json,
 )
 from pymysql import connections, cursors
+import pymysql
 import os
 import boto3
 from datetime import datetime 
@@ -55,6 +58,11 @@ def list_files():
 
     return contents
 
+
+def cleartext():
+    response = " "
+    return response
+
 @app.route("/view/stud", methods=['GET'])
 def getStudents():
     try:
@@ -73,10 +81,13 @@ def getStudents():
 @app.route("/view/report/<studid>", methods=['GET'])
 def previewReport(studid):
     try:
-        cursor = db_conn.cursor()
-        cursor.execute("SELECT * FROM progressReport WHERE studID = %s", (studid))
+        cursor = db_conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("SELECT reportID, reportName, dueDate FROM progressReport WHERE supervisorID=%s", ("S01"))
+        classworks = cursor.fetchall()
+        cursor.execute("SELECT * FROM submission WHERE studID = %s", (studid))
         reports = cursor.fetchall()
-        # contents = list_files()
+        
+        # contents = list_files
 
     except Exception as e:
             return str(e)
@@ -84,21 +95,20 @@ def previewReport(studid):
     finally:
         cursor.close()
 
-    return render_template('ViewReport.html', reports = zip(reports, "test"))  
-    # return render_template('ViewReport.html', contents="test")  
+    return render_template('ViewReport.html', classworks = classworks, reports = reports, files="test")  
     
 #     # list_file = []
 #     # stud_id = request.form['stud_id']
 #     # filename = stud_id + " "
 
-@app.route('/update/report/<reportid>', methods=['GET', 'POST'])
-def update(reportid):
+@app.route('/update/report/<submissionid>', methods=['GET', 'POST'])
+def update(submissionid):
     status = request.form['reportStatus']
     remark = request.form['remark']
     cursor = db_conn.cursor()
 
     try:
-        cursor.execute("UPDATE progressReport SET status = %s, remark = %s WHERE reportID=%s", (status, remark, reportid))
+        cursor.execute("UPDATE submission SET status = %s, remark = %s WHERE submissionID=%s", (status, remark, submissionid))
         db_conn.commit()
 
     except Exception as e:
