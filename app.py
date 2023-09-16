@@ -35,23 +35,34 @@ def StudLogin():
 def comp_register():
     return render_template('RegisterComp.html')
 
+@app.route("/admin/compdetails/<compid>", methods=["GET",'POST'])
+def CompDetails(compid):
+    cursor = db_conn.cursor()
+    cursor.execute("SELECT * FROM company WHERE compID=%s" , (compid))
+    compDetails = cursor.fetchall()
+    cursor.close()
 
-@app.route("/admin/compdetails", methods=['GET','POST'])
-def CompDetails():
-    return render_template('CompDetails.html')
+    s3 = boto3.client('s3')
+    contents = []
+    for image in s3.list_objects(Bucket=custombucket)['Contents']:
+        file = image['Key']
+        if(file.startswith('comp-id-'+compid)):
+            contents.append(file)    
+            
+    return render_template('CompDetails.html', comp = zip(compDetails,contents))
 
 @app.route("/admin/registredcomp", methods=['GET'])
 def RegisteredComp():
     cursor = db_conn.cursor()
-    cursor.execute("SELECT first_name,last_name FROM employee")
-    employeeName = cursor.fetchall()
+    cursor.execute("SELECT compID,CompName,registerStatus FROM company WHERE registerStatus='active'")
+    company = cursor.fetchall()
     cursor.close()
-    return render_template("RegisteredComp.html", emp = employeeName)
+    return render_template("RegisteredComp.html", comp = company)
 
 @app.route("/admin/compregistration", methods=['GET'])
 def CompRequest():
     cursor = db_conn.cursor()
-    cursor.execute("SELECT compID,CompName,registerStatus FROM company")
+    cursor.execute("SELECT compID,CompName,registerStatus FROM company WHERE registerStatus='pending'")
     company = cursor.fetchall()
     cursor.close()
     return render_template("CompRegistration.html", comp = company)
