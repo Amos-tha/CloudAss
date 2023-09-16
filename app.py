@@ -48,8 +48,8 @@ def CompDetails(compid):
         file = image['Key']
         if(file.startswith('comp-id-'+compid)):
             contents.append(file)    
-            
-    return render_template('CompDetails.html', comp = zip(compDetails,contents))
+    return render_template('CompDetails.html', comp = compDetail, file = contents)
+        #return render_template('CompDetails.html', comp = compDetails)
 
 @app.route("/admin/registredcomp", methods=['GET'])
 def RegisteredComp():
