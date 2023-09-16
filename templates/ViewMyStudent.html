@@ -1,5 +1,8 @@
 {% extends "layout.html" %} {% block content %}
-<table class="table table-hover table-bordered" style="margin: 10px">
+<table
+  class="table table-hover table-bordered"
+  style="margin: 10px; width: 98%"
+>
   <thead class="table-dark">
     <tr>
       <th scope="col">#</th>
@@ -12,17 +15,25 @@
       <th scope="col">Report</th>
     </tr>
   </thead>
-  <tbody >
+  <tbody>
+    {% for stud in students %}
     <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
+      <th scope="row">{{loop.index}}</th>
+      <td>{{stud[1]}}</td>
+      <td>{{stud[4]}}</td>
+      <td>programme</td>
+      <td>{{stud[3]}}</td>
       <td>@mdo</td>
       <td>@mdo</td>
-      <td>@mdo</td>
-      <td>@mdo</td>
-      <td>@mdo</td>
+      <td>
+        <a
+          href="/view/report/"
+          class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+          >Details</a
+        >
+      </td>
     </tr>
+    {% endfor %}
   </tbody>
 </table>
 {% endblock %}

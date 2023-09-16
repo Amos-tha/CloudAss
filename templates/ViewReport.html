@@ -1,11 +1,11 @@
-{% extends "layout.html" %} {% block content %} {% for report in reports %} {%
-for pdf in contents %}
+{% extends "layout.html" %} {% block content %} {% for report, pdf in reports:
+%}
 <div class="card" style="margin: 10px">
-  <div class="card-header">Feature</div>
+  <div class="card-header">Report {{loop.index}}</div>
   <div class="card-body">
     <form
       class="row g-2"
-      action="/view/report/{{report[0]}}"
+      action="/update/report/{{report[0]}}"
       autocomplete="on"
       method="POST"
       enctype="multipart/form-data"
@@ -17,18 +17,18 @@ for pdf in contents %}
             class="form-check-input"
             type="radio"
             name="reportStatus"
-            id="reportApproveStatus"
+            value="Approve"
           />
-          <label class="form-label" for="reportApproveStatus"> Approve </label>
+          <label class="form-label"> Approve </label>
         </div>
         <div class="px-2">
           <input
             class="form-check-input"
             type="radio"
             name="reportStatus"
-            id="reportRejectStatus"
+            value="Reject"
           />
-          <label class="form-label" for="reportRejectStatus"> Reject </label>
+          <label class="form-label"> Reject </label>
         </div>
         <div class="col d-flex flex-row justify-content-end">
           <button type="submit" class="btn btn-primary btn-sm">Save</button>
@@ -37,7 +37,7 @@ for pdf in contents %}
 
       <label class="fw-bold"
         >Report:
-        <a href="/download/{{ pdf }}" target="_blank" class="fw-normal"
+        <a href="/preview/{{ pdf }}" target="_blank" class="fw-normal"
           >{{pdf}}</a
         ></label
       >
@@ -55,21 +55,10 @@ for pdf in contents %}
         ></textarea>
         <div class="d-flex flex-row justify-content-between">
           <span class="small">[Maximum 500 characters] </span>
-          <a
-            href=""
-            onclick="clearInput('supervisorRemark{{ report }}');return false;"
-            class="small text-decoration-none"
-            >Clear Text</a
-          >
+          <input type="reset" name="clear">
         </div>
       </div>
     </form>
   </div>
 </div>
-
-<script>
-  function clearInput() {
-    document.getElementById("supervisorRemark {{ report }}").reset();
-  }
-</script>
-{% endfor %} {% endfor %} {% endblock %}
+{% endfor %} {% endblock %}

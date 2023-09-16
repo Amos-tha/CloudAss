@@ -49,26 +49,28 @@ def list_files():
 
     return contents
 
-@app.route("/view/stud")
-def test():
-    return render_template('ViewMyStudent.html')
-
-# @app.route("/myITP", method=['POST'])
-# def getStudents():
-#     cursor = db_conn.cursor()
-#     cursor.execute("SELECT * FROM Student")
-#     students = cursor.fetchall()
-#     cursor.close()
-
-#     return render_template("ViewReport.html", maxStud = len(), students = students)
-
-@app.route("/view/report/<id>", methods=['GET'])
-def previewReport(id):
+@app.route("/view/stud", methods=['GET'])
+def getStudents():
     try:
         cursor = db_conn.cursor()
-        cursor.execute("SELECT * FROM progressReport WHERE studID = %s", (id))
+        cursor.execute("SELECT * FROM student WHERE supervisorID = %s", ("S01"))
+        students = cursor.fetchall()
+
+    except Exception as e:
+        return str(e)
+    
+    finally:
+        cursor.close()
+
+    return render_template('ViewMyStudent.html', students = students)
+
+@app.route("/view/report/<studid>", methods=['GET'])
+def previewReport(studid):
+    try:
+        cursor = db_conn.cursor()
+        cursor.execute("SELECT * FROM progressReport WHERE studID = %s", (studid))
         reports = cursor.fetchall()
-        contents = list_files()
+        # contents = list_files()
 
     except Exception as e:
             return str(e)
@@ -76,26 +78,21 @@ def previewReport(id):
     finally:
         cursor.close()
 
-    return render_template('ViewReport.html', reports=reports, contents=contents)  
+    return render_template('ViewReport.html', reports = zip(reports, "test"))  
     # return render_template('ViewReport.html', contents="test")  
-
-def clear():
-     response = request.form.get("response")
-     response = " "
-     return response
     
 #     # list_file = []
 #     # stud_id = request.form['stud_id']
 #     # filename = stud_id + " "
 
-@app.route('/update/report/<id>', methods=['GET', 'POST'])
-def update(id):
+@app.route('/update/report/<reportid>', methods=['GET', 'POST'])
+def update(reportid):
     status = request.form['reportStatus']
     remark = request.form['remark']
     cursor = db_conn.cursor()
 
     try:
-        cursor.execute("UPDATE progressReport SET status = %s, remark = %s WHERE reportID=%s", (status, remark, id))
+        cursor.execute("UPDATE progressReport SET status = %s, remark = %s WHERE reportID=%s", (status, remark, reportid))
         db_conn.commit()
 
     except Exception as e:
@@ -104,7 +101,7 @@ def update(id):
     finally:
         cursor.close()
 
-    return
+    return "Save successfully"
 
 @app.route('/preview/<filename>', methods=['GET'])
 def preview(filename):
