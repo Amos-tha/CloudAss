@@ -1,0 +1,85 @@
+{%extends "compLayout.html"%}
+
+{% block title %}Add Offer{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-row justify-content-center align-items-center">
+    <div class="col-8 mb-4">
+        <div class="fs-2 fw-bold text-center mb-2">Add New Offer</div>
+        <div class="text-center mb-4">Fill up the form to place a new internship offer.</div>
+        <form class="row g-3" action="/company/AddOffer" method="POST" enctype="multipart/form-data">
+            <div class="col-12">
+                <label for="inputPosition" class="form-label">Position</label>
+                <input type="text" class="form-control border-3" id="inputPosition" name="inputPosition"
+                    placeholder="e.g. Cloud Architect" required>
+            </div>
+            <div class="col-6">
+                <label for="inputAllowance" class="form-label">Allowance (RM)<span class="small"></label>
+                <input type="text" class="form-control border-3" id="inputAllowance" name="inputAllowance"
+                    placeholder="e.g. 2000.00, 800.00-2000.00" required>
+            </div>
+            <div class="col-6">
+                <label for="inputDuration" class="form-label">Duration (month)</label>
+                <input type="number" class="form-control border-3" id="inputDuration" name="inputDuration" min="1"
+                    value="3">
+            </div>
+            <div class="col-12">
+                <label for="inputPrerequisite" class="form-label">Prerequisite</label>
+                <textarea class="form-control border-3" id="inputPrerequisite" name="inputPrerequisite" rows="3"
+                    placeholder="e.g. AWS, Django, Java, C++, SQL"></textarea>
+            </div>
+            <div class="col-12">
+                <label for="inputLanguage" class="form-label">Language</label>
+                <input type="text" class="form-control border-3" id="inputLanguage" name="inputLanguage"
+                    placeholder="e.g. English, Mandarin, Bahasa Melayu">
+            </div>
+            <div class="col-12">
+                <label for="inputLocation" class="form-label">Location</label>
+                <textarea class="form-control border-3" id="inputLocation" name="inputLocation" rows="3"
+                    placeholder="e.g. 1, Lebuh Bandar Utama, Bandar Utama, 47800 Petaling Jaya, Selangor"></textarea>
+            </div>
+            <div class="col-12">
+                <label for="inputDescription" class="form-label">Description</label>
+                <textarea class="form-control border-3" id="inputDescription" name="inputDescription" rows="7"
+                    placeholder="e.g. We are looking for talented and innovative students to join our team for the 2024 summer. All interns will receive a meaningful project and an unparalleled experience."></textarea>
+            </div>
+            <div class="col-12 d-flex flex-row justify-content-end">
+                <a class="btn btn-secondary btn-lg me-4" href="/company/offers">Cancel</a>
+                <button type="reset" class="btn btn-secondary btn-lg me-4">Reset</button>
+                <!-- <button type="submit" class="btn btn-primary btn-lg">Sign in</button> -->
+                <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop">Add</button>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1"
+                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirm Register?</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            This offer will be posted immediately. Are you sure?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary me-3" data-bs-dismiss="modal">Close</button>
+                            <button type="Submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    var loadFile = function (event, frame) {
+        var output = document.getElementById(frame);
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function () {
+            URL.revokeObjectURL(output.src) // free memory
+        }
+    };
+</script>
+{%endblock%}

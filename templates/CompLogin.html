@@ -1,0 +1,32 @@
+{%extends "generalLayout.html"%}
+
+{% block title %}Company Login{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-row justify-content-center align-items-center mt-5">
+    <div class="col-5">
+        {% if msg|length %}
+        <div class="alert alert-danger alert-dismissible fade show">
+            <strong>Error!</strong> {{msg}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endif %}
+
+        <div class="fs-2 fw-bold text-center mb-2">Company Login</div>
+        <form class="row g-3" action="/company/Login" method="POST" enctype="multipart/form-data">
+            <div class="col-12">
+                <label for="inputEmail" class="form-label">Email</label>
+                <input type="email" class="form-control border-3" id="inputEmail" name="inputEmail" required>
+            </div>
+            <div class="col-12">
+                <label for="inputPassword" class="form-label">Password</label>
+                <input type="password" class="form-control border-3" id="inputPassword" name="inputPassword">
+            </div>
+            <div class="col-12 d-flex flex-row justify-content-end">
+                <a href="{{ url_for('comp_register') }}" class="btn btn-secondary btn-lg me-4">Register Account</a>
+                <button type="submit" class="btn btn-primary btn-lg">Login</button>
+            </div>
+        </form>
+    </div>
+</div>
+{%endblock%}

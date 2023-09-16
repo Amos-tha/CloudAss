@@ -1,44 +1,46 @@
-<head>
-    <style>
-        .about {
-            margin: 50px;
-            padding: 40px;
-            display: flex;
-            background-color: #f8f9fa;
-        }
+{%extends "generalLayout.html"%}
 
-        .about>div {
-            float: left;
-            width: 50%;
-            margin: 5px;
-            padding: 5px;
-            font-size: 20px;
-        }
+{% block title %}FOCS Industrial Training Programme{% endblock %}
+{% block head %}
+{{super()}}
+<style>
+    .about {
+        margin: 50px;
+        padding: 40px;
+        display: flex;
+        background-color: #f8f9fa;
+    }
 
-        .img {
-            width: 250px;
-            height: 280px;
-            height: auto;
-        }
+    .about>div {
+        float: left;
+        width: 50%;
+        margin: 5px;
+        padding: 5px;
+        font-size: 20px;
+    }
 
-        .contents {
-            text-align: left;
-        }
+    .img {
+        width: 250px;
+        height: 280px;
+        height: auto;
+    }
 
-        .container {
-            margin-top: 20px;
-            margin-left: 25px;
-            margin-right: 25px;
-            padding-top: 20px;
-            padding-left: 25px;
-            padding-right: 25px;
-        }
-    </style>
-    <title>FOCS Industrial Training Programme</title>
-</head>
+    .contents {
+        text-align: left;
+    }
 
-{%extends "layout.html"%}
-{% block content%}
+    .container {
+        margin-top: 20px;
+        margin-left: 25px;
+        margin-right: 25px;
+        padding-top: 20px;
+        padding-left: 25px;
+        padding-right: 25px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
 <center>
     <!-- About section -->
     <section>

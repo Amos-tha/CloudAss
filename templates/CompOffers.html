@@ -1,0 +1,79 @@
+{%extends "compLayout.html"%}
+
+{% block title %}Company Login{% endblock %}
+{% block head %}
+{{super()}}
+<link href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css' rel='stylesheet'
+    type='text/css'>
+<link href='https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css' rel='stylesheet' type='text/css'>
+
+<script language="JavaScript" type="text/javascript" src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script language="JavaScript" type="text/javascript"
+    src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script language="JavaScript" type="text/javascript"
+    src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column col-10 align-self-center">
+    <div>
+        <div class="fs-2 fw-bold mt-4 mb-3">Offers</div>
+    </div>
+    <div class="d-flex flex-row justify-content-end mb-4">
+        <a href="{{ url_for('comp_add_offer') }}" class="btn btn-primary btn-lg">Add New Offer</a>
+    </div>
+    <div>
+        <table id='datatable' class='table' width='100%'>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Date Posted</th>
+                    <th>Position</th>
+                    <th>Allowance</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var empDataTable = $('#datatable').DataTable({
+            'processing': true,
+            'serverSide': true,
+            'serverMethod': 'post',
+            'ajax': {
+                'url': '/company/GetOffers'
+            },
+            'lengthMenu': [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+            searching: true,
+            sort: false,
+            "serverSide": true,
+            'columnDefs': [
+                {
+                    defaultContent: '<button class="btn btn-secondary btn-sm">More</button>',
+                    targets: -1
+                },
+                {
+                    defaultContent: "-",
+                    targets: "_all"
+                },
+            ],
+            'columns': [
+                { data: 'offerID' },
+                { data: 'datePosted' },
+                { data: 'position' },
+                { data: 'allowance' },
+                { data: 'offerStatus' },
+                { data: null }
+            ]
+        });
+
+        table.on('click', 'button', function (e) {
+            let data = table.row(e.target.closest('tr')).data();
+            window.location.replace("/company/offerdetails?id="+ data[0]);
+        });
+    });
+</script>
+{%endblock%}
