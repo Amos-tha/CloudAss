@@ -17,7 +17,7 @@ db_conn = connections.Connection(
     db=customdb
 )
 output = {}
-table = 'employee'
+table = 'company'
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
@@ -34,6 +34,27 @@ def StudLogin():
 @app.route("/company/register", methods=['GET','POST'])
 def comp_register():
     return render_template('RegisterComp.html')
+
+
+@app.route("/admin/compdetails", methods=['GET','POST'])
+def CompDetails():
+    return render_template('CompDetails.html')
+
+@app.route("/admin/registredcomp", methods=['GET'])
+def RegisteredComp():
+    cursor = db_conn.cursor()
+    cursor.execute("SELECT first_name,last_name FROM employee")
+    employeeName = cursor.fetchall()
+    cursor.close()
+    return render_template("RegisteredComp.html", emp = employeeName)
+
+@app.route("/admin/compregistration", methods=['GET'])
+def CompRequest():
+    cursor = db_conn.cursor()
+    cursor.execute("SELECT compID,CompName,registerStatus FROM company")
+    company = cursor.fetchall()
+    cursor.close()
+    return render_template("CompRegistration.html", comp = company)
 
 @app.route("/company/Register", methods=['GET','POST'])
 def Comp_Register():
