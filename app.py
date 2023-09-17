@@ -44,6 +44,8 @@ def about():
 def StudLogin():
     return render_template("StudLogin.html")
 
+
+# SUPERVISOR SITE
 def list_files():
     """
     Function to list files in a given S3 bucket
@@ -58,15 +60,14 @@ def list_files():
 
     return contents
 
-
 def cleartext():
     response = " "
     return response
 
 @app.route("/view/stud", methods=['GET'])
-def getStudents():
+def get_studs():
     try:
-        cursor = db_conn.cursor()
+        cursor = db_conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute("SELECT * FROM student WHERE supervisorID = %s", ("S01"))
         students = cursor.fetchall()
 
@@ -96,14 +97,31 @@ def previewReport(studid):
         cursor.close()
 
     return render_template('ViewReport.html', classworks = classworks, reports = reports, files="test")  
-    
-#     # list_file = []
-#     # stud_id = request.form['stud_id']
-#     # filename = stud_id + " "
+
+@app.route("/supervisor/login", methods=["GET", "POST"])
+def sup_login():
+    if request.method == 'GET':
+        return render_template("SupLogin.html", msg="")
+    else:
+        cursor = db_conn.cursor()
+        email = request.form["inputEmail"]
+        password = request.form["inputPassword"]
+        cursor.execute(
+            "SELECT * FROM supervisor WHERE supervisorEmail=%s AND supervisorPassword=%s",
+            (email, password)
+        )
+        record = cursor.fetchone()
+        if record:
+            session["loggedin"] = True
+            session["userid"] = record[0]
+            session["username"] = record[1]
+            return redirect(url_for("get_studs"))
+        else:
+            msg = "Incorrect email/password.Try again!"
+            return render_template("SupLogin.html", msg=msg)
 
 @app.route('/update/report/<submissionid>', methods=['GET', 'POST'])
 def update(submissionid):
-    cincai = request
     status = request.form['reportStatus']
     remark = request.form['remark']
     cursor = db_conn.cursor()
