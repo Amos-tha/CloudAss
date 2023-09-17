@@ -75,7 +75,7 @@ def stud_submission():
 
         # get filename
         for report in classworks:
-            filenames.append("report_" + str(report['reportID']) + "_" + str(report['studName']) + "_" + str(studid) + ".pdf")
+            filenames.append("report_" + str(report['reportID']) + "_" + str(report['studName']) + "_" + str(report['studID']) + ".pdf")
 
         files = list_files(filenames)
         print(filenames)
