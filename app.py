@@ -414,6 +414,7 @@ def comp_offer_details():
         "SELECT * FROM offer WHERE offerID=%s",
         (offerID),
     )
+    
     record = cursor.fetchone()
     return render_template(
         "CompOfferDetails.html",
@@ -427,6 +428,23 @@ def comp_offer_details():
         description=record[7],
         datePosted=record[8].strftime("%d-%m-%Y %I:%M:%S %p"),
         offerStatus=record[9],
+    )
+
+
+@app.route("/company/UpdateOfferDetails", methods=["GET", "POST"])
+def comp_update_offer_details():
+    offerID = request.form['inputOfferID']
+    offerStatus = request.form['inputOfferStatus']
+
+    cursor = db_conn.cursor()
+    cursor.execute(
+        "UPDATE offer SET offerStatus = %s WHERE offerID=%s;",
+        (offerStatus,offerID),
+    )
+    db_conn.commit()
+    cursor.close()
+    return redirect(url_for("comp_offer_details"),
+        id=offerID,
     )
 
 
