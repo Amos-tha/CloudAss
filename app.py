@@ -84,11 +84,11 @@ def submit(reportid):
         students = cursor.fetchone()
         
         # Uplaod image file in S3 #
-        report_file = "report_" + str(reportid) + "_" + str(students[1]) + "_" + str(students[0])
+        report_file = "report_" + str(reportid) + "_" + str(students[1]) + "_" + str(students[0]) + ".pdf"
         s3 = boto3.resource("s3")
 
         print("Data inserted in MySQL RDS... uploading image to S3...")
-        s3.Bucket(custombucket).put_object(Key=report_file, Body=pdf)
+        s3.Bucket(custombucket).put_object(Key=report_file, Body=pdf, ContentType="application/pdf")
         bucket_location = boto3.client("s3").get_bucket_location(
             Bucket=custombucket
         )
@@ -127,7 +127,6 @@ def unsubmit(reportid):
         
         # Uplaod image file in S3 #
         report_file = "report_" + str(reportid) + "_" + str(students[1]) + "_" + str(students[0]) + ".pdf"
-        print("testing" + report_file)
         s3 = boto3.resource("s3")
 
         print("Data inserted in MySQL RDS... uploading image to S3...")
