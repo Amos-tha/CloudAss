@@ -512,7 +512,7 @@ def Comp_Get_Offer_Applications():
 
 @app.route("/company/appdetails", methods=["GET", "POST"])
 def comp_app_details():
-    appID = request.args.get("id")
+    appID = request.args.get("appid")
     try:
         db_conn2 = connections.Connection(
             host=customhost,
