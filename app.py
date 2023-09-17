@@ -44,6 +44,15 @@ def about():
 def StudLogin():
     return render_template("StudLogin.html")
 
+@app.route("/stud/submission")
+def stud_submission():
+    supid = session['userid']
+    cursor = db_conn.cursor(pymysql.cursors.DictCursor)
+    cursor.execute("SELECT supervisorID FROM student WHERE studentID=%s", (supid))  
+    cursor.execute("SELECT reportID, reportName, dueDate FROM progressReport WHERE supervisorID=%s", (supid))
+    classworks = cursor.fetchall()
+    return render_template("StudSubmitReport.html", classworks=classworks)
+
 
 # SUPERVISOR SITE
 def list_files():
@@ -64,11 +73,12 @@ def cleartext():
     response = " "
     return response
 
-@app.route("/view/stud", methods=['GET'])
+@app.route("/supervisor/view/stud", methods=['GET'])
 def get_studs():
     try:
+        supid = session['userid']
         cursor = db_conn.cursor(pymysql.cursors.DictCursor)
-        cursor.execute("SELECT * FROM student WHERE supervisorID = %s", ("S01"))
+        cursor.execute("SELECT * FROM student WHERE supervisorID = %s", (supid))
         students = cursor.fetchall()
 
     except Exception as e:
@@ -77,13 +87,14 @@ def get_studs():
     finally:
         cursor.close()
 
-    return render_template('ViewMyStudent.html', students = students)
+    return render_template('SupMyITP.html', students = students)
 
-@app.route("/view/report/<studid>", methods=['GET'])
+@app.route("/supervisor/view/report/<studid>", methods=['GET'])
 def previewReport(studid):
     try:
+        supid = session['userid']
         cursor = db_conn.cursor(pymysql.cursors.DictCursor)
-        cursor.execute("SELECT reportID, reportName, dueDate FROM progressReport WHERE supervisorID=%s", ("S01"))
+        cursor.execute("SELECT reportID, reportName, dueDate FROM progressReport WHERE supervisorID=%s", (supid))
         classworks = cursor.fetchall()
         cursor.execute("SELECT * FROM submission WHERE studID = %s", (studid))
         reports = cursor.fetchall()
@@ -96,7 +107,7 @@ def previewReport(studid):
     finally:
         cursor.close()
 
-    return render_template('ViewReport.html', classworks = classworks, reports = reports, files="test")  
+    return render_template('SupViewReport.html', classworks = classworks, reports = reports, files="test")  
 
 @app.route("/supervisor/login", methods=["GET", "POST"])
 def sup_login():

@@ -2,6 +2,7 @@
 block content %}
 
 <div class="d-flex flex-row justify-content-end">
+  Search: 
   <input
     type="text"
     class="live-search-box form-control my-2 me-4 border border-black"
@@ -27,28 +28,26 @@ block content %}
     </tr>
   </thead>
   <tbody class="stud-list">
-    {% if students | length != 0 %} {% for stud in students %}
+    {% for stud in students if students | length != 0 %}
     <tr>
       <th scope="row">{{loop.index}}</th>
       <td>{{stud["studName"]}}</td>
       <td>{{'Male' if stud["studGender"] == 'M' else 'Female' }}</td>
       <td>programme</td>
-      <td>{{stud["studPhone"]}}</td>
+      <td>{{stud["studPhone"]}}</td>  
       <td>@mdo</td>
       <td>@mdo</td>
       <td>
         <a
-          href="/view/report/{{stud['studID']}}"
+          href="/supervisor/view/report/{{stud['studID']}}"
           class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
           >Details</a
         >
       </td>
     </tr>
-    {% endfor %} {% else %}
-    <tr>
-      No students found
-    </tr>
-    {% endif %}
+    {% else %}
+    <td colspan="8" class="text-center">No students found</td>
+    {% endfor %}
   </tbody>
 </table>
 
