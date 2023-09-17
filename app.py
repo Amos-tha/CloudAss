@@ -29,7 +29,20 @@ db_conn = connections.Connection(
 output = {}
 table = "employee"
 
+def list_files(filenames):
+    """
+    Function to list files in a given S3 bucket
+    """
+    s3 = boto3.client('s3')
+    contents = []
+    for image in s3.list_objects(Bucket=custombucket)['Contents']:
+        for filename in filenames:
+            s3_name = image['Key']
+            if(filename == s3_name):
+                contents.append(s3_name)
 
+    return contents
+    
 @app.route("/", methods=["GET", "POST"])
 def home():
     return render_template("Index.html")
@@ -49,6 +62,8 @@ def StudLogin():
 
 @app.route("/stud/submission")
 def stud_submission():
+    filenames = []
+
     try:
         studid = session['userid']
         cursor = db_conn.cursor(pymysql.cursors.DictCursor)
@@ -57,6 +72,12 @@ def stud_submission():
         classworks = cursor.fetchall()
         cursor.execute("SELECT * FROM submission WHERE studID = %s", ('2205123'))
         submissions = cursor.fetchall()
+
+        # get filename
+        for report in classworks:
+            filenames.append("report_" + str(report['reportID']) + "_" + str(report['studName']) + "_" + str(studid) + ".pdf")
+
+        files = list_files(filenames)
     
     except Exception as e:
         return str(e)
@@ -64,7 +85,7 @@ def stud_submission():
     finally:
         cursor.close()
 
-    return render_template("StudSubmitReport.html", classworks=classworks, submissions=submissions)
+    return render_template("StudSubmitReport.html", classworks=classworks, submissions=submissions, files=files)
 
 @app.route("/stud/submit/<reportid>", methods=["GET", "POST"])
 def submit(reportid):
@@ -82,6 +103,11 @@ def submit(reportid):
         db_conn.commit()
         cursor.execute("SELECT * FROM student WHERE studID = %s", ('2205123'))  
         students = cursor.fetchone()
+
+        for report in reports:
+            filenames.append("report_" + str(report['reportID']) + "_" + str(report['studName']) + "_" + str(studid) + ".pdf")
+
+        files = list_files(filenames)
         
         # Uplaod image file in S3 #
         report_file = "report_" + str(reportid) + "_" + str(students[1]) + "_" + str(students[0]) + ".pdf"
@@ -150,20 +176,6 @@ def unsubmit(reportid):
     return redirect(url_for('stud_submission'))
 
 # SUPERVISOR SITE
-def list_files(filenames):
-    """
-    Function to list files in a given S3 bucket
-    """
-    s3 = boto3.client('s3')
-    contents = []
-    for image in s3.list_objects(Bucket=custombucket)['Contents']:
-        for filename in filenames:
-            s3_name = image['Key']
-            if(filename == s3_name):
-                contents.append(s3_name)
-
-    return contents
-
 def cleartext():
     response = " "
     return response
