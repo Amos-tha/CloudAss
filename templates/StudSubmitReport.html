@@ -30,7 +30,7 @@ endblock %} {% block content %} {% for classwork in classworks %}
         >
       </div>
 
-      {% print classwork['studName']  submitted['reportID']|string%}
+      {% print classwork['studName'],submitted['reportID']|string%}
       <!-- Submitted Report -->
       {% for file in files if submitted['reportID']|string + '_' +
       classwork['studName'] in file %}
