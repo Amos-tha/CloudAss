@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect
+from io import BytesIO
+from flask import Flask, render_template, request, redirect, send_file, session, url_for
 from pymysql import connections
 import os
 import boto3
@@ -6,6 +7,7 @@ import pymysql
 from config import *
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = "amos-itp"
 
 bucket = custombucket
 region = customregion
@@ -24,17 +26,9 @@ table = 'employee'
 def home():
     return render_template('Index.html')
 
-@app.route("/studRegister", methods=['GET', 'POST'])
-def studRegister():
-    return render_template('RegisterStudent.html')
-
 @app.route("/about", methods=['POST'])
 def about():
     return render_template('www.tarc.edu.my')
-
-@app.route("/login", methods=['GET', 'POST'])
-def StudLogin():
-    return render_template('StudLogin.html')
 
 @app.route("/company/register", methods=['GET','POST'])
 def comp_register():
@@ -152,52 +146,95 @@ def AddEmp():
 
 @app.route("/student/studRegister", methods=['GET','POST'])
 def stud_Register():
-    studID = request.form['inputstudID']
-    studUniEmail = request.form['inputUniEmail']
-    studLevel = request.form['inputLevel']
-    studProgramme = request.form['inputProgramme']
-    studTutGrp = request.form['inputTutGrp']
-    CGPA = request.form['inputCGPA']
-    superVisorName = request.form['inputSupervisor']
+    if request.method == "POST":
+        studID = request.form['inputstudID']
+        studUniEmail = request.form['inputUniEmail']
+        studLevel = request.form['inputLevel']
+        studProgramme = request.form['inputProgramme']
+        studTutGrp = request.form['inputTutGrp']
+        CGPA = request.form['inputCGPA']
+        superVisorName = request.form['inputSupervisor']
 
-    studName = request.form['inputName']
-    studIC = request.form['inputIC']
-    studGender = request.form['inputGender']
-    studPersonalEmail = request.form['inputPersonalEmail']
-    studPhone = request.form['inputPhone']
-    studAddress = request.form['inputAddress']
+        studName = request.form['inputName']
+        studIC = request.form['inputIC']
+        studGender = request.form['inputGender']
+        studPersonalEmail = request.form['inputPersonalEmail']
+        studPhone = request.form['inputPhone']
+        studAddress = request.form['inputAddress']
 
-    get_supervisorid_sql = "SELECT superVisorID FROM supervisor WHERE superVisorName = (%s)"
-    insert_sql = "INSERT INTO student (studID, studName, studIC, studPhone, studGender, studUniEmail, studPersonalEmail, studAddress, studLevel, studProgramme, studTutGrp, CGPA, supervisorID)VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    cursor = db_conn.cursor()
+        get_supervisorid_sql = "SELECT superVisorID FROM supervisor WHERE superVisorName = (%s)"
+        insert_sql = "INSERT INTO student (studID, studName, studIC, studPhone, studGender, studUniEmail, studPersonalEmail, studAddress, studLevel, studProgramme, studTutGrp, CGPA, supervisorID)VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor = db_conn.cursor()
 
-    try:
-        cursor.execute(get_supervisorid_sql, superVisorName)
-        superVisorID = cursor.fetchone()
-        cursor.execute(insert_sql, (studID, studName, studIC, studPhone, studGender, studUniEmail, studPersonalEmail, studAddress, studLevel, studProgramme, studTutGrp, CGPA, superVisorID))
-        db_conn.commit()
+        try:
+            cursor.execute(get_supervisorid_sql, superVisorName)
+            superVisorID = cursor.fetchone()
+            cursor.execute(insert_sql, (studID, studName, studIC, studPhone, studGender, studUniEmail, studPersonalEmail, studAddress, studLevel, studProgramme, studTutGrp, CGPA, superVisorID))
+            db_conn.commit()
 
-    finally:
-        cursor.close()
+        finally:
+            cursor.close()
 
-    return redirect("/")
+    return render_template("StudLogin.html", msg="")
 
 @app.route("/viewOffers", methods=['GET','POST'])
 def viewoffers():
     try:
         cursor = db_conn.cursor(pymysql.cursors.DictCursor)
-        cursor.execute("SELECT offerID, position, allowance, duration, prerequisite, language, location, datePosted, offerStatus, compName FROM offer O, company C WHERE O.compID = C.compID")
+        cursor.execute("SELECT offerID, position, allowance, duration, prerequisite, language, location, datePosted, offerStatus, O.compID, compName FROM offer O, company C WHERE O.compID = C.compID")
         offers = cursor.fetchall()
-        
-        # contents = list_files
+        for offer in offers:
+            compID = offer['compID']
 
     except Exception as e:
+            # print(e)
             return str(e)
 
     finally:
         cursor.close()
 
-    return render_template('ViewOffers.html', offers = offers) 
+    s3 = boto3.client("s3")
+    contents = []
+    for image in s3.list_objects(Bucket=custombucket)["Contents"]:
+        file = image["Key"]
+        if file.startswith("comp-id-" + compID + "_logo"):
+            contents.append(file)
+
+    return render_template('ViewOffers.html', offers = offers, contents=contents) 
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    return render_template("StudLogin.html", msg="")
+
+@app.route("/student/login", methods=["GET", "POST"])
+def Stud_Login():
+    msg = ""
+    cursor = db_conn.cursor()
+    if request.method == "POST":
+        email = request.form["inputUniEmail"]
+        ic = request.form["inputIC"]
+        cursor.execute(
+            "SELECT * FROM student WHERE studUniEmail=%s AND studIC=%s",
+            (email, ic),
+        )
+        record = cursor.fetchone()
+        if record:
+            session["loggedin"] = True
+            session["userid"] = record[0]
+            session["username"] = record[1]
+            return redirect(url_for("viewoffers"))
+        else:
+            msg = "Incorrect university email/NRIC. Try again!"
+    return render_template("StudLogin.html", msg=msg)
+
+@app.route('/previewImg/<file>', methods=['GET'])
+def preview(file):
+    if request.method == 'GET':
+        s3 = boto3.resource('s3')
+        file1 = s3.Object(custombucket, file).get()
+    img = file1['Body'].read()
+    return send_file(BytesIO(img), mimetype='image/jpeg')
+    # return file['Body'].read()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)

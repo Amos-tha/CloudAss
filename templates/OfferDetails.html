@@ -5,7 +5,7 @@
 {% block content %}
 <div class="d-flex flex-row justify-content-center align-items-center mt-5">
     <div class="col-5 text-center">
-        <div class="fs-2 fw-bold text-center mb-2">Internship Offers</div>
+        <div class="fs-2 fw-bold text-center mb-2">Offer Details</div>
         <div class="row">
             {% for offer in offers %}
             <div class="col-sm-6 mb-3">
@@ -13,18 +13,15 @@
                     <div class="card-header">
                         {{offer['compName']}}
                     </div>
-                    {{compImg}}
-                    <!-- <img src="..." class="card-img-top" alt="..."> -->
-                    <a href="/previewImg/{{ file[0] }}" target="_blank" class="fw-normal"></a>
                     <div class="card-body">
                         <h5 class="card-title">Position: {{offer['position']}}</h5>
                         <h5 class="card-title">Allowance: RM{{offer['allowance']}}</h5>
                         <h5 class="card-title">Duration: {{offer['duration']}} months</h5>
-                        <!-- <h5 class="card-title">Prerequisite: {{offer['prerequisite']}}</h5>
+                        <h5 class="card-title">Prerequisite: {{offer['prerequisite']}}</h5>
                         <h5 class="card-title">Language: {{offer['language']}}</h5>
                         <h5 class="card-title">Location: {{offer['location']}}</h5>
                         <h5 class="card-title">Date Posted: {{offer['datePosted']}}</h5>
-                        <h5 class="card-title">Offer Status: {{offer['offerStatus']}}</h5> -->
+                        <h5 class="card-title">Offer Status: {{offer['offerStatus']}}</h5>
                         <a href="#" class="btn btn-primary">View Offer</a>
                     </div>
                 </div>
