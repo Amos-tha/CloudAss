@@ -15,6 +15,48 @@ endblock %} {% block content %} {% for classwork in classworks %}
     class="card-body accordion-collapse collapse show"
     id="classwork{{ classwork['reportName']}}"
   >
+    {% for submitted in submissions %}
+    <form
+      class="row g-2"
+      action="/stud/unsubmit/{{classwork['reportID']}}"
+      autocomplete="on"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+      <div class="d-flex flex-row">
+        <label class="fw-bold"
+          >Submitted Date: {{submitted['handInDate']}}</label
+        >
+        <p class="ms-2"></p>
+      </div>
+      <label class="fw-bold">Supervisor Remark: </label>
+      <div class="form-check">
+        <textarea class="form-control" row="5" name="remark">
+{{report['remark'] if report['remark'] != None else ' '}}</textarea
+        >
+      </div>
+      <div class="col-6 mb-3">
+        <label for="inputPdf" class="form-label">Add Work</label>
+        <input
+          class="form-control border-2"
+          type="file"
+          id="inputPdf"
+          name="inputPdf"
+          accept=".pdf"
+          onchange="loadFile(event, 'pdfPreview')"
+        />
+        <embed
+          id="pdfPreview"
+          type="application/pdf"
+          width="300"
+          height="300"
+          title="Title of my pdf"
+          class="border border-3 mt-2"
+        />
+      </div>
+      <button type="submit" class="btn btn-primary">Unsubmit</button>
+    </form>
+    {% else %}
     <form
       class="row g-2"
       action="/stud/submit/{{classwork['reportID']}}"
@@ -51,6 +93,7 @@ endblock %} {% block content %} {% for classwork in classworks %}
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+    {% endfor %}
   </div>
 </div>
 <script>
