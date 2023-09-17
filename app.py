@@ -127,6 +127,7 @@ def unsubmit(reportid):
         
         # Uplaod image file in S3 #
         report_file = "report_" + str(reportid) + "_" + str(students[1]) + "_" + str(students[0]) + ".pdf"
+        print(report_file)
         s3 = boto3.resource("s3")
 
         print("Data inserted in MySQL RDS... uploading image to S3...")
