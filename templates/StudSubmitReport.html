@@ -32,7 +32,7 @@ endblock %} {% block content %} {% for classwork in classworks %}
 
       <!-- Submitted Report -->
       {% for file in files if submitted['reportID']|string + '_' +
-      classwork['studName'] in file %} {% print file %}
+      classwork['studName'] in file %}
       <label class="fw-bold"
         >Report:
         <a href="/preview/{{ file }}" target="_blank" class="fw-normal"
