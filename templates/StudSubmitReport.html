@@ -30,10 +30,9 @@ endblock %} {% block content %} {% for classwork in classworks %}
         >
       </div>
 
-      {% print classwork['studName'],submitted['reportID']|string%}
       <!-- Submitted Report -->
       {% for file in files if submitted['reportID']|string + '_' +
-      classwork['studName'] in file %}
+      classwork['studName'] in file %} {% print file %}
       <label class="fw-bold"
         >Report:
         <a href="/preview/{{ file }}" target="_blank" class="fw-normal"
