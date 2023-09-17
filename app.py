@@ -459,7 +459,7 @@ def Comp_Get_Offer_Applications():
             ## Total number of records with filtering
             likeString = "%" + searchValue + "%"
             cursor.execute(
-                "SELECT COUNT(*) AS allcount FROM application WHERE appStatus LIKE %s AND offerID=%s ORDER BY CASE appStatus WHEN 'pending' THEN 0 WHEN 'accepted' THEN 1 WHEN 'rejected' THEN 2 END ASC, appliedDateTime ASC;",
+                "SELECT COUNT(*) AS allcount FROM application WHERE appStatus LIKE %s AND offerID=%s ORDER BY CASE appStatus WHEN 'Pending' THEN 0 WHEN 'Accepted' THEN 1 WHEN 'Rejected' THEN 2 END ASC, appliedDateTime ASC;",
                 (likeString, offerID),
             )
             rsallcount = cursor.fetchone()
@@ -468,13 +468,13 @@ def Comp_Get_Offer_Applications():
             ## Fetch records
             if searchValue == "":
                 cursor.execute(
-                    "SELECT * FROM application a, student s WHERE a.studID=s.studID AND offerID=%s ORDER BY CASE appStatus WHEN 'pending' THEN 0 WHEN 'accepted' THEN 1 WHEN 'rejected' THEN 2 END ASC, appliedDateTime ASC LIMIT %s, %s;",
+                    "SELECT * FROM application a, student s WHERE a.studID=s.studID AND offerID=%s ORDER BY CASE appStatus WHEN 'Pending' THEN 0 WHEN 'Accepted' THEN 1 WHEN 'Rejected' THEN 2 END ASC, appliedDateTime ASC LIMIT %s, %s;",
                     (offerID, row, rowperpage),
                 )
                 offerlist = cursor.fetchall()
             else:
                 cursor.execute(
-                    "SELECT * FROM application a, student s WHERE a.studID=s.studID AND appStatus LIKE %s AND offerID=%s ORDER BY CASE appStatus WHEN 'pending' THEN 0 WHEN 'accepted' THEN 1 WHEN 'rejected' THEN 2 END ASC, appliedDateTime ASC LIMIT %s, %s;",
+                    "SELECT * FROM application a, student s WHERE a.studID=s.studID AND appStatus LIKE %s AND offerID=%s ORDER BY CASE appStatus WHEN 'Pending' THEN 0 WHEN 'Accepted' THEN 1 WHEN 'Rejected' THEN 2 END ASC, appliedDateTime ASC LIMIT %s, %s;",
                     (likeString, offerID, row, rowperpage),
                 )
                 offerlist = cursor.fetchall()

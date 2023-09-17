@@ -31,8 +31,7 @@
                     href="/company/offers"></a>
                 <div class="fs-2 fw-bold text-center mb-2">Offer Details</div>
             </div>
-            <div class="text-center mb-4"><strong>You may directly change the values below and click Save to change
-                    Offer details.</strong></div>
+            <div class="text-center mb-4"><strong>You can only make the offer to be Active or Revoked.</strong></div>
             <form class="row g-3">
                 <div class="col-2">
                     <label for="inputOfferID" class="form-label">Offer ID</label>
@@ -40,6 +39,13 @@
                         value="{{offerID}}" disabled required>
                 </div>
                 <div class="col-2">
+                    {% if offerStatus == 'Pending' or offerStatus == 'Rejected' %}
+                    <label for="inputOfferStatus" class="form-label">Offer Status</label>
+                    <select class="form-select" aria-label="Default select example" id="inputOfferStatus"
+                        name="inputOfferStatus" disabled>
+                        <option value="{{offerStatus}}" SELECTED>{{offerStatus}}</option>
+                    </select>
+                    {% else %}
                     <label for="inputOfferStatus" class="form-label">Offer Status</label>
                     <select class="form-select" aria-label="Default select example" id="inputOfferStatus"
                         name="inputOfferStatus">
@@ -51,47 +57,48 @@
                         {% endif %}
                         {% endfor %}
                     </select>
+                    {% endif %}
                 </div>
                 <div class="col-3">
                     <label for="inputDatePosted" class="form-label">Date Posted</label>
                     <input type="text" class="form-control border-3" id="inputDatePosted" name="inputDatePosted"
-                        value="{{datePosted}}" required>
+                        value="{{datePosted}}" required disabled>
                 </div>
                 <div class="col-5">
                     <label for="inputPosition" class="form-label">Position</label>
                     <input type="text" class="form-control border-3" id="inputPosition" name="inputPosition"
-                        value="{{position}}" required>
+                        value="{{position}}" required disabled>
                 </div>
                 <div class="col-2">
                     <label for="inputAllowance" class="form-label">Allowance (RM)<span class="small"></label>
                     <input type="text" class="form-control border-3" id="inputAllowance" name="inputAllowance"
-                        placeholder="e.g. 2000.00, 800.00-2000.00" value="{{allowance}}" required>
+                        placeholder="e.g. 2000.00, 800.00-2000.00" value="{{allowance}}" required disabled>
                 </div>
                 <div class="col-2">
                     <label for="inputDuration" class="form-label">Duration (month)</label>
                     <input type="number" class="form-control border-3" id="inputDuration" name="inputDuration" min="1"
-                        value="{{duration}}">
+                        value="{{duration}}" disabled>
                 </div>
                 <div class="col-8">
                     <label for="inputLanguage" class="form-label">Language(s)</label>
                     <input type="text" class="form-control border-3" id="inputLanguage" name="inputLanguage"
-                        value="{{language}}">
+                        value="{{language}}" disabled>
                 </div>
                 <div class="col-12">
                     <label for="inputPrerequisite" class="form-label">Prerequisite</label>
-                    <textarea class="form-control border-3" id="inputPrerequisite" name="inputPrerequisite"
-                        rows="3">{{prerequisite}}</textarea>
+                    <textarea class="form-control border-3" id="inputPrerequisite" name="inputPrerequisite" rows="3"
+                        disabled>{{prerequisite}}</textarea>
                 </div>
 
                 <div class="col-12">
                     <label for="inputLocation" class="form-label">Location</label>
-                    <textarea class="form-control border-3" id="inputLocation" name="inputLocation"
-                        rows="3">{{location}}</textarea>
+                    <textarea class="form-control border-3" id="inputLocation" name="inputLocation" rows="3"
+                        disabled>{{location}}</textarea>
                 </div>
                 <div class="col-12">
                     <label for="inputDescription" class="form-label">Description</label>
-                    <textarea class="form-control border-3" id="inputDescription" name="inputDescription"
-                        rows="7">{{description}}</textarea>
+                    <textarea class="form-control border-3" id="inputDescription" name="inputDescription" rows="7"
+                        disabled>{{description}}</textarea>
                 </div>
                 <div class="col-12 d-flex flex-row justify-content-end">
                     <button type="reset" class="btn btn-secondary btn-lg me-4">Reset</button>
@@ -174,7 +181,7 @@
 
         table.on('click', 'button', function (e) {
             let data = table.row(e.target.closest('tr')).data();
-            window.location.replace("/company/appdetails?offerid=" +getUrlParameter('id')+ "&appid=" + data.appID);
+            window.location.replace("/company/appdetails?offerid=" + getUrlParameter('id') + "&appid=" + data.appID);
         });
 
         $('#All').on('click', function () {
