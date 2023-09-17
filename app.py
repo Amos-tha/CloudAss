@@ -197,7 +197,7 @@ def viewoffers():
         compID = offer['compID']
         for image in s3.list_objects(Bucket=custombucket)["Contents"]:
             file = image["Key"]
-            if file.startswith("comp-id-" + compID + "_logo"):
+            if file.startswith("comp-id-" + str(compID) + "_logo"):
                 contents.append(file)
 
     return render_template('ViewOffers.html', offers = offers, contents=contents) 
