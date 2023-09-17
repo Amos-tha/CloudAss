@@ -106,10 +106,11 @@
                     <button type="submit" class="btn btn-primary btn-lg">Save</button>
                 </div>
                 {% endif %}
-                
+
             </form>
         </div>
     </div>
+    {% if offerStatus != 'Pending' and offerStatus != 'Rejected' %}
     <div class="col-10 mb-4">
         <button class="btn btn-primary me-2" id="All">All</button>
         <button class="btn btn-secondary me-2" id="Pending">Pending</button>
@@ -131,6 +132,8 @@
             </thead>
         </table>
     </div>
+    {% endif %}
+
 </div>
 <script>
     var getUrlParameter = function getUrlParameter(sParam) {
