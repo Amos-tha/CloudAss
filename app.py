@@ -531,12 +531,10 @@ def comp_app_details():
         record = cursor.fetchone()
         s3 = boto3.client("s3")
         contents = []
-        # for image in s3.list_objects(Bucket=custombucket)["Contents"]:
-        #     file = image["Key"]
-        #     if file.startswith("stud-id-" + record['studID'] + '_resume'):
-        filename="stud-id-"+record['studID']+'_resume'
-        file = s3.Bucket(custombucket).get_object(Key=filename)
-        contents.append(file)
+        for image in s3.list_objects(Bucket=custombucket)["Contents"]:
+            file = image["Key"]
+            if file.startswith("stud-id-" + record['studID'] + '_resume'):
+                contents.append(file)
         return render_template("CompAppDetails.html", appdetails=record, file=contents)
     except Exception as e:
         print(e)
