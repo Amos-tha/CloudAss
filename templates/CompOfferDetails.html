@@ -100,10 +100,13 @@
                     <textarea class="form-control border-3" id="inputDescription" name="inputDescription" rows="7"
                         disabled>{{description}}</textarea>
                 </div>
+                {% if offerStatus != 'Pending' and offerStatus != 'Rejected' %}
                 <div class="col-12 d-flex flex-row justify-content-end">
                     <button type="reset" class="btn btn-secondary btn-lg me-4">Reset</button>
                     <button type="submit" class="btn btn-primary btn-lg">Save</button>
                 </div>
+                {% endif %}
+                
             </form>
         </div>
     </div>

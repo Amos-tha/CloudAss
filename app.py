@@ -558,7 +558,7 @@ def Comp_Add_Offer():
     location = request.form["inputLocation"]
     description = request.form["inputDescription"]
     datePosted = datetime.now()
-    offerStatus = "Active"
+    offerStatus = "Pending"
     compID = session["userid"]
 
     insert_sql = "INSERT INTO offer (position, allowance, duration, prerequisite, language, location, description, datePosted, offerStatus, compID)VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
