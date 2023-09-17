@@ -43,7 +43,7 @@
           <button type="submit" class="btn btn-primary btn-sm">Save</button>
         </div>
       </div>
-      {% for file in files %}
+      {% for file in files if file.endswith(report['studID'].pdf) %}
       <label class="fw-bold"
         >Report:
         <a href="/preview/{{ file }}" target="_blank" class="fw-normal"

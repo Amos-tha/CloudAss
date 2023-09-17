@@ -15,7 +15,8 @@ endblock %} {% block content %} {% for classwork in classworks %}
     class="card-body accordion-collapse collapse show"
     id="classwork{{ classwork['reportName']}}"
   >
-    {% for submitted in submissions %}
+    {% for submitted in submissions if submitted['reportID'] ==
+    classwork['reportID'] %}
     <form
       class="row g-2"
       action="/stud/unsubmit/{{classwork['reportID']}}"
@@ -37,14 +38,6 @@ endblock %} {% block content %} {% for classwork in classworks %}
       </div>
       <div class="col-6 mb-3">
         <label for="inputPdf" class="form-label">Add Work</label>
-        <input
-          class="form-control border-2"
-          type="file"
-          id="inputPdf"
-          name="inputPdf"
-          accept=".pdf"
-          onchange="loadFile(event, 'pdfPreview')"
-        />
         <embed
           id="pdfPreview"
           type="application/pdf"

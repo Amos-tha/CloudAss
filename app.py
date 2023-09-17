@@ -108,19 +108,59 @@ def submit(reportid):
     print("all modification done...")
     return redirect(url_for('stud_submission'))
 
+@app.route("/stud/unsubmit/<reportid>", methods=["GET", "POST"])
+def submit(reportid):
+    pdf = request.files["inputPdf"]
+    studid = session['userid']
+    studName = session['username']
+    cursor = db_conn.cursor()
+    handInDate = datetime.now()
+
+    if pdf.filename == "":
+        return "Please select a pdf to submit"
+
+    try:
+        cursor.execute("INSERT INTO submission (handInDate, reportID, studID) VALUES (%s, %s, %s)", (handInDate, reportid, '2205123'))
+        db_conn.commit()
+        cursor.execute("SELECT * FROM student WHERE studID = %s", ('2205123'))  
+        students = cursor.fetchone()
+        
+        # Uplaod image file in S3 #
+        report_file = "report_" + str(reportid) + "_" + str(students[1]) + "_" + str(students[0]) + ".pdf"
+        s3 = boto3.resource("s3")
+
+        print("Data inserted in MySQL RDS... uploading image to S3...")
+        s3.Bucket(custombucket).put_object(Key=report_file, Body=pdf)
+        bucket_location = boto3.client("s3").get_bucket_location(
+            Bucket=custombucket
+        )
+        s3_location = bucket_location["LocationConstraint"]
+
+        if s3_location is None:
+            s3_location = ""
+        else:
+            s3_location = "-" + s3_location
+
+    except Exception as e:
+        return str(e)
+
+    finally:
+        cursor.close()
+
+    return redirect(url_for('stud_submission'))
 
 # SUPERVISOR SITE
-def list_files():
+def list_files(filenames):
     """
     Function to list files in a given S3 bucket
     """
     s3 = boto3.client('s3')
     contents = []
     for image in s3.list_objects(Bucket=custombucket)['Contents']:
-        file = image['Key']
-        if(file.endswith('.pdf')):
-            contents.append(file)
-        # contents.append(f'https://{custombucket}.s3.amazonaws.com/{image}')
+        for filename in filenames:
+            s3_name = image['Key']
+            if(filename == s3_name):
+                contents.append(s3_name)
 
     return contents
 
@@ -146,15 +186,19 @@ def get_studs():
 
 @app.route("/supervisor/view/report/<studid>", methods=['GET'])
 def previewReport(studid):
+    filenames = []
     try:
         supid = session['userid']
         cursor = db_conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute("SELECT reportID, reportName, dueDate FROM progressReport WHERE supervisorID=%s", (supid))
         classworks = cursor.fetchall()
-        cursor.execute("SELECT * FROM submission WHERE studID = %s", (studid))
+        cursor.execute("SELECT * FROM student s, submission sb WHERE s.studID = sb.studID AND studID = %s", (studid))
         reports = cursor.fetchall()
         
-        contents = list_files()
+        for report in reports:
+            filenames.append("report_" + str(report['reportID']) + "_" + str(report['studName']) + "_" + str(studid) + ".pdf")
+
+        files = list_files(filenames)
 
     except Exception as e:
             return str(e)
@@ -162,7 +206,7 @@ def previewReport(studid):
     finally:
         cursor.close()
 
-    return render_template('SupViewReport.html', classworks = classworks, reports = reports, files=contents)  
+    return render_template('SupViewReport.html', classworks = classworks, reports = reports, files=files)  
 
 @app.route("/supervisor/login", methods=["GET", "POST"])
 def sup_login():
