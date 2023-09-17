@@ -49,12 +49,64 @@ def StudLogin():
 
 @app.route("/stud/submission")
 def stud_submission():
-    supid = session['userid']
-    cursor = db_conn.cursor(pymysql.cursors.DictCursor)
-    cursor.execute("SELECT supervisorID FROM student WHERE studentID=%s", (supid))  
-    cursor.execute("SELECT reportID, reportName, dueDate FROM progressReport WHERE supervisorID=%s", (supid))
-    classworks = cursor.fetchall()
-    return render_template("StudSubmitReport.html", classworks=classworks)
+    try:
+        studid = session['userid']
+        cursor = db_conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("SELECT * FROM student s, progressReport p WHERE s.supervisorID = "
+                       + "p.supervisorID AND studID = %s", ('2205123'))  
+        classworks = cursor.fetchall()
+        cursor.execute("SELECT * FROM submission WHERE studID = %s", ('2205123'))
+        submissions = cursor.fetchall()
+    
+    except Exception as e:
+        return str(e)
+    
+    finally:
+        cursor.close()
+
+    return render_template("StudSubmitReport.html", classworks=classworks, submissions=submissions)
+
+@app.route("/stud/submit/<reportid>", methods=["GET", "POST"])
+def submit(reportid):
+    pdf = request.files["inputPdf"]
+    studid = session['userid']
+    studName = session['username']
+    cursor = db_conn.cursor()
+    handInDate = datetime.now()
+
+    if pdf.filename == "":
+        return "Please select a pdf to submit"
+
+    try:
+        cursor.execute("INSERT INTO submission (handInDate, reportID, studID) VALUES (%s, %s, %s)", (handInDate, reportid, '2205123'))
+        db_conn.commit()
+        cursor.execute("SELECT * FROM student WHERE studID = %s", ('2205123'))  
+        students = cursor.fetchone()
+        
+        # Uplaod image file in S3 #
+        report_file = "report_" + str(reportid) + "_" + str(students[1]) + "_" + str(students[0])
+        s3 = boto3.resource("s3")
+
+        print("Data inserted in MySQL RDS... uploading image to S3...")
+        s3.Bucket(custombucket).put_object(Key=report_file, Body=pdf)
+        bucket_location = boto3.client("s3").get_bucket_location(
+            Bucket=custombucket
+        )
+        s3_location = bucket_location["LocationConstraint"]
+
+        if s3_location is None:
+            s3_location = ""
+        else:
+            s3_location = "-" + s3_location
+
+    except Exception as e:
+        return str(e)
+
+    finally:
+        cursor.close()
+
+    print("all modification done...")
+    return redirect(url_for('stud_submission'))
 
 
 # SUPERVISOR SITE
@@ -102,7 +154,7 @@ def previewReport(studid):
         cursor.execute("SELECT * FROM submission WHERE studID = %s", (studid))
         reports = cursor.fetchall()
         
-        # contents = list_files
+        contents = list_files
 
     except Exception as e:
             return str(e)
@@ -110,7 +162,7 @@ def previewReport(studid):
     finally:
         cursor.close()
 
-    return render_template('SupViewReport.html', classworks = classworks, reports = reports, files="test")  
+    return render_template('SupViewReport.html', classworks = classworks, reports = reports, files=contents)  
 
 @app.route("/supervisor/login", methods=["GET", "POST"])
 def sup_login():

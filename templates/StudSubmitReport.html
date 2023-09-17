@@ -1,23 +1,23 @@
 {% extends "generalLayout.html" %} {% block title %} Report Submission {%
 endblock %} {% block content %} {% for classwork in classworks %}
-<div class="card" style="margin: 10px">
+<div class="card" id="card_accordion" style="margin: 10px">
   <div
     class="card-header text-bg-secondary"
     data-bs-toggle="collapse"
-    href="#submission{{ classwork['reportName']}}"
-    role="button"
-    aria-expanded="true"
-    aria-controls="submission{{ classwork['reportName']}}"
+    data-bs-target="#classwork{{ classwork['reportName']}}"
+    aria-expanded="false"
+    aria-controls="classwork{{ classwork['reportName']}}"
+    style="cursor: pointer"
   >
     Report {{classwork['reportName']}} {{classwork['dueDate']}}
   </div>
   <div
-    class="card-body collapse multi-collapse"
-    id="submission{{ classwork['reportName']}}"
+    class="card-body accordion-collapse collapse show"
+    id="classwork{{ classwork['reportName']}}"
   >
     <form
       class="row g-2"
-      action="/update/report/{{report['submissionID']}}"
+      action="/stud/submit/{{classwork['reportID']}}"
       autocomplete="on"
       method="POST"
       enctype="multipart/form-data"
@@ -30,8 +30,36 @@ endblock %} {% block content %} {% for classwork in classworks %}
       <div class="form-check">
         <textarea class="form-control" row="5" name="remark"></textarea>
       </div>
+      <div class="col-6 mb-3">
+        <label for="inputPdf" class="form-label">Add Work</label>
+        <input
+          class="form-control border-2"
+          type="file"
+          id="inputPdf"
+          name="inputPdf"
+          accept=".pdf"
+          onchange="loadFile(event, 'pdfPreview')"
+        />
+        <embed
+          id="pdfPreview"
+          type="application/pdf"
+          width="300"
+          height="300"
+          title="Title of my pdf"
+          class="border border-3 mt-2"
+        />
+      </div>
     </form>
     <button type="submit" class="btn btn-primary">Submit</button>
   </div>
 </div>
+<script>
+  var loadFile = function (event, frame) {
+    var output = document.getElementById(frame);
+    output.src = URL.createObjectURL(event.target.files[0]) + "#page=1";
+    output.onload = function () {
+      URL.revokeObjectURL(output.src); // free memory
+    };
+  };
+</script>
 {% endfor %} {% endblock %}
