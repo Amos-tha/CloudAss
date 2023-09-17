@@ -1,0 +1,30 @@
+{%extends "generalLayout.html"%}
+
+{% block title %}Internship Offers{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-row justify-content-center align-items-center mt-5">
+    <div class="col-5">
+        <div class="fs-2 fw-bold text-center mb-2">Internship Offers</div>
+        {% for offer in offers %}
+        <div class="card">
+            <div class="card-header">
+                {{offer['compName']}}
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Position: {{offer['position']}}</h5>
+                <h5 class="card-title">Allowance: RM{{offer['allowance']}}</h5>
+                <h5 class="card-title">Duration: {{offer['duration']}} months</h5>
+                <h5 class="card-title">Prerequisite: {{offer['prerequisite']}}</h5>
+                <h5 class="card-title">Language: {{offer['language']}}</h5>
+                <h5 class="card-title">Location: {{offer['location']}}</h5>
+                <h5 class="card-title">Date Posted: {{offer['datePosted']}}</h5>
+                <h5 class="card-title">Offer Status: {{offer['offerStatus']}}</h5>
+                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                <a href="#" class="btn btn-primary">View Offer</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{%endblock%}

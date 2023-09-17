@@ -1,0 +1,168 @@
+{%extends "generalLayout.html"%}
+
+{% block title %}Student Registration{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-row justify-content-center align-items-center">
+    <div class="col-8 mb-4">
+        <div class="fs-2 fw-bold text-center mb-2">Student Registration Form</div>
+        <form class="row g-3 align-items-center" action="/student/studRegister" method="POST" enctype="multipart/form-data">
+            <div class="card text-center">
+                <div class="card-header">
+                    Academic Information
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <label for="inputstudID" class="col-sm-2 col-form-label">Student ID</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control border-3" id="inputstudID" name="inputstudID"
+                                required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputUniEmail" class="col-sm-2 col-form-label">Student University Email</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control border-3" id="inputUniEmail" name="inputUniEmail"
+                                required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputLevel" class="col-sm-2 col-form-label">Level</label>
+                        <div class="col-sm-10">
+                            <select class="form-select border-3" aria-label="Default select example" id="inputLevel" name="inputLevel">
+                                <option selected>Select a level</option>
+                                <option value="Bachelor Degree">Bachelor Degree</option>
+                                <option value="Diploma">Diploma</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputProgramme" class="col-sm-2 col-form-label">Programme<span class="small"> <br>(enter
+                                short form)</span></label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control border-3" id="inputProgramme" name="inputProgramme"
+                                required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputTutGrp" class="col-sm-2 col-form-label">Tutorial Group</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control border-3" id="inputTutGrp" name="inputTutGrp"
+                                required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputCGPA" class="col-sm-2 col-form-label">CGPA</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control border-3" id="inputCGPA" name="inputCGPA" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputSupervisor" class="col-sm-2 col-form-label">Supervisor Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control border-3" id="inputSupervisor" name="inputSupervisor"
+                                required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card text-center">
+                <div class="card-header">
+                    Personal Information
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <label for="inputName" class="col-sm-2 col-form-label">Full Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control border-3" id="inputName" name="inputName"
+                                required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputIC" class="col-sm-2 col-form-label">NRIC</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control border-3" id="inputIC" name="inputIC"
+                                required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputGender" class="col-sm-2 col-form-label">Gender</label>
+                        <div class="col-sm-10">
+                            <select class="form-select border-3" aria-label="Default select example" id="inputGender" name="inputGender">
+                                <option selected>Select a gender</option>
+                                <option value="M">M</option>
+                                <option value="F">F</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card text-center">
+                <div class="card-header">
+                    Contact Information
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <label for="inputPersonalEmail" class="col-sm-2 col-form-label">Personal Email</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control border-3" id="inputPersonalEmail" name="inputPersonalEmail"
+                                required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputPhone" class="col-sm-2 col-form-label">Phone Number</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control border-3" id="inputPhone" name="inputPhone"
+                                required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputAddress" class="col-sm-2 col-form-label">Address</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control border-3" id="inputAddress" name="inputAddress"
+                                required></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 d-flex flex-row justify-content-end">
+                <button type="reset" class="btn btn-secondary btn-lg me-4">Reset Form</button>
+                <!-- <button type="submit" class="btn btn-primary btn-lg">Sign in</button> -->
+                <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop">Sign
+                    up</button>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1"
+                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirm Register?</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            This registration form will be submitted to the database and you are not allowed to modify the information again.
+                            Continue?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary me-3" data-bs-dismiss="modal">Close</button>
+                            <button type="Submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    var loadFile = function (event, frame) {
+        var output = document.getElementById(frame);
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function () {
+            URL.revokeObjectURL(output.src) // free memory
+        }
+    };
+</script>
+{%endblock%}

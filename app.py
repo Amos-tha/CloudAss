@@ -34,8 +34,11 @@ table = "employee"
 def home():
     return render_template("Index.html")
 
+@app.route("/studRegister", methods=['GET', 'POST'])
+def studRegister():
+    return render_template('RegisterStudent.html')
 
-@app.route("/about", methods=["POST"])
+@app.route("/about", methods=['POST'])
 def about():
     return render_template("www.tarc.edu.my")
 
@@ -445,6 +448,54 @@ def AddEmp():
     print("all modification done...")
     return render_template("AddEmpOutput.html", name=emp_name)
 
+@app.route("/student/studRegister", methods=['GET','POST'])
+def stud_Register():
+    studID = request.form['inputstudID']
+    studUniEmail = request.form['inputUniEmail']
+    studLevel = request.form['inputLevel']
+    studProgramme = request.form['inputProgramme']
+    studTutGrp = request.form['inputTutGrp']
+    CGPA = request.form['inputCGPA']
+    superVisorName = request.form['inputSupervisor']
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=80, debug=True)
+    studName = request.form['inputName']
+    studIC = request.form['inputIC']
+    studGender = request.form['inputGender']
+    studPersonalEmail = request.form['inputPersonalEmail']
+    studPhone = request.form['inputPhone']
+    studAddress = request.form['inputAddress']
+
+    get_supervisorid_sql = "SELECT superVisorID FROM supervisor WHERE superVisorName = (%s)"
+    insert_sql = "INSERT INTO student (studID, studName, studIC, studPhone, studGender, studUniEmail, studPersonalEmail, studAddress, studLevel, studProgramme, studTutGrp, CGPA, supervisorID)VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    cursor = db_conn.cursor()
+
+    try:
+        cursor.execute(get_supervisorid_sql, superVisorName)
+        superVisorID = cursor.fetchone()
+        cursor.execute(insert_sql, (studID, studName, studIC, studPhone, studGender, studUniEmail, studPersonalEmail, studAddress, studLevel, studProgramme, studTutGrp, CGPA, superVisorID))
+        db_conn.commit()
+
+    finally:
+        cursor.close()
+
+    return redirect("/")
+
+@app.route("/viewOffers", methods=['GET','POST'])
+def viewoffers():
+    try:
+        cursor = db_conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("SELECT offerID, position, allowance, duration, prerequisite, language, location, datePosted, offerStatus, compName FROM offer O, company C WHERE O.compID = C.compID")
+        offers = cursor.fetchall()
+        
+        # contents = list_files
+
+    except Exception as e:
+            return str(e)
+
+    finally:
+        cursor.close()
+
+    return render_template('ViewOffers.html', offers = offers) 
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=80, debug=True)
