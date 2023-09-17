@@ -7,12 +7,14 @@ from flask import (
     session,
     jsonify,
     json,
+    send_file,
 )
 from pymysql import connections, cursors
 import os
 import boto3
-from datetime import datetime 
+from datetime import datetime
 from config import *
+from io import BytesIO
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "amos-itp"
@@ -23,8 +25,6 @@ region = customregion
 db_conn = connections.Connection(
     host=customhost, port=3306, user=customuser, password=custompass, db=customdb
 )
-output = {}
-table = "employee"
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -45,6 +45,45 @@ def StudLogin():
 @app.route("/company/register", methods=["GET", "POST"])
 def comp_register():
     return render_template("CompRegister.html")
+
+
+@app.route("/admin/compdetails/<compid>", methods=["GET", "POST"])
+def CompDetails(compid):
+    cursor = db_conn.cursor()
+    cursor.execute("SELECT * FROM company WHERE compID=%s", (compid))
+    compDetails = cursor.fetchall()
+    cursor.close()
+
+    s3 = boto3.client("s3")
+    contents = []
+    for image in s3.list_objects(Bucket=custombucket)["Contents"]:
+        file = image["Key"]
+        if file.startswith("comp-id-" + compid):
+            contents.append(file)
+    return render_template("CompDetails.html", comp=compDetails, file=contents)
+    # return render_template('CompDetails.html', comp = compDetails)
+
+
+@app.route("/admin/registredcomp", methods=["GET"])
+def RegisteredComp():
+    cursor = db_conn.cursor()
+    cursor.execute(
+        "SELECT compID,CompName,registerStatus FROM company WHERE registerStatus='active'"
+    )
+    company = cursor.fetchall()
+    cursor.close()
+    return render_template("RegisteredComp.html", comp=company)
+
+
+@app.route("/admin/compregistration", methods=["GET"])
+def CompRequest():
+    cursor = db_conn.cursor()
+    cursor.execute(
+        "SELECT compID,CompName,registerStatus FROM company WHERE registerStatus='pending'"
+    )
+    company = cursor.fetchall()
+    cursor.close()
+    return render_template("CompRegistration.html", comp=company)
 
 
 @app.route("/company/Register", methods=["GET", "POST"])
@@ -142,15 +181,25 @@ def Comp_Login():
     return render_template("CompLogin.html", msg=msg)
 
 
+@app.route("/previewImg/<file>", methods=["GET"])
+def preview(file):
+    if request.method == "GET":
+        s3 = boto3.resource("s3")
+        file1 = s3.Object(custombucket, file).get()
+    img = file1["Body"].read()
+    return send_file(BytesIO(img), mimetype="image/jpeg")
+    # return file['Body'].read()
+
+
 @app.route("/company/offers", methods=["GET", "POST"])
 def comp_offers():
     return render_template("CompOffers.html")
 
 
 @app.route("/company/GetOffers", methods=["POST"])
-def comp_get_offers():
+def Comp_Get_Offers():
     try:
-        db_conn = connections.Connection(
+        db_conn2 = connections.Connection(
             host=customhost,
             port=3306,
             user=customuser,
@@ -158,7 +207,7 @@ def comp_get_offers():
             db=customdb,
             cursorclass=cursors.DictCursor,
         )
-        cursor = db_conn.cursor()
+        cursor = db_conn2.cursor()
         if request.method == "POST":
             draw = request.form["draw"]
             row = int(request.form["start"])
@@ -167,7 +216,9 @@ def comp_get_offers():
             compID = session["userid"]
 
             ## Total number of records without filtering
-            cursor.execute("SELECT count(*) as allcount from offer WHERE compID=%s", compID)
+            cursor.execute(
+                "SELECT count(*) as allcount from offer WHERE compID=%s", compID
+            )
             rsallcount = cursor.fetchone()
             totalRecords = rsallcount["allcount"]
 
@@ -189,24 +240,34 @@ def comp_get_offers():
                 offerlist = cursor.fetchall()
             else:
                 cursor.execute(
-                    "SELECT * FROM offer WHERE (position LIKE %s OR location LIKE %s OR prerequisite LIKE %s OR language LIKE %s OR allowance LIKE %s) AND compID=%s ORDER BY offerStatus asc, datePosted desc",
-                    (likeString, likeString, likeString, likeString, likeString, compID),
+                    "SELECT * FROM offer WHERE (position LIKE %s OR location LIKE %s OR prerequisite LIKE %s OR language LIKE %s OR allowance LIKE %s) AND compID=%s ORDER BY offerStatus asc, datePosted desc limit %s, %s;",
+                    (
+                        likeString,
+                        likeString,
+                        likeString,
+                        likeString,
+                        likeString,
+                        compID,
+                        row,
+                        rowperpage,
+                    ),
                 )
                 offerlist = cursor.fetchall()
-            
+
             data = []
             for row in offerlist:
                 print(row["offerID"])
                 data.append(
                     {
                         "offerID": row["offerID"],
-                        "datePosted": row["datePosted"].strftime("%d-%m-%Y %I:%M:%S %p"),
+                        "datePosted": row["datePosted"].strftime(
+                            "%d-%m-%Y %I:%M:%S %p"
+                        ),
                         "position": row["position"],
                         "allowance": row["allowance"],
                         "offerStatus": row["offerStatus"],
                     }
                 )
-                
             response = {
                 "draw": draw,
                 "iTotalRecords": totalRecords,
@@ -218,6 +279,138 @@ def comp_get_offers():
         print(e)
     finally:
         cursor.close()
+        db_conn2.close()
+
+
+@app.route("/company/offerdetails", methods=["GET", "POST"])
+def comp_offer_details():
+    offerID = request.args.get("id")
+    cursor = db_conn.cursor()
+    cursor.execute(
+        "SELECT * FROM offer WHERE offerID=%s",
+        (offerID),
+    )
+    record = cursor.fetchone()
+    return render_template(
+        "CompOfferDetails.html",
+        offerID=record[0],
+        position=record[1],
+        allowance=record[2],
+        duration=record[3],
+        prerequisite=record[4],
+        language=record[5],
+        location=record[6],
+        description=record[7],
+        datePosted=record[8].strftime("%d-%m-%Y %I:%M:%S %p"),
+        offerStatus=record[9],
+    )
+
+
+@app.route("/company/GetOfferApplications", methods=["POST"])
+def Comp_Get_Offer_Applications():
+    try:
+        db_conn2 = connections.Connection(
+            host=customhost,
+            port=3306,
+            user=customuser,
+            password=custompass,
+            db=customdb,
+            cursorclass=cursors.DictCursor,
+        )
+        cursor = db_conn2.cursor()
+        if request.method == "POST":
+            draw = request.form["draw"]
+            row = int(request.form["start"])
+            rowperpage = int(request.form["length"])
+            searchValue = request.form["search[value]"]
+            offerID = request.args.get("id")
+            ## Total number of records without filtering
+            cincai = request.form
+            cursor.execute(
+                "SELECT count(*) as allcount from application WHERE offerID=%s", offerID
+            )
+            rsallcount = cursor.fetchone()
+            totalRecords = rsallcount["allcount"]
+
+            ## Total number of records with filtering
+            likeString = "%" + searchValue + "%"
+            cursor.execute(
+                "SELECT COUNT(*) AS allcount FROM application WHERE appStatus LIKE %s AND offerID=%s ORDER BY CASE appStatus WHEN 'pending' THEN 0 WHEN 'accepted' THEN 1 WHEN 'rejected' THEN 2 END ASC, appliedDateTime ASC;",
+                (likeString, offerID),
+            )
+            rsallcount = cursor.fetchone()
+            totalRecordwithFilter = rsallcount["allcount"]
+
+            ## Fetch records
+            if searchValue == "":
+                cursor.execute(
+                    "SELECT * FROM application a, student s WHERE a.studID=s.studID AND offerID=%s ORDER BY CASE appStatus WHEN 'pending' THEN 0 WHEN 'accepted' THEN 1 WHEN 'rejected' THEN 2 END ASC, appliedDateTime ASC LIMIT %s, %s;",
+                    (offerID, row, rowperpage),
+                )
+                offerlist = cursor.fetchall()
+            else:
+                cursor.execute(
+                    "SELECT * FROM application a, student s WHERE a.studID=s.studID AND appStatus LIKE %s AND offerID=%s ORDER BY CASE appStatus WHEN 'pending' THEN 0 WHEN 'accepted' THEN 1 WHEN 'rejected' THEN 2 END ASC, appliedDateTime ASC LIMIT %s, %s;",
+                    (likeString, offerID, row, rowperpage),
+                )
+                offerlist = cursor.fetchall()
+
+            data = []
+            for row in offerlist:
+                data.append(
+                    {
+                        "appID": row["appID"],
+                        "appliedDateTime": row["appliedDateTime"].strftime(
+                            "%d-%m-%Y %I:%M:%S %p"
+                        ),
+                        "studID": row["studID"],
+                        "studName": row["studName"],
+                        "studLevel": row["studLevel"],
+                        "studProgramme": row["studProgramme"],
+                        "CGPA": format(row["CGPA"], ".4f"),
+                        "appStatus": row["appStatus"],
+                    }
+                )
+
+            response = {
+                "draw": draw,
+                "iTotalRecords": totalRecords,
+                "iTotalDisplayRecords": totalRecordwithFilter,
+                "aaData": data,
+            }
+            return jsonify(response)
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        db_conn2.close()
+
+
+@app.route("/company/appdetails", methods=["GET", "POST"])
+def comp_app_details():
+    appID = request.args.get("id")
+    try:
+        db_conn2 = connections.Connection(
+            host=customhost,
+            port=3306,
+            user=customuser,
+            password=custompass,
+            db=customdb,
+            cursorclass=cursors.DictCursor,
+        )
+        cursor = db_conn2.cursor()
+        cursor.execute(
+            "SELECT * FROM offer o, application o, student s WHERE o.offerID=a.offerID AND  a.studID=s.studID AND a.appID=%s;",
+            (appID),
+        )
+
+        record = cursor.fetchone()
+        return render_template("CompAppDetails.html", appdetails=record)
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        db_conn2.close()
 
 
 @app.route("/company/addoffer", methods=["GET", "POST"])
@@ -235,7 +428,7 @@ def Comp_Add_Offer():
     location = request.form["inputLocation"]
     description = request.form["inputDescription"]
     datePosted = datetime.now()
-    offerStatus = "active"
+    offerStatus = "Active"
     compID = session["userid"]
 
     insert_sql = "INSERT INTO offer (position, allowance, duration, prerequisite, language, location, description, datePosted, offerStatus, compID)VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"

@@ -3,21 +3,7 @@
 {% block title %}Add Offer{% endblock %}
 {% block head %}
 {{super()}}
-<link href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css' rel='stylesheet'
-    type='text/css'>
-<link href='https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-<script language="JavaScript" type="text/javascript" src="https://code.jquery.com/jquery-3.7.0.js"></script>
-<script language="JavaScript" type="text/javascript"
-    src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script language="JavaScript" type="text/javascript"
-    src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-<script language="JavaScript" type="text/javascript"
-    src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
-<style>
-    .dataTables_filter {
-        display: none;
-    }
 </style>
 {% endblock %}
 
@@ -29,7 +15,7 @@
                 <a class="bi bi-chevron-left"
                     style="font-size: 50px; position: absolute; text-decoration: none; color:black"
                     href="/company/offers"></a>
-                <div class="fs-2 fw-bold text-center mb-2">Offer Details</div>
+                <div class="fs-2 fw-bold text-center mb-2">Application Details</div>
             </div>
             <div class="text-center mb-4"><strong>You may directly change the values below and click Save to change
                     Offer details.</strong></div>
@@ -139,63 +125,6 @@
         return false;
     };
 
-    $(document).ready(function () {
-        var table = $('#datatable').DataTable({
-            'processing': true,
-            'serverSide': true,
-            'serverMethod': 'post',
-            'ajax': {
-                'url': '/company/GetOfferApplications?id=' + getUrlParameter('id'),
-            },
-            'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, "All"]],
-            searching: true,
-            sort: false,
-            'columnDefs': [
-                {
-                    defaultContent: '<button class="more_btn btn btn-secondary btn-sm">More</button>',
-                    targets: -1
-                },
-                {
-                    defaultContent: "-",
-                    targets: "_all"
-                },
-            ],
-            'columns': [
-                { data: 'appliedDateTime' },
-                { data: 'studID' },
-                { data: 'studName' },
-                { data: 'studLevel' },
-                { data: 'studProgramme' },
-                { data: 'CGPA' },
-                { data: 'appStatus' },
-                { data: null },
-            ]
-        });
 
-        table.on('click', 'button', function (e) {
-            let data = table.row(e.target.closest('tr')).data();
-            window.location.replace("/company/appdetails?id=" + data.appID);
-        });
-
-        $('#All').on('click', function () {
-            // Toggle the filter on the DataTable
-            table.search("").draw();
-        });
-
-        $('#Pending').on('click', function () {
-            // Toggle the filter on the DataTable
-            table.search("Pending").draw();
-        });
-
-        $('#Accepted').on('click', function () {
-            // Toggle the filter on the DataTable
-            table.search("Accepted").draw();
-        });
-
-        $('#Rejected').on('click', function () {
-            // Toggle the filter on the DataTable
-            table.search("Rejected").draw();
-        });
-    });
 </script>
 {%endblock%}

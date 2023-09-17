@@ -23,15 +23,15 @@
         <a href="{{ url_for('comp_add_offer') }}" class="btn btn-primary btn-lg">Add New Offer</a>
     </div>
     <div>
-        <table id='datatable' class='table' width='100%'>
+        <table id='datatable' class='table table-hover' width='100%'>
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Date Posted</th>
-                    <th>Position</th>
-                    <th>Allowance</th>
-                    <th>Status</th>
-                    <th></th>
+                    <th style="background-color: rgb(194, 194, 194); ">ID</th>
+                    <th style="background-color: rgb(194, 194, 194); ">Date Posted</th>
+                    <th style="background-color: rgb(194, 194, 194); ">Position</th>
+                    <th style="background-color: rgb(194, 194, 194); ">Allowance</th>
+                    <th style="background-color: rgb(194, 194, 194); ">Status</th>
+                    <th style="background-color: rgb(194, 194, 194); "></th>
                 </tr>
             </thead>
         </table>
@@ -39,14 +39,14 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
-        var empDataTable = $('#datatable').DataTable({
+        var table = $('#datatable').DataTable({
             'processing': true,
             'serverSide': true,
             'serverMethod': 'post',
             'ajax': {
                 'url': '/company/GetOffers'
             },
-            'lengthMenu': [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+            'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, "All"]],
             searching: true,
             sort: false,
             "serverSide": true,
@@ -72,7 +72,7 @@
 
         table.on('click', 'button', function (e) {
             let data = table.row(e.target.closest('tr')).data();
-            window.location.replace("/company/offerdetails?id="+ data[0]);
+            window.location.replace("/company/offerdetails?id=" + data.offerID);
         });
     });
 </script>
