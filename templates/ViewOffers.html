@@ -15,7 +15,7 @@
                     </div>
                     <!-- <img src="..." class="card-img-top" alt="..."> -->
                     <div class="card-body">
-                        {% for content in contents if 'comp-id-' + offer['compID']|string + '_logo' in file%}
+                        {% for content in contents if 'comp-id-' + offer['compID']|string + '_logo' in content%}
                         <a href="/previewImg/{{content}}" target="_blank" class="fw-normal">{{content}}</a>
                         {% endfor %}
                         <h5 class="card-title">Position: {{offer['position']}}</h5>
