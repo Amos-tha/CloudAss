@@ -15,9 +15,8 @@
                     </div>
                     <!-- <img src="..." class="card-img-top" alt="..."> -->
                     {% for content in contents if 'comp-id-' + offer['compID']|string + '_logo' in file%}
-                    <a href="/previewImg/{{ content }}" target="_blank" class="fw-normal">hello</a>
-                    {% endfor %}
                     <div class="card-body">
+                        <a href="/previewImg/{{content}}" target="_blank" class="fw-normal">{{content}}</a>
                         <h5 class="card-title">Position: {{offer['position']}}</h5>
                         <h5 class="card-title">Allowance: RM{{offer['allowance']}}</h5>
                         <h5 class="card-title">Duration: {{offer['duration']}} months</h5>
@@ -27,6 +26,7 @@
                         <h5 class="card-title">Date Posted: {{offer['datePosted']}}</h5>
                         <h5 class="card-title">Offer Status: {{offer['offerStatus']}}</h5> -->
                         <a href="#" class="btn btn-primary">View Offer</a>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
