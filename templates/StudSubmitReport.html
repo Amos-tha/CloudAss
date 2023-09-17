@@ -30,9 +30,10 @@ endblock %} {% block content %} {% for classwork in classworks %}
         >
       </div>
 
+      {% print classwork['studName'] %}
       <!-- Submitted Report -->
       {% for file in files if submitted['reportID']|string + '_' +
-      classwork['studName'] in file%}
+      classwork['studName'] in file %}
       <label class="fw-bold"
         >Report:
         <a href="/preview/{{ file }}" target="_blank" class="fw-normal"
@@ -48,17 +49,6 @@ endblock %} {% block content %} {% for classwork in classworks %}
         <textarea class="form-control" row="5" name="remark">
 {{submitted['remark'] if submitted['remark'] != None else ' '}}</textarea
         >
-      </div>
-      <div class="col-6 mb-3">
-        <embed
-          id="pdfPreview"
-          type="application/pdf"
-          width="300"
-          height="300"
-          title="Title of my pdf"
-          class="border border-3 mt-2"
-          src=""
-        />
       </div>
       <button type="submit" class="btn btn-primary">Unsubmit</button>
     </form>
