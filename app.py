@@ -23,7 +23,7 @@ bucket = custombucket
 region = customregion
 
 db_conn = connections.Connection(
-    host=customhost, port=3306, user=customuser, password=custompass, db=customdb
+    host=customhost, port=3306, user=customuser, password=custompass, db=customdb, connect_timeout=86400
 )
 
 
@@ -95,7 +95,7 @@ def Comp_Register():
     compAddress = request.form["inputAddress"]
     compWebsite = request.form["inputWebsite"]
     socialMedia = request.form["inputSocialMedia"]
-    registerStatus = "pending"
+    registerStatus = "Pending"
     committeeID = None
     compLogo = request.files["inputLogo"]
     businessLicense = request.files["inputLicense"]
@@ -256,7 +256,6 @@ def Comp_Get_Offers():
 
             data = []
             for row in offerlist:
-                print(row["offerID"])
                 data.append(
                     {
                         "offerID": row["offerID"],
@@ -400,7 +399,7 @@ def comp_app_details():
         )
         cursor = db_conn2.cursor()
         cursor.execute(
-            "SELECT * FROM offer o, application o, student s WHERE o.offerID=a.offerID AND  a.studID=s.studID AND a.appID=%s;",
+            "SELECT * FROM offer o, application a, student s WHERE o.offerID=a.offerID AND a.studID=s.studID AND a.appID=%s;",
             (appID),
         )
 

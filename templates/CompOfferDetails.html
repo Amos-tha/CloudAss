@@ -45,7 +45,7 @@
                         name="inputOfferStatus">
                         {% for tempStatus in ["Active","Revoked"] %}
                         {% if offerStatus == tempStatus %}
-                        <option value="{{tempStatus}}" SELECTED>{{tempStatus}}</option>"
+                        <option value="{{tempStatus}}" SELECTED>{{tempStatus}}</option>
                         {% else %}
                         <option value="{{tempStatus}}">{{tempStatus}}</option>
                         {% endif %}
@@ -74,7 +74,7 @@
                 </div>
                 <div class="col-8">
                     <label for="inputLanguage" class="form-label">Language(s)</label>
-                    <input type="text" class="form-control border-3" id="inputLanguage" name="inputLanguage" min="1"
+                    <input type="text" class="form-control border-3" id="inputLanguage" name="inputLanguage"
                         value="{{language}}">
                 </div>
                 <div class="col-12">

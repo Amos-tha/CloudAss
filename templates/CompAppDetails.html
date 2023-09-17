@@ -1,0 +1,188 @@
+{%extends "compLayout.html"%}
+
+{% block title %}Add Offer{% endblock %}
+{% block head %}
+{{super()}}
+<script language="JavaScript" type="text/javascript" src="https://code.jquery.com/jquery-3.7.0.js"></script>
+{% endblock %}
+
+
+{% block content %}
+<div class="d-flex flex-column justify-content-center align-items-center">
+    <div class="col-10 mt-4">
+        <div class="card border-secondary ">
+            <div class="card-header text-bg-dark fw-bold fs-5">
+                Application
+            </div>
+            <div class="card-body">
+                <form action="/company/Register" method="POST" enctype="multipart/form-data">
+                    <div class="d-flex flex-row justify-content-between mb-3 ms-2 me-2">
+                        <div class="col-1">
+                            <label for="inputOfferID" class="form-label">Offer ID</label>
+                            <input type="text" class="form-control border-3" id="inputOfferID" name="inputOfferID"
+                                value="{{appdetails['offerID']}}" disabled required>
+                        </div>
+                        <div class="col-6">
+                            <label for="inputPosition" class="form-label">Position</label>
+                            <input type="text" class="form-control border-3" id="inputPosition" name="inputPosition"
+                                value="{{appdetails['position']}}" disabled required>
+                        </div>
+                        <div class="col-2">
+                            <label for="inputDuration" class="form-label">Duration (month)</label>
+                            <input type="number" class="form-control border-3" id="inputDuration" name="inputDuration"
+                                min="1" value="{{appdetails['duration']}}" disabled required>
+                        </div>
+                        <div class="col-2">
+                            <label for="inputAllowance" class="form-label">Allowance (RM)</label>
+                            <input type="text" class="form-control border-3" id="inputAllowance" name="inputAllowance"
+                                value="{{appdetails['allowance']}}" disabled required>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row justify-content-between mb-3 ms-2 me-2">
+                        <div class="col-1">
+                            <label for="inputAppID" class="form-label">Application ID</label>
+                            <input type="text" class="form-control border-3" id="inputAppID" name="inputAppID"
+                                value="{{appdetails['appID']}}" disabled required>
+                        </div>
+                        <div class="col-6">
+                            <label for="inputAppliedDate" class="form-label">Date Applied</label>
+                            <input type="text" class="form-control border-3" id="inputAppliedDate"
+                                name="inputAppliedDate" value="{{appdetails['appliedDateTime']}}" disabled required>
+                        </div>
+                        <div class="form-group col-4">
+                            <label for="inputAppStatus" class="form-label">Application Status <span
+                                    style="font-weight:bold; color: red;">*</span></label>
+                            <select class="form-select border-3" aria-label="Default select example" id="inputAppStatus"
+                                name="inputAppStatus" required>
+                                {% for tempStatus in ["Pending","Accepted", "Rejected"] %}
+                                {% if appdetails['appStatus'] == tempStatus %}
+                                <option value="{{tempStatus}}" SELECTED>{{tempStatus}}</option>
+                                {% else %}
+                                <option value="{{tempStatus}}">{{tempStatus}}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class=" ms-2 me-2">
+                        {% if appdetails['appStatus'] == 'Pending' %}
+                        <div class="form-group d-none" id="textbox-container">
+                            <label for="textbox">Feedback <span style="font-weight:bold; color: red;">*</span></label>
+                            <textarea class="form-control border-4" id="textbox" name="inputFeedback" rows="3"
+                                placeholder="e.g. Please provide some feedback on why you accept or reject the application."></textarea>
+                        </div>
+                        {% else %}
+                        <div class="form-group" id="textbox-container">
+                            <label for="textbox">Feedback <span style="font-weight:bold; color: red;">*</span></label>
+                            <textarea class="form-control border-4" id="textbox" name="inputFeedback" rows="3"
+                                placeholder="e.g. Please provide some feedback on why you accept or reject the application."
+                                required></textarea>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="d-flex flex-row justify-content-center">
+                        <div class="card border-secondary col-11 mt-4">
+                            <div class="card-header text-bg-secondary fw-bold fs-5">
+                                Student
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex flex-row justify-content-between mb-3 ms-2 me-2">
+                                    <div class="col-1">
+                                        <label for="inputStudID" class="form-label">Student ID</label>
+                                        <input type="text" class="form-control border-3" id="inputStudID"
+                                            name="inputStudID" value="{{appdetails['studID']}}" disabled required>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="inputStudName" class="form-label">Student Name</label>
+                                        <input type="text" class="form-control border-3" id="inputStudName"
+                                            name="inputStudName" value="{{appdetails['studName']}}" disabled required>
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="inputStudLevel" class="form-label">Level of Study</label>
+                                        <input type="text" class="form-control border-3" id="inputStudLevel"
+                                            name="inputStudLevel" value="{{appdetails['studLevel']}}" disabled required>
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="inputStudProgramme" class="form-label">Programme</label>
+                                        <input type="text" class="form-control border-3" id="inputStudProgramme"
+                                            name="inputStudProgramme" value="{{appdetails['studProgramme']}}" disabled
+                                            required>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-row justify-content-between mb-3 ms-2 me-2">
+                                    <div class="col-1">
+                                        <label for="inputStudGender" class="form-label">Gender</label>
+                                        <input type="text" class="form-control border-3" id="inputStudGender"
+                                            name="inputStudGender" value="{{appdetails['studGender']}}" disabled
+                                            required>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="inputStudUniEmail" class="form-label">Email</label>
+                                        <input type="text" class="form-control border-3" id="inputStudUniEmail"
+                                            name="inputStudUniEmail" value="{{appdetails['studUniEmail']}}" disabled
+                                            required>
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="inputStudPhone" class="form-label">Phone Number</label>
+                                        <input type="text" class="form-control border-3" id="inputStudPhone"
+                                            name="inputStudPhone" value="{{appdetails['studPhone']}}" disabled required>
+                                    </div>
+
+                                    <div class="col-2">
+                                        <label for="inputCGPA" class="form-label">CGPA</label>
+                                        <input type="text" class="form-control border-3" id="inputCGPA" name="inputCGPA"
+                                            value="{{appdetails['CGPA']}}" disabled required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-5 d-flex flex-row justify-content-end">
+                        <button type="reset" class="btn btn-secondary btn-lg me-4" id="resetBtn">Reset</button>
+                        <button type="submit" class="btn btn-primary" id="respondBtn">Respond</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+</div>
+<script>
+    var getUrlParameter = function getUrlParameter(sParam) {
+        var sPageURL = window.location.search.substring(1),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+            }
+        }
+        return false;
+    };
+
+    $(document).ready(function () {
+        $("#inputAppStatus").change(function () {
+            if ($(this).val() === "Pending") {
+                $("#textbox-container").addClass("d-none");
+                $("#textbox-container").attr("required", false);
+            } else if ($(this).val() === "Accepted") {
+                $("#textbox-container").removeClass("d-none");
+                $("#textbox-container").attr("required", true);
+            } else if ($(this).val() === "Rejected") {
+                $("#textbox-container").removeClass("d-none");
+                $("#textbox-container").attr("required", true);
+            }
+        });
+
+        $("#resetBtn").click(function () {
+            $("#inputAppStatus").val("{{appdetails['appStatus']}}").change();
+        });
+    });
+</script>
+{%endblock%}
