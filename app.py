@@ -303,7 +303,7 @@ def Comp_Login():
             return redirect(url_for("comp_offers"))
         else:
             msg = "Incorrect email/password.Try again!"
-    return render_template("CompLogin.html", msg=msg)
+    return redirect(url_for("comp_login"), msg=msg)
 
 
 @app.route("/previewImg/<file>", methods=["GET"])
