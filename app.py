@@ -138,27 +138,20 @@ def submit(reportid):
 
 @app.route("/stud/unsubmit/<reportid>", methods=["GET", "POST"])
 def unsubmit(reportid):
-    pdf = request.files["inputPdf"]
     studid = session['userid']
-    studName = session['username']
+    name = session['username']
     cursor = db_conn.cursor()
-    handInDate = datetime.now()
-
-    if pdf.filename == "":
-        return "Please select a pdf to submit"
 
     try:
-        cursor.execute("INSERT INTO submission (handInDate, reportID, studID) VALUES (%s, %s, %s)", (handInDate, reportid, '2205123'))
+        cursor.execute("DELETE FROM submission WHERE reportID=%s AND studID=%s", (reportid, '2205123'))
         db_conn.commit()
-        cursor.execute("SELECT * FROM student WHERE studID = %s", ('2205123'))  
-        students = cursor.fetchone()
         
-        # Uplaod image file in S3 #
-        report_file = "report_" + str(reportid) + "_" + str(students[1]) + "_" + str(students[0]) + ".pdf"
+        # Delete image file in S3 #
+        print("Data deleted in MySQL RDS... deleteing image from S3...")
+        report_file = "report_" + str(reportid) + "_" + "Amos" + "_" + "2205123" + ".pdf"
         s3 = boto3.resource("s3")
+        s3.Object(custombucket, report_file).delete()
 
-        print("Data inserted in MySQL RDS... uploading image to S3...")
-        s3.Bucket(custombucket).put_object(Key=report_file, Body=pdf, ContentType="application/pdf")
         bucket_location = boto3.client("s3").get_bucket_location(
             Bucket=custombucket
         )
