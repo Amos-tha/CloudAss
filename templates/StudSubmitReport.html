@@ -1,0 +1,37 @@
+{% extends "generalLayout.html" %} {% block title %} Report Submission {%
+endblock %} {% block content %} {% for classwork in classworks %}
+<div class="card" style="margin: 10px">
+  <div
+    class="card-header text-bg-secondary"
+    data-bs-toggle="collapse"
+    href="#submission{{ classwork['reportName']}}"
+    role="button"
+    aria-expanded="true"
+    aria-controls="submission{{ classwork['reportName']}}"
+  >
+    Report {{classwork['reportName']}} {{classwork['dueDate']}}
+  </div>
+  <div
+    class="card-body collapse multi-collapse"
+    id="submission{{ classwork['reportName']}}"
+  >
+    <form
+      class="row g-2"
+      action="/update/report/{{report['submissionID']}}"
+      autocomplete="on"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+      <div class="d-flex flex-row">
+        <label class="fw-bold">Submitted Date:</label>
+        <p class="ms-2"></p>
+      </div>
+      <label class="fw-bold">Supervisor Remark: </label>
+      <div class="form-check">
+        <textarea class="form-control" row="5" name="remark"></textarea>
+      </div>
+    </form>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+</div>
+{% endfor %} {% endblock %}

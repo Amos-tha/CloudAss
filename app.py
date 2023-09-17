@@ -4,12 +4,15 @@ from flask import (
     request,
     redirect,
     url_for,
+    make_response,
+    send_file,
     session,
     jsonify,
     json,
     send_file,
 )
 from pymysql import connections, cursors
+import pymysql
 import os
 import boto3
 from datetime import datetime
@@ -40,6 +43,128 @@ def about():
 @app.route("/login", methods=["GET", "POST"])
 def StudLogin():
     return render_template("StudLogin.html")
+
+@app.route("/stud/submission")
+def stud_submission():
+    supid = session['userid']
+    cursor = db_conn.cursor(pymysql.cursors.DictCursor)
+    cursor.execute("SELECT supervisorID FROM student WHERE studentID=%s", (supid))  
+    cursor.execute("SELECT reportID, reportName, dueDate FROM progressReport WHERE supervisorID=%s", (supid))
+    classworks = cursor.fetchall()
+    return render_template("StudSubmitReport.html", classworks=classworks)
+
+
+# SUPERVISOR SITE
+def list_files():
+    """
+    Function to list files in a given S3 bucket
+    """
+    s3 = boto3.client('s3')
+    contents = []
+    for image in s3.list_objects(Bucket=custombucket)['Contents']:
+        file = image['Key']
+        if(file.endswith('.pdf')):
+            contents.append(file)
+        # contents.append(f'https://{custombucket}.s3.amazonaws.com/{image}')
+
+    return contents
+
+def cleartext():
+    response = " "
+    return response
+
+@app.route("/supervisor/view/stud", methods=['GET'])
+def get_studs():
+    try:
+        supid = session['userid']
+        cursor = db_conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("SELECT * FROM student WHERE supervisorID = %s", (supid))
+        students = cursor.fetchall()
+
+    except Exception as e:
+        return str(e)
+    
+    finally:
+        cursor.close()
+
+    return render_template('SupMyITP.html', students = students)
+
+@app.route("/supervisor/view/report/<studid>", methods=['GET'])
+def previewReport(studid):
+    try:
+        supid = session['userid']
+        cursor = db_conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("SELECT reportID, reportName, dueDate FROM progressReport WHERE supervisorID=%s", (supid))
+        classworks = cursor.fetchall()
+        cursor.execute("SELECT * FROM submission WHERE studID = %s", (studid))
+        reports = cursor.fetchall()
+        
+        # contents = list_files
+
+    except Exception as e:
+            return str(e)
+
+    finally:
+        cursor.close()
+
+    return render_template('SupViewReport.html', classworks = classworks, reports = reports, files="test")  
+
+@app.route("/supervisor/login", methods=["GET", "POST"])
+def sup_login():
+    if request.method == 'GET':
+        return render_template("SupLogin.html", msg="")
+    else:
+        cursor = db_conn.cursor()
+        email = request.form["inputEmail"]
+        password = request.form["inputPassword"]
+        cursor.execute(
+            "SELECT * FROM supervisor WHERE supervisorEmail=%s AND supervisorPassword=%s",
+            (email, password)
+        )
+        record = cursor.fetchone()
+        if record:
+            session["loggedin"] = True
+            session["userid"] = record[0]
+            session["username"] = record[1]
+            return redirect(url_for("get_studs"))
+        else:
+            msg = "Incorrect email/password.Try again!"
+            return render_template("SupLogin.html", msg=msg)
+
+@app.route('/update/report/<submissionid>', methods=['GET', 'POST'])
+def update(submissionid):
+    status = request.form['reportStatus']
+    remark = request.form['remark']
+    cursor = db_conn.cursor()
+
+    try:
+        cursor.execute("UPDATE submission SET status = %s, remark = %s WHERE submissionID=%s", (status, remark, submissionid))
+        db_conn.commit()
+
+    except Exception as e:
+            return str(e)
+
+    finally:
+        cursor.close()
+
+    return "Save successfully"
+
+@app.route('/preview/<filename>', methods=['GET'])
+def preview(filename):
+    if request.method == 'GET':
+        s3 = boto3.resource('s3')
+        file = s3.Object(custombucket, filename).get()
+        response = make_response(file['Body'].read())
+        response.headers['Content-Type'] = 'application/pdf'
+        return response
+    
+@app.route('/download/<filename>', methods=['GET'])
+def download(filename):
+    if request.method == 'GET':
+        s3 = boto3.resource('s3')
+        output = f"/media/{filename}"
+        s3.Bucket(bucket).download_file(Key=filename, Filename=output)
+        return send_file(output, as_attachment=True)
 
 
 @app.route("/company/register", methods=["GET", "POST"])

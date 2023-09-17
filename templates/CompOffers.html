@@ -42,6 +42,7 @@
         var table = $('#datatable').DataTable({
             'processing': true,
             'serverSide': true,
+            "bPaginate": false,
             'serverMethod': 'post',
             'ajax': {
                 'url': '/company/GetOffers'
