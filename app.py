@@ -183,8 +183,6 @@ def viewoffers():
         cursor = db_conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute("SELECT offerID, position, allowance, duration, prerequisite, language, location, datePosted, offerStatus, O.compID, compName FROM offer O, company C WHERE O.compID = C.compID")
         offers = cursor.fetchall()
-        for offer in offers:
-            compID = offer['compID']
 
     except Exception as e:
             print(e)
@@ -195,10 +193,12 @@ def viewoffers():
 
     s3 = boto3.client("s3")
     contents = []
-    for image in s3.list_objects(Bucket=custombucket)["Contents"]:
-        file = image["Key"]
-        if file.startswith("comp-id-" + compID + "_logo"):
-            contents.append(file)
+    for offer in offers:
+        compID = offer['compID']
+        for image in s3.list_objects(Bucket=custombucket)["Contents"]:
+            file = image["Key"]
+            if file.startswith("comp-id-" + compID + "_logo"):
+                contents.append(file)
 
     return render_template('ViewOffers.html', offers = offers, contents=contents) 
 
