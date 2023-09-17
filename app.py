@@ -130,7 +130,7 @@ def unsubmit(reportid):
         s3 = boto3.resource("s3")
 
         print("Data inserted in MySQL RDS... uploading image to S3...")
-        s3.Bucket(custombucket).put_object(Key=report_file, Body=pdf)
+        s3.Bucket(custombucket).put_object(Key=report_file, Body=pdf, ContentType="application/pdf")
         bucket_location = boto3.client("s3").get_bucket_location(
             Bucket=custombucket
         )
