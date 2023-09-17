@@ -32,7 +32,7 @@ endblock %} {% block content %} {% for classwork in classworks %}
       <label class="fw-bold">Supervisor Remark: </label>
       <div class="form-check">
         <textarea class="form-control" row="5" name="remark">
-{{report['remark'] if report['remark'] != None else ' '}}</textarea
+{{submitted['remark'] if submitted['remark'] != None else ' '}}</textarea
         >
       </div>
       <div class="col-6 mb-3">
