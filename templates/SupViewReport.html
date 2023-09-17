@@ -43,7 +43,7 @@
           <button type="submit" class="btn btn-primary btn-sm">Save</button>
         </div>
       </div>
-      {% for file in files if report['reportID']|string + report['studName'] in file%}
+      {% for file in files if report['reportID']|string + '_' + report['studName'] in file%}
       <label class="fw-bold"
         >Report:
         <a href="/preview/{{ file }}" target="_blank" class="fw-normal"
