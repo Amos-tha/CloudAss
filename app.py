@@ -184,7 +184,7 @@ def viewoffers():
         cursor.execute("SELECT offerID, position, allowance, duration, prerequisite, language, location, datePosted, offerStatus, O.compID, compName FROM offer O, company C WHERE O.compID = C.compID")
         offers = cursor.fetchall()
         for offer in offers:
-            compID = offer['O.compID']
+            compID = offer['compID']
 
     except Exception as e:
             print(e)
