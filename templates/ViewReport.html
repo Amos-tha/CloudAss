@@ -1,5 +1,8 @@
 {% extends "generalLayout.html" %} {% block title %} Progress Report {% endblock
-%} {% block content %} {% for classwork in classworks %}
+%} {% block content %}
+
+<!-- loop the total submission needed -->
+{% for classwork in classworks %}
 <div class="card" style="margin: 10px">
   <div class="card-header">
     Report {{classwork['reportName']}} {{classwork['dueDate']}}
@@ -42,12 +45,14 @@
         >Report:
         <a href="/preview/{{ file }}" target="_blank" class="fw-normal"
           >{{file}}</a
-        ></label
+        >
+        <a href="/download/{{ file }}" class="fw-normal ms-2">Downloaod</a></label
       >
       {% endfor %}
+
       <div class="d-flex flex-row">
         <label class="fw-bold">Submitted Date:</label>
-        {{report['handInDate'].strftime('%Y-%m-%d')}}
+        <p class="ms-2">{{report['handInDate'].strftime('%Y-%m-%d')}}</p>
       </div>
       <label class="fw-bold">Supervisor Remark: </label>
       <div class="form-check">
@@ -61,28 +66,18 @@
       </div>
     </form>
   </div>
+
+  <!-- if havent submit -->
   {% else %}
   <div class="card-body">
     <div class="d-flex flex-row">
       <label class="fw-bold">Status: </label>
       <div class="px-2">
-        <input
-          class="form-check-input"
-          type="radio"
-          name="reportStatus"
-          value="Approve"
-          disabled
-        />
+        <input class="form-check-input" type="radio" value="Approve" disabled />
         <label class="form-label"> Approve </label>
       </div>
       <div class="px-2">
-        <input
-          class="form-check-input"
-          type="radio"
-          name="reportStatus"
-          value="Reject"
-          disabled
-        />
+        <input class="form-check-input" type="radio" value="Reject" disabled />
         <label class="form-label"> Reject </label>
       </div>
       <div class="col d-flex flex-row justify-content-end">
@@ -98,7 +93,7 @@
     </div>
     <label class="fw-bold">Supervisor Remark: </label>
     <div class="form-check">
-      <textarea class="form-control" row="5" name="remark"></textarea>
+      <textarea class="form-control" row="5"></textarea>
       <div class="d-flex flex-row justify-content-between">
         <span class="small">[Maximum 500 characters] </span>
         <a href="">Clear</a>

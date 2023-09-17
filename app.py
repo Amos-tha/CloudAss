@@ -103,6 +103,7 @@ def previewReport(studid):
 
 @app.route('/update/report/<submissionid>', methods=['GET', 'POST'])
 def update(submissionid):
+    cincai = request
     status = request.form['reportStatus']
     remark = request.form['remark']
     cursor = db_conn.cursor()
