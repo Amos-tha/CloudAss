@@ -199,6 +199,7 @@ def previewReport(studid):
             filenames.append("report_" + str(report['reportID']) + "_" + str(report['studName']) + "_" + str(studid) + ".pdf")
 
         files = list_files(filenames)
+        print(files)
 
     except Exception as e:
             return str(e)
