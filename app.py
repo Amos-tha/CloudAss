@@ -192,7 +192,7 @@ def previewReport(studid):
         cursor = db_conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute("SELECT reportID, reportName, dueDate FROM progressReport WHERE supervisorID=%s", (supid))
         classworks = cursor.fetchall()
-        cursor.execute("SELECT * FROM student s, submission sb WHERE s.studID = sb.studID AND studID = %s", (studid))
+        cursor.execute("SELECT * FROM student s, submission sb WHERE s.studID = sb.studID AND sb.studID = %s", (studid))
         reports = cursor.fetchall()
         
         for report in reports:
