@@ -29,6 +29,8 @@ endblock %} {% block content %} {% for classwork in classworks %}
           >Submitted Date: {{submitted['handInDate']}}</label
         >
       </div>
+
+      <!-- Submitted Report -->
       {% for file in files if classwork['reportID']|string + '_' +
       classwork['studName'] in file%}
       <label class="fw-bold"
@@ -40,6 +42,7 @@ endblock %} {% block content %} {% for classwork in classworks %}
           >Downloaod</a
         ></label
       >
+      {% endfor %}
       <label class="fw-bold">Supervisor Remark: </label>
       <div class="form-check">
         <textarea class="form-control" row="5" name="remark">
