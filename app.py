@@ -307,7 +307,7 @@ def Comp_Login():
 
 
 @app.route("/previewImg/<file>", methods=["GET"])
-def preview(file):
+def previewImg(file):
     if request.method == "GET":
         s3 = boto3.resource("s3")
         file1 = s3.Object(custombucket, file).get()
