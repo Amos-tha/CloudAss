@@ -109,7 +109,7 @@ def submit(reportid):
     return redirect(url_for('stud_submission'))
 
 @app.route("/stud/unsubmit/<reportid>", methods=["GET", "POST"])
-def submit(reportid):
+def unsubmit(reportid):
     pdf = request.files["inputPdf"]
     studid = session['userid']
     studName = session['username']
