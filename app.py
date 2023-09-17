@@ -154,7 +154,7 @@ def previewReport(studid):
         cursor.execute("SELECT * FROM submission WHERE studID = %s", (studid))
         reports = cursor.fetchall()
         
-        contents = list_files
+        contents = list_files()
 
     except Exception as e:
             return str(e)
