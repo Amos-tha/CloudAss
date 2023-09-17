@@ -508,7 +508,7 @@ def Comp_Get_Offer_Applications():
     finally:
         cursor.close()
         db_conn2.close()
-
+        
 
 @app.route("/company/appdetails", methods=["GET", "POST"])
 def comp_app_details():
@@ -529,7 +529,13 @@ def comp_app_details():
         )
 
         record = cursor.fetchone()
-        return render_template("CompAppDetails.html", appdetails=record)
+        s3 = boto3.client("s3")
+        contents = []
+        for image in s3.list_objects(Bucket=custombucket)["Contents"]:
+            file = image["Key"]
+            if file.startswith("stud-id-" + record['studID'] + '_resume'):
+                contents.append(file)
+        return render_template("CompAppDetails.html", appdetails=record, file=contents)
     except Exception as e:
         print(e)
     finally:
