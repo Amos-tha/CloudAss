@@ -181,7 +181,7 @@ def stud_Register():
             cursor.execute(insert_sql, (studID, studName, studIC, studPhone, studGender, studUniEmail, studPersonalEmail, studAddress, studLevel, studProgramme, studTutGrp, CGPA, superVisorID))
             db_conn.commit()
 
-            resume_file = "stud-id-" + str(studID) + "_resume"
+            resume_file = "stud-id-" + str(studID) + "_resume.pdf"
             s3 = boto3.resource("s3")
 
             try:
