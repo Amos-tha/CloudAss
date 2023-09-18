@@ -166,15 +166,39 @@ def stud_Register():
         studPhone = request.form['inputPhone']
         studAddress = request.form['inputAddress']
 
+        studResume = request.files["inputResume"]
+
         get_supervisorid_sql = "SELECT superVisorID FROM supervisor WHERE superVisorName = (%s)"
         insert_sql = "INSERT INTO student (studID, studName, studIC, studPhone, studGender, studUniEmail, studPersonalEmail, studAddress, studLevel, studProgramme, studTutGrp, CGPA, supervisorID)VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         cursor = db_conn.cursor()
+
+        if studResume.filename == "":
+            return "Please upload your resume!"
 
         try:
             cursor.execute(get_supervisorid_sql, superVisorName)
             superVisorID = cursor.fetchone()
             cursor.execute(insert_sql, (studID, studName, studIC, studPhone, studGender, studUniEmail, studPersonalEmail, studAddress, studLevel, studProgramme, studTutGrp, CGPA, superVisorID))
             db_conn.commit()
+
+            resume_file = "stud-id-" + str(studID) + "_resume"
+            s3 = boto3.resource("s3")
+
+            try:
+                print("Data inserted in MySQL RDS... uploading resume to S3...")
+                s3.Bucket(custombucket).put_object(Key=resume_file, Body=studResume)
+                bucket_location = boto3.client("s3").get_bucket_location(
+                    Bucket=custombucket
+                )
+                s3_location = bucket_location["LocationConstraint"]
+
+                if s3_location is None:
+                    s3_location = ""
+                else:
+                    s3_location = "-" + s3_location
+
+            except Exception as e:
+                return str(e)
 
         finally:
             cursor.close()
