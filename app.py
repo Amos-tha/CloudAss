@@ -313,7 +313,7 @@ def apply_offer():
     finally:
         cursor.close()
 
-    return redirect(url_for("view_offer_details"), selectedOffer=selectedOfferID)
+    return redirect(url_for("view_offer_details", selectedOffer=selectedOfferID))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
