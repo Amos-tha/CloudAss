@@ -268,6 +268,7 @@ def preview(file):
 def view_offer_details():
     if request.method == "GET":
         selectedOfferID = request.args.get("selectedOffer")
+        print(selectedOfferID)
 
     try:
         cursor = db_conn.cursor(pymysql.cursors.DictCursor)
