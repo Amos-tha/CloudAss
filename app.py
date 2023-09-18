@@ -267,7 +267,7 @@ def view_offer_details():
 @app.route("/student/applyOffer", methods=['GET','POST'])
 def apply_offer():
     if request.method == "POST":
-        selectedOfferID = request.args.get("selectedOffer")
+        selectedOfferID = request.form['selectedOffer']
         studID = session["userid"]
         datetimeNow = datetime.datetime.now()
         insert_sql = "INSERT INTO application (appStatus, appliedDateTime, studID, offerID) VALUES (%s, %s, %s, %s)"
