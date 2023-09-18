@@ -330,6 +330,12 @@ def Comp_Login():
     return render_template("CompLogin.html", msg=msg)
 
 
+@app.route("/company/Logout", methods=["GET", "POST"])
+def Comp_Logout():
+    session.clear()
+    return redirect(url_for("home"))
+
+
 @app.route("/previewImg/<file>", methods=["GET"])
 def previewImg(file):
     if request.method == "GET":
@@ -665,7 +671,9 @@ def comp_app_details():
             file = image["Key"]
             if file.startswith("stud-id-" + record["studID"] + "_resume"):
                 contents.append(file)
-        return render_template("CompApplicationDetails.html", appdetails=record, file=contents)
+        return render_template(
+            "CompApplicationDetails.html", appdetails=record, file=contents
+        )
     except Exception as e:
         print(e)
     finally:
