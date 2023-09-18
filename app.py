@@ -239,7 +239,7 @@ def preview(file):
 @app.route("/student/offerDetails", methods=['GET','POST'])
 def view_offer_detaisl():
     if request.method == "GET":
-        selectedOfferID = request.args.get("selectedComp")
+        selectedOfferID = request.args.get("selectedOffer")
 
     try:
         cursor = db_conn.cursor(pymysql.cursors.DictCursor)
