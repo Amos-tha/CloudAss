@@ -174,8 +174,10 @@
                     </div>
                     <div class="mt-5 d-flex flex-row justify-content-end">
                         <a class="btn btn-secondary me-4" id="backBtn">Back</a>
+                        {% if appdetails['appStatus'] == 'Pending' %}
                         <button type="reset" class="btn btn-secondary me-4" id="resetBtn">Reset</button>
                         <button type="submit" class="btn btn-primary" id="respondBtn">Respond</button>
+                        {% endif %}
                     </div>
                 </form>
             </div>
