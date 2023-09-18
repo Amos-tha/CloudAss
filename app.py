@@ -297,7 +297,6 @@ def apply_offer():
     if request.method == "POST":
         selectedOfferID = request.form['selectedOffer']
         studID = session["userid"]
-        print(studID)
         datetimeNow = datetime.datetime.now()
         insert_sql = "INSERT INTO application (appStatus, appliedDateTime, studID, offerID) VALUES (%s, %s, %s, %s)"
         cursor = db_conn.cursor()
@@ -314,7 +313,7 @@ def apply_offer():
     finally:
         cursor.close()
 
-    return redirect(url_for("view_offer_details"))
+    return redirect(url_for("view_offer_details"), selectedOffer=selectedOfferID)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
