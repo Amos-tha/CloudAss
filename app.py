@@ -87,7 +87,6 @@ def Comp_Register():
 
     return redirect("/")
 
-
 @app.route("/company/login", methods=['GET','POST'])
 def comp_login():
     return render_template('CompLogin.html')
@@ -144,6 +143,10 @@ def AddEmp():
 
     print("all modification done...")
     return render_template('AddEmpOutput.html', name=emp_name)
+
+@app.route("/student/studRegisterPage", methods=['GET','POST'])
+def stud_Register_Page():
+    return render_template('RegisterStudent.html')
 
 @app.route("/student/studRegister", methods=['GET','POST'])
 def stud_Register():
