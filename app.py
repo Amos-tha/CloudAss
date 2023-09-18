@@ -327,7 +327,7 @@ def Comp_Login():
             return redirect(url_for("comp_offers"))
         else:
             msg = "Incorrect email/password.Try again!"
-    return redirect(url_for("comp_login", msg=msg))
+    return render_template("CompLogin.html", msg=msg)
 
 
 @app.route("/previewImg/<file>", methods=["GET"])
@@ -374,8 +374,8 @@ def Comp_Get_Offers():
             ## Total number of records with filtering
             likeString = "%" + searchValue + "%"
             cursor.execute(
-                "SELECT count(*) as allcount from offer WHERE (position LIKE %s OR location LIKE %s OR prerequisite LIKE %s OR language LIKE %s OR allowance LIKE %s) AND compID=%s",
-                (likeString, likeString, likeString, likeString, likeString, compID),
+                "SELECT count(*) as allcount from offer WHERE (position LIKE %s OR location LIKE %s OR prerequisite LIKE %s OR language LIKE %s OR allowance LIKE %s OR offerStatus LIKE %s) AND compID=%s",
+                (likeString, likeString, likeString, likeString, likeString, likeString, compID),
             )
             rsallcount = cursor.fetchone()
             totalRecordwithFilter = rsallcount["allcount"]
@@ -389,13 +389,14 @@ def Comp_Get_Offers():
                 offerlist = cursor.fetchall()
             else:
                 cursor.execute(
-                    "SELECT * FROM offer WHERE (position LIKE %s OR location LIKE %s OR prerequisite LIKE %s OR language LIKE %s OR allowance LIKE %s) AND compID=%s ORDER BY CASE offerStatus WHEN 'Pending' THEN 0 WHEN 'Active' THEN 1 WHEN 'Revoked' THEN 2 WHEN 'Rejected' THEN 3 END ASC, datePosted DESC limit %s, %s;",
+                    "SELECT * FROM offer WHERE (position LIKE %s OR location LIKE %s OR prerequisite LIKE %s OR language LIKE %s OR allowance LIKE %s OR offerStatus LIKE %s) AND compID=%s ORDER BY CASE offerStatus WHEN 'Pending' THEN 0 WHEN 'Active' THEN 1 WHEN 'Revoked' THEN 2 WHEN 'Rejected' THEN 3 END ASC, datePosted DESC limit %s, %s;",
                     (
                         likeString,
                         likeString,
                         likeString,
                         likeString,
                         likeString,
+                        likeString, 
                         compID,
                         row,
                         rowperpage,
