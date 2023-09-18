@@ -588,10 +588,11 @@ def comp_respond_app():
     offerID = request.form["inputOfferID"]
     appID = request.form["inputAppID"]
     appStatus = request.form["inputAppStatus"]
+    feedback = request.form["inputFeedback"]
     cursor = db_conn.cursor()
     cursor.execute(
-        "UPDATE application SET appStatus = %s WHERE appID=%s;",
-        (appStatus, appID),
+        "UPDATE application SET appStatus = %s, feedback=%s WHERE appID=%s;",
+        (appStatus, feedback, appID),
     )
     db_conn.commit()
     cursor.close()
