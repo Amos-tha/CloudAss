@@ -244,7 +244,7 @@ def view_offer_detaisl():
     try:
         cursor = db_conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute("SELECT offerID, position, allowance, duration, prerequisite, language, location, datePosted, offerStatus, O.compID, compName FROM offer O, company C WHERE O.compID = C.compID AND O.compID = %s AND C.compID = %s", (selectedCompID, selectedCompID))
-        offerdetails = cursor.fetchall()
+        offerdetails = cursor.fetchone()
 
     except Exception as e:
             print(e)    
@@ -255,12 +255,11 @@ def view_offer_detaisl():
 
     s3 = boto3.client("s3")
     contents = []
-    for offerdetail in offerdetails:
-        compID = offerdetail['compID']
-        for image in s3.list_objects(Bucket=custombucket)["Contents"]:
-            file = image["Key"]
-            if file.startswith("comp-id-" + str(compID) + "_logo"):
-                contents.append(file)
+    compID = offerdetails['compID']
+    for image in s3.list_objects(Bucket=custombucket)["Contents"]:
+        file = image["Key"]
+        if file.startswith("comp-id-" + str(compID) + "_logo"):
+            contents.append(file)
 
     return render_template('OfferDetails.html', offerdetails = offerdetails, contents=contents) 
 
