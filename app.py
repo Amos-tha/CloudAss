@@ -243,7 +243,7 @@ def view_offer_detaisl():
 
     try:
         cursor = db_conn.cursor(pymysql.cursors.DictCursor)
-        cursor.execute("SELECT offerID, position, allowance, duration, prerequisite, language, location, datePosted, offerStatus, O.compID, compName FROM offer O, company C WHERE O.compID = C.compID AND O.compID = selectedCompID AND C.compID = selectedCompID")
+        cursor.execute("SELECT offerID, position, allowance, duration, prerequisite, language, location, datePosted, offerStatus, O.compID, compName FROM offer O, company C WHERE O.compID = C.compID AND O.compID = %s AND C.compID = %s", (selectedCompID, selectedCompID))
         offerdetails = cursor.fetchall()
 
     except Exception as e:
