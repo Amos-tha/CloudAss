@@ -262,7 +262,7 @@ def view_offer_detaisl():
             if file.startswith("comp-id-" + str(compID) + "_logo"):
                 contents.append(file)
 
-    return render_template('OfferDeatails.html', offerdetails = offerdetails, contents=contents) 
+    return render_template('OfferDetails.html', offerdetails = offerdetails, contents=contents) 
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
