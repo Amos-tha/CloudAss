@@ -269,7 +269,7 @@ def apply_offer():
     if request.method == "POST":
         selectedOfferID = request.args.get("selectedOffer")
         studID = session["userid"]
-        datetimeNow = datetime.now()
+        datetimeNow = datetime.datetime.now()
         insert_sql = "INSERT INTO application (feedback, appStatus, appliedDateTime, feedbackDateTime, studID, offerID)VALUES (%s, %s, %s, %s, %s, %s, %s)"
         cursor = db_conn.cursor()
 
