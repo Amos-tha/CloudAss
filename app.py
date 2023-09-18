@@ -458,7 +458,6 @@ def comp_offer_details():
 
 @app.route("/company/UpdateOfferDetails", methods=["GET", "POST"])
 def comp_update_offer_details():
-    print(request)
     offerID = request.form["inputOfferID"]
     offerStatus = request.form["inputOfferStatus"]
     cursor = db_conn.cursor()
@@ -582,6 +581,21 @@ def comp_app_details():
     finally:
         cursor.close()
         db_conn2.close()
+
+
+@app.route("/company/RespondApplication", methods=["GET", "POST"])
+def comp_respond_app():
+    offerID = request.form["inputOfferID"]
+    appID = request.form["inputAppID"]
+    appStatus = request.form["inputAppStatus"]
+    cursor = db_conn.cursor()
+    cursor.execute(
+        "UPDATE application SET appStatus = %s WHERE appID=%s;",
+        (appStatus, appID),
+    )
+    db_conn.commit()
+    cursor.close()
+    return redirect(url_for("comp_offer_details", offerid=offerID, appid=appID))
 
 
 @app.route("/company/addoffer", methods=["GET", "POST"])
