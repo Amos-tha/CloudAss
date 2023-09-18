@@ -1,6 +1,7 @@
+import datetime
 from io import BytesIO
 from flask import Flask, render_template, request, redirect, send_file, session, url_for
-from pymysql import connections
+from pymysql import NULL, connections
 import os
 import boto3
 import pymysql
@@ -237,7 +238,7 @@ def preview(file):
     # return file['Body'].read()
 
 @app.route("/student/offerDetails", methods=['GET','POST'])
-def view_offer_detaisl():
+def view_offer_details():
     if request.method == "GET":
         selectedOfferID = request.args.get("selectedOffer")
 
@@ -262,6 +263,28 @@ def view_offer_detaisl():
             contents.append(file)
 
     return render_template('OfferDetails.html', offerdetails = offerdetails, contents=contents) 
+
+@app.route("/student/applyOffer", methods=['GET','POST'])
+def apply_offer():
+    if request.method == "POST":
+        selectedOfferID = request.args.get("selectedOffer")
+        studID = session["userid"]
+        datetimeNow = datetime.now()
+        insert_sql = "INSERT INTO application (feedback, appStatus, appliedDateTime, feedbackDateTime, studID, offerID)VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        cursor = db_conn.cursor()
+
+    try:
+        cursor.execute(insert_sql, (NULL, "Pending", datetimeNow, NULL, studID, selectedOfferID))
+        db_conn.commit()
+        appID = cursor.lastrowid
+
+    except Exception as e: 
+            return str(e)
+
+    finally:
+        cursor.close()
+
+    return redirect(url_for("view_offer_details"))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
