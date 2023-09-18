@@ -236,5 +236,33 @@ def preview(file):
     return send_file(BytesIO(img), mimetype='image/jpeg')
     # return file['Body'].read()
 
+@app.route("/student/offerDetails", methods=['GET','POST'])
+def view_offer_detaisl():
+    if request.method == "GET":
+        compID = request.args.get("selectedComp")
+
+    try:
+        cursor = db_conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("SELECT offerID, position, allowance, duration, prerequisite, language, location, datePosted, offerStatus, O.compID, compName FROM offer O, company C WHERE O.compID = C.compID")
+        offerdetails = cursor.fetchall()
+
+    except Exception as e:
+            print(e)
+            return str(e)
+
+    finally:
+        cursor.close()
+
+    s3 = boto3.client("s3")
+    contents = []
+    for offerdetail in offerdetails:
+        compID = offerdetail['compID']
+        for image in s3.list_objects(Bucket=custombucket)["Contents"]:
+            file = image["Key"]
+            if file.startswith("comp-id-" + str(compID) + "_logo"):
+                contents.append(file)
+
+    return render_template('OfferDeatails.html', offerdetails = offerdetails, contents=contents) 
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)

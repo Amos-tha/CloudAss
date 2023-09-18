@@ -5,29 +5,33 @@
 {% block content %}
 <div class="d-flex flex-row justify-content-center align-items-center mt-5">
     <div class="col-5 text-center">
-        <div class="fs-2 fw-bold text-center mb-2">Offer Details</div>
+        <div class="fs-2 fw-bold text-center mb-2">Internship Offers</div>
+        <form class="row g-3 align-items-center" action="/student/offerDetails" method="GET"
+            enctype="multipart/form-data"></form>
         <div class="row">
-            {% for offer in offers %}
-            <div class="col-sm-6 mb-3">
+            <div class="col-sm-6 col-md-4 mb-3">
                 <div class="card">
                     <div class="card-header">
-                        {{offer['compName']}}
+                        {{offerdetails['compName']}}
                     </div>
+                    <img src="/previewImg/{{contents}}" class="card-img-top"
+                        alt="{{contents}}">
                     <div class="card-body">
-                        <h5 class="card-title">Position: {{offer['position']}}</h5>
-                        <h5 class="card-title">Allowance: RM{{offer['allowance']}}</h5>
-                        <h5 class="card-title">Duration: {{offer['duration']}} months</h5>
-                        <h5 class="card-title">Prerequisite: {{offer['prerequisite']}}</h5>
-                        <h5 class="card-title">Language: {{offer['language']}}</h5>
-                        <h5 class="card-title">Location: {{offer['location']}}</h5>
-                        <h5 class="card-title">Date Posted: {{offer['datePosted']}}</h5>
-                        <h5 class="card-title">Offer Status: {{offer['offerStatus']}}</h5>
-                        <a href="#" class="btn btn-primary">View Offer</a>
+                        <h5 class="card-title">Position: <br>{{offerdetails['position']}}</h5>
+                        <h5 class="card-title">Allowance: <br>RM{{offerdetails['allowance']}}</h5>
+                        <h5 class="card-title">Duration: <br>{{offerdetails['duration']}} months</h5>
+                        <h5 class="card-title">Prerequisite: {{offerdetails['prerequisite']}}</h5>
+                        <h5 class="card-title">Language: {{offerdetails['language']}}</h5>
+                        <h5 class="card-title">Location: {{offerdetails['location']}}</h5>
+                        <h5 class="card-title">Date Posted: {{offerdetails['datePosted']}}</h5>
+                        <h5 class="card-title">Offer Status: {{offerdetails['offerStatus']}}</h5>
+                        <button type="Submit" class="btn btn-primary" name="selectedComp" value="{{offer['compID']}}">View Offer</button>
+                        <!-- <a href="#" class="btn btn-primary" id="{{offer['compID']}}">View Offer</a> -->
                     </div>
                 </div>
             </div>
-            {% endfor %}
         </div>
+        </form>
     </div>
 </div>
 {%endblock%}
