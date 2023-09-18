@@ -8,11 +8,11 @@
         <div class="fs-2 fw-bold text-center mb-2">Internship Offers</div>
         <form class="row g-3 align-items-center" action="/student/offerDetails" method="GET"
             enctype="multipart/form-data">
-            <div class="card">
+            <div class="card text-center">
                 <div class="card-header">
                     {{offerdetails['compName']}}
                 </div>
-                <img src="/previewImg/{{contents[0]}}" class="card-img-top" alt="{{contents}}">
+                <img src="/previewImg/{{contents[0]}}" class="card-img-top" alt="{{contents}}" style="width:50%; height:auto;">
                 <div class="card-body">
                     <h5 class="card-title">Position: {{offerdetails['position']}}</h5>
                     <p class="card-text">Allowance: RM{{offerdetails['allowance']}}</p>
