@@ -324,7 +324,7 @@ def Comp_Login():
             session["loggedin"] = True
             session["userid"] = record[0]
             session["username"] = record[1]
-            return redirect(url_for("comp_offers"))
+            return redirect(url_for("comp_applications"))
         else:
             msg = "Incorrect email/password.Try again!"
     return render_template("CompLogin.html", msg=msg)
