@@ -12,7 +12,9 @@
                 <div class="card-header text-center">
                     {{offerdetails['compName']}}
                 </div>
-                <img src="/previewImg/{{contents[0]}}" class="card-img-top" alt="{{contents}}" style="height: 50%; width: 50%;">
+                <div style="height: 50%; width: 50%;">
+                    <img src="/previewImg/{{contents[0]}}" class="card-img-top" alt="{{contents}}">
+                </div>
                 <div class="card-body">
                     <h5 class="card-title text-center">Position: {{offerdetails['position']}}</h5>
                     <p class="card-text">Allowance: RM{{offerdetails['allowance']}}</p>
