@@ -37,6 +37,7 @@
                     <label for="inputOfferID" class="form-label">Offer ID</label>
                     <input type="text" class="form-control border-3" id="inputOfferID" name="inputOfferID"
                         value="{{offerID}}" disabled required>
+                    <input type="hidden" id="inputOfferID" name="inputOfferID" value="{{offerID}}" required>
                 </div>
                 <div class="col-2">
                     {% if offerStatus == 'Pending' or offerStatus == 'Rejected' %}
@@ -45,6 +46,7 @@
                         name="inputOfferStatus" disabled>
                         <option value="{{offerStatus}}" SELECTED>{{offerStatus}}</option>
                     </select>
+                    <input type="hidden" id="inputOfferStatus" name="inputOfferStatus" value="{{offerStatus}}" required>
                     {% else %}
                     <label for="inputOfferStatus" class="form-label">Offer Status</label>
                     <select class="form-select" aria-label="Default select example" id="inputOfferStatus"
@@ -58,51 +60,60 @@
                         {% endfor %}
                     </select>
                     {% endif %}
+                    
                 </div>
                 <div class="col-3">
                     <label for="inputDatePosted" class="form-label">Date Posted</label>
                     <input type="text" class="form-control border-3" id="inputDatePosted" name="inputDatePosted"
                         value="{{datePosted}}" required disabled>
+                    <input type="hidden" id="inputDatePosted" name="inputDatePosted" value="{{datePosted}}" required>
                 </div>
                 <div class="col-5">
                     <label for="inputPosition" class="form-label">Position</label>
                     <input type="text" class="form-control border-3" id="inputPosition" name="inputPosition"
                         value="{{position}}" required disabled>
+                    <input type="hidden" id="inputPosition" name="inputPosition" value="{{position}}" required>
                 </div>
                 <div class="col-2">
                     <label for="inputAllowance" class="form-label">Allowance (RM)<span class="small"></label>
                     <input type="text" class="form-control border-3" id="inputAllowance" name="inputAllowance"
                         placeholder="e.g. 2000.00, 800.00-2000.00" value="{{allowance}}" required disabled>
+                    <input type="hidden" id="inputAllowance" name="inputAllowance" value="{{allowance}}" required>
                 </div>
                 <div class="col-2">
                     <label for="inputDuration" class="form-label">Duration (month)</label>
                     <input type="number" class="form-control border-3" id="inputDuration" name="inputDuration" min="1"
                         value="{{duration}}" disabled>
+                    <input type="hidden" id="inputDuration" name="inputDuration" value="{{duration}}" required>
                 </div>
                 <div class="col-8">
                     <label for="inputLanguage" class="form-label">Language(s)</label>
                     <input type="text" class="form-control border-3" id="inputLanguage" name="inputLanguage"
                         value="{{language}}" disabled>
+                    <input type="hidden" id="inputLanguage" name="inputLanguage" value="{{language}}" required>
                 </div>
                 <div class="col-12">
                     <label for="inputPrerequisite" class="form-label">Prerequisite</label>
                     <textarea class="form-control border-3" id="inputPrerequisite" name="inputPrerequisite" rows="3"
                         disabled>{{prerequisite}}</textarea>
+                    <input type="hidden" id="inputPrerequisite" name="inputPrerequisite" value="{{prerequisite}}"
+                        required>
                 </div>
 
                 <div class="col-12">
                     <label for="inputLocation" class="form-label">Location</label>
                     <textarea class="form-control border-3" id="inputLocation" name="inputLocation" rows="3"
                         disabled>{{location}}</textarea>
+                    <input type="hidden" id="inputLocation" name="inputLocation" value="{{location}}" required>
                 </div>
                 <div class="col-12">
                     <label for="inputDescription" class="form-label">Description</label>
                     <textarea class="form-control border-3" id="inputDescription" name="inputDescription" rows="7"
                         disabled>{{description}}</textarea>
+                    <input type="hidden" id="inputDescription" name="inputDescription" value="{{description}}" required>
                 </div>
                 {% if offerStatus != 'Pending' and offerStatus != 'Rejected' %}
                 <div class="col-12 d-flex flex-row justify-content-end">
-                    <button type="reset" class="btn btn-secondary btn-lg me-4">Reset</button>
                     <button type="submit" class="btn btn-primary btn-lg">Save</button>
                 </div>
                 {% endif %}

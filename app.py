@@ -327,7 +327,7 @@ def Comp_Login():
             return redirect(url_for("comp_offers"))
         else:
             msg = "Incorrect email/password.Try again!"
-    return redirect(url_for("comp_login"), msg=msg)
+    return redirect(url_for("comp_login", msg=msg))
 
 
 @app.route("/previewImg/<file>", methods=["GET"])
@@ -383,13 +383,13 @@ def Comp_Get_Offers():
             ## Fetch records
             if searchValue == "":
                 cursor.execute(
-                    "SELECT * FROM offer WHERE compID=%s ORDER BY offerStatus asc, datePosted desc limit %s, %s;",
+                    "SELECT * FROM offer WHERE compID=%s ORDER BY CASE offerStatus WHEN 'Pending' THEN 0 WHEN 'Active' THEN 1 WHEN 'Revoked' THEN 2 WHEN 'Rejected' THEN 3 END ASC, datePosted DESC limit %s, %s;",
                     (compID, row, rowperpage),
                 )
                 offerlist = cursor.fetchall()
             else:
                 cursor.execute(
-                    "SELECT * FROM offer WHERE (position LIKE %s OR location LIKE %s OR prerequisite LIKE %s OR language LIKE %s OR allowance LIKE %s) AND compID=%s ORDER BY offerStatus asc, datePosted desc limit %s, %s;",
+                    "SELECT * FROM offer WHERE (position LIKE %s OR location LIKE %s OR prerequisite LIKE %s OR language LIKE %s OR allowance LIKE %s) AND compID=%s ORDER BY CASE offerStatus WHEN 'Pending' THEN 0 WHEN 'Active' THEN 1 WHEN 'Revoked' THEN 2 WHEN 'Rejected' THEN 3 END ASC, datePosted DESC limit %s, %s;",
                     (
                         likeString,
                         likeString,
@@ -457,9 +457,9 @@ def comp_offer_details():
 
 @app.route("/company/UpdateOfferDetails", methods=["GET", "POST"])
 def comp_update_offer_details():
+    print(request)
     offerID = request.form["inputOfferID"]
     offerStatus = request.form["inputOfferStatus"]
-
     cursor = db_conn.cursor()
     cursor.execute(
         "UPDATE offer SET offerStatus = %s WHERE offerID=%s;",
@@ -467,7 +467,7 @@ def comp_update_offer_details():
     )
     db_conn.commit()
     cursor.close()
-    return redirect(url_for("comp_offer_details"), id=offerID)
+    return redirect(url_for("comp_offer_details", id=offerID))
 
 
 @app.route("/company/GetOfferApplications", methods=["POST"])
