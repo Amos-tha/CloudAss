@@ -12,16 +12,19 @@
                 <div class="card-header text-center">
                     {{offerdetails['compName']}}
                 </div>
-                <img src="/previewImg/{{contents[0]}}" class="card-img-top" alt="{{contents}}">
-                <div class="card-body">
-                    <h5 class="card-title text-center">Position: {{offerdetails['position']}}</h5>
-                    <p class="card-text">Allowance: RM{{offerdetails['allowance']}}</p>
-                    <p class="card-text">Duration: {{offerdetails['duration']}} months</p>
-                    <p class="card-text">Prerequisite: {{offerdetails['prerequisite']}}</p>
-                    <p class="card-text">Language: {{offerdetails['language']}}</p>
-                    <p class="card-text">Location: {{offerdetails['location']}}</p>
-                    <p class="card-text">Date Posted: {{offerdetails['datePosted']}}</p>
-                    <p class="card-text">Offer Status: {{offerdetails['offerStatus']}}</p>
+                <div class="card-body row">
+                    <div class="col"><img src="/previewImg/{{contents[0]}}" class="card-img-top" alt="{{contents}}">
+                    </div>
+                    <div class="col">
+                        <h5 class="card-title text-center">Position: {{offerdetails['position']}}</h5>
+                        <p class="card-text">Allowance: RM{{offerdetails['allowance']}}</p>
+                        <p class="card-text">Duration: {{offerdetails['duration']}} months</p>
+                        <p class="card-text">Prerequisite: {{offerdetails['prerequisite']}}</p>
+                        <p class="card-text">Language: {{offerdetails['language']}}</p>
+                        <p class="card-text">Location: {{offerdetails['location']}}</p>
+                        <p class="card-text">Date Posted: {{offerdetails['datePosted']}}</p>
+                        <p class="card-text">Offer Status: {{offerdetails['offerStatus']}}</p>
+                    </div>
                     <button type="Submit" class="btn btn-primary" name="selectedOffer"
                         value="{{offerdetails['offerID']}}">Apply Offer</button>
                 </div>
