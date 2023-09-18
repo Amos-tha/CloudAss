@@ -239,11 +239,11 @@ def preview(file):
 @app.route("/student/offerDetails", methods=['GET','POST'])
 def view_offer_detaisl():
     if request.method == "GET":
-        selectedCompID = request.args.get("selectedComp")
+        selectedOfferID = request.args.get("selectedComp")
 
     try:
         cursor = db_conn.cursor(pymysql.cursors.DictCursor)
-        cursor.execute("SELECT offerID, position, allowance, duration, prerequisite, language, location, datePosted, offerStatus, O.compID, compName FROM offer O, company C WHERE O.compID = C.compID AND O.compID = %s AND C.compID = %s", (selectedCompID, selectedCompID))
+        cursor.execute("SELECT offerID, position, allowance, duration, prerequisite, language, location, datePosted, offerStatus, O.compID, compName FROM offer O, company C WHERE O.compID = C.compID AND offerID = %s", (selectedOfferID))
         offerdetails = cursor.fetchone()
 
     except Exception as e:
