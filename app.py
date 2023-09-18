@@ -340,6 +340,88 @@ def previewImg(file):
     # return file['Body'].read()
 
 
+@app.route("/company/applications", methods=["GET", "POST"])
+def comp_applications():
+    return render_template("CompApplications.html")
+
+
+@app.route("/company/GetApplications", methods=["POST"])
+def Comp_Get_Applications():
+    try:
+        db_conn2 = connections.Connection(
+            host=customhost,
+            port=3306,
+            user=customuser,
+            password=custompass,
+            db=customdb,
+            cursorclass=cursors.DictCursor,
+        )
+        cursor = db_conn2.cursor()
+        if request.method == "POST":
+            draw = request.form["draw"]
+            row = int(request.form["start"])
+            rowperpage = int(request.form["length"])
+            searchValue = request.form["search[value]"]
+            compID = session["userid"]
+            ## Total number of records without filtering
+            cursor.execute(
+                "SELECT COUNT(*) AS allcount FROM application a, offer o WHERE a.offerID=o.offerID AND compID=%s",
+                compID,
+            )
+            rsallcount = cursor.fetchone()
+            totalRecords = rsallcount["allcount"]
+
+            ## Total number of records with filtering
+            likeString = "%" + searchValue + "%"
+            cursor.execute(
+                "SELECT COUNT(*) AS allcount FROM application a, offer o WHERE (appStatus LIKE %s OR position LIKE %s) AND a.offerID=o.offerID AND compID=%s ORDER BY CASE appStatus WHEN 'Pending' THEN 0 WHEN 'Accepted' THEN 1 WHEN 'Rejected' THEN 2 END ASC, appliedDateTime ASC ;",
+                (likeString, likeString, compID),
+            )
+            rsallcount = cursor.fetchone()
+            totalRecordwithFilter = rsallcount["allcount"]
+
+            ## Fetch records
+            if searchValue == "":
+                cursor.execute(
+                    "SELECT * FROM application a, offer o WHERE a.offerID=o.offerID AND compID=%s ORDER BY CASE appStatus WHEN 'Pending' THEN 0 WHEN 'Accepted' THEN 1 WHEN 'Rejected' THEN 2 END ASC, appliedDateTime ASC LIMIT %s, %s;",
+                    (compID, row, rowperpage),
+                )
+                offerlist = cursor.fetchall()
+            else:
+                cursor.execute(
+                    "SELECT * FROM application a, offer o WHERE (appStatus LIKE %s OR position LIKE %s) AND a.offerID=o.offerID AND compID=%s ORDER BY CASE appStatus WHEN 'Pending' THEN 0 WHEN 'Accepted' THEN 1 WHEN 'Rejected' THEN 2 END ASC, appliedDateTime ASC LIMIT %s, %s;",
+                    (likeString, likeString, compID, row, rowperpage),
+                )
+                offerlist = cursor.fetchall()
+
+            data = []
+            for row in offerlist:
+                data.append(
+                    {
+                        "appID": row["appID"],
+                        "appStatus": row["appStatus"],
+                        "appliedDateTime": row["appliedDateTime"].strftime("%d-%m-%Y"),
+                        "position": row["position"],
+                        "allowance": row["allowance"],
+                        "duration": row["duration"],
+                        "offerStatus": row["offerStatus"],
+                    }
+                )
+
+            response = {
+                "draw": draw,
+                "iTotalRecords": totalRecords,
+                "iTotalDisplayRecords": totalRecordwithFilter,
+                "aaData": data,
+            }
+            return jsonify(response)
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        db_conn2.close()
+
+
 @app.route("/company/offers", methods=["GET", "POST"])
 def comp_offers():
     return render_template("CompOffers.html")
@@ -375,7 +457,15 @@ def Comp_Get_Offers():
             likeString = "%" + searchValue + "%"
             cursor.execute(
                 "SELECT count(*) as allcount from offer WHERE (position LIKE %s OR location LIKE %s OR prerequisite LIKE %s OR language LIKE %s OR allowance LIKE %s OR offerStatus LIKE %s) AND compID=%s",
-                (likeString, likeString, likeString, likeString, likeString, likeString, compID),
+                (
+                    likeString,
+                    likeString,
+                    likeString,
+                    likeString,
+                    likeString,
+                    likeString,
+                    compID,
+                ),
             )
             rsallcount = cursor.fetchone()
             totalRecordwithFilter = rsallcount["allcount"]
@@ -396,7 +486,7 @@ def Comp_Get_Offers():
                         likeString,
                         likeString,
                         likeString,
-                        likeString, 
+                        likeString,
                         compID,
                         row,
                         rowperpage,
@@ -575,7 +665,7 @@ def comp_app_details():
             file = image["Key"]
             if file.startswith("stud-id-" + record["studID"] + "_resume"):
                 contents.append(file)
-        return render_template("CompAppDetails.html", appdetails=record, file=contents)
+        return render_template("CompApplicationDetails.html", appdetails=record, file=contents)
     except Exception as e:
         print(e)
     finally:

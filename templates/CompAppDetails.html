@@ -202,9 +202,16 @@
         }
         return false;
     };
-
-    var a = document.getElementById('backBtn');
-    a.href = "/company/offerdetails?id=" + getUrlParameter('offerid');
+    var offerid = getUrlParameter('offerid');
+    if (offerid === false){
+        var a = document.getElementById('backBtn');
+        a.href = "/company/applications";
+    }
+    else{
+        var a = document.getElementById('backBtn');
+        a.href = "/company/offerdetails?id=" + getUrlParameter('offerid');
+    }
+    
 
     $(document).ready(function () {
         $("#inputAppStatus").change(function () {

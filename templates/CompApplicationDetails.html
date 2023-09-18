@@ -1,112 +1,190 @@
 {%extends "compLayout.html"%}
 
-{% block title %}Add Offer{% endblock %}
+{% block title %}Application Details{% endblock %}
 {% block head %}
 {{super()}}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-</style>
+<script language="JavaScript" type="text/javascript" src="https://code.jquery.com/jquery-3.7.0.js"></script>
 {% endblock %}
+
 
 {% block content %}
 <div class="d-flex flex-column justify-content-center align-items-center">
-    <div class="d-flex flex-row justify-content-center align-items-center">
-        <div class="col-8 mb-4">
-            <div>
-                <a class="bi bi-chevron-left"
-                    style="font-size: 50px; position: absolute; text-decoration: none; color:black"
-                    href="/company/offers"></a>
-                <div class="fs-2 fw-bold text-center mb-2">Application Details</div>
+    <div class="col-10 mt-4">
+        <div class="card border-secondary ">
+            <div class="card-header text-bg-dark fw-bold fs-5">
+                Application
             </div>
-            <div class="text-center mb-4"><strong>You may directly change the values below and click Save to change
-                    Offer details.</strong></div>
-            <form class="row g-3">
-                <div class="col-2">
-                    <label for="inputOfferID" class="form-label">Offer ID</label>
-                    <input type="text" class="form-control border-3" id="inputOfferID" name="inputOfferID"
-                        value="{{offerID}}" disabled required>
-                </div>
-                <div class="col-2">
-                    <label for="inputOfferStatus" class="form-label">Offer Status</label>
-                    <select class="form-select" aria-label="Default select example" id="inputOfferStatus"
-                        name="inputOfferStatus">
-                        {% for tempStatus in ["Active","Revoked"] %}
-                        {% if offerStatus == tempStatus %}
-                        <option value="{{tempStatus}}" SELECTED>{{tempStatus}}</option>"
+            <div class="card-body">
+                <form action="/company/RespondApplication" method="POST" enctype="multipart/form-data">
+                    <div class="d-flex flex-row justify-content-between mb-3 ms-2 me-2">
+                        <div class="col-1">
+                            <label for="inputOfferID" class="form-label">Offer ID</label>
+                            <input type="text" class="form-control border-3" id="inputOfferID" name="inputOfferID"
+                                value="{{appdetails['offerID']}}" disabled required>
+                            <input type="hidden" id="inputOfferID" name="inputOfferID" value="{{appdetails['offerID']}}"
+                                required>
+                        </div>
+                        <div class="col-6">
+                            <label for="inputPosition" class="form-label">Position</label>
+                            <input type="text" class="form-control border-3" id="inputPosition" name="inputPosition"
+                                value="{{appdetails['position']}}" disabled required>
+                            <input type="hidden" id="inputPosition" name="inputPosition"
+                                value="{{appdetails['position']}}" required>
+                        </div>
+                        <div class="col-2">
+                            <label for="inputDuration" class="form-label">Duration (month)</label>
+                            <input type="number" class="form-control border-3" id="inputDuration" name="inputDuration"
+                                min="1" value="{{appdetails['duration']}}" disabled required>
+                            <input type="hidden" id="inputDuration" name="inputDuration"
+                                value="{{appdetails['duration']}}" required>
+                        </div>
+                        <div class="col-2">
+                            <label for="inputAllowance" class="form-label">Allowance (RM)</label>
+                            <input type="text" class="form-control border-3" id="inputAllowance" name="inputAllowance"
+                                value="{{appdetails['allowance']}}" disabled required>
+                            <input type="hidden" id="inputAllowance" name="inputAllowance"
+                                value="{{appdetails['allowance']}}" required>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row justify-content-between mb-3 ms-2 me-2">
+                        <div class="col-1">
+                            <label for="inputAppID" class="form-label">Application ID</label>
+                            <input type="text" class="form-control border-3" id="inputAppID" name="inputAppID"
+                                value="{{appdetails['appID']}}" disabled required>
+                            <input type="hidden" id="inputAppID" name="inputAppID" value="{{appdetails['appID']}}"
+                                required>
+                        </div>
+                        <div class="col-6">
+                            <label for="inputAppliedDate" class="form-label">Date Applied</label>
+                            <input type="text" class="form-control border-3" id="inputAppliedDate"
+                                name="inputAppliedDate" value="{{appdetails['appliedDateTime']}}" disabled required>
+                            <input type="hidden" id="inputAppliedDate" name="inputAppliedDate"
+                                value="{{appdetails['appliedDateTime']}}" required>
+                        </div>
+                        <div class="form-group col-4">
+                            {% if appdetails['appStatus'] == 'Pending' %}
+                            <label for="inputAppStatus" class="form-label">Application Status <span
+                                    style="font-weight:bold; color: red;">*</span></label>
+                            <select class="form-select border-3" aria-label="Default select example" id="inputAppStatus"
+                                name="inputAppStatus" required>
+                                {% for tempStatus in ["Pending","Accepted", "Rejected"] %}
+                                {% if appdetails['appStatus'] == tempStatus %}
+                                <option value="{{tempStatus}}" SELECTED>{{tempStatus}}</option>
+                                {% else %}
+                                <option value="{{tempStatus}}">{{tempStatus}}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                            {% else %}
+                            <label for="inputAppStatus" class="form-label">Application Status <span
+                                    style="font-weight:bold; color: red;">*</span></label>
+                            <select class="form-select border-3" aria-label="Default select example" id="inputAppStatus"
+                                name="inputAppStatus" disabled required>
+                                {% for tempStatus in ["Pending","Accepted", "Rejected"] %}
+                                {% if appdetails['appStatus'] == tempStatus %}
+                                <option value="{{tempStatus}}" SELECTED>{{tempStatus}}</option>
+                                {% else %}
+                                <option value="{{tempStatus}}">{{tempStatus}}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class=" ms-2 me-2">
+                        {% if appdetails['appStatus'] == 'Pending' %}
+                        <div class="form-group d-none" id="textbox-container">
+                            <label for="textbox">Feedback <span style="font-weight:bold; color: red;">*</span></label>
+                            <textarea class="form-control border-4" id="textbox" name="inputFeedback" rows="3"
+                                placeholder="e.g. Please provide some feedback on why you accept or reject the application."></textarea>
+                            <input type="hidden" id="inputFeedback" name="inputFeedback"
+                                value="{{appdetails['feedback']}}" required>
+                        </div>
                         {% else %}
-                        <option value="{{tempStatus}}">{{tempStatus}}</option>
+                        <div class="form-group" id="textbox-container">
+                            <label for="textbox">Feedback <span style="font-weight:bold; color: red;">*</span></label>
+                            <textarea class="form-control border-4" id="textbox" name="inputFeedback" rows="3" disabled
+                                required></textarea>
+                        </div>
                         {% endif %}
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-3">
-                    <label for="inputDatePosted" class="form-label">Date Posted</label>
-                    <input type="text" class="form-control border-3" id="inputDatePosted" name="inputDatePosted"
-                        value="{{datePosted}}" required>
-                </div>
-                <div class="col-5">
-                    <label for="inputPosition" class="form-label">Position</label>
-                    <input type="text" class="form-control border-3" id="inputPosition" name="inputPosition"
-                        value="{{position}}" required>
-                </div>
-                <div class="col-2">
-                    <label for="inputAllowance" class="form-label">Allowance (RM)<span class="small"></label>
-                    <input type="text" class="form-control border-3" id="inputAllowance" name="inputAllowance"
-                        placeholder="e.g. 2000.00, 800.00-2000.00" value="{{allowance}}" required>
-                </div>
-                <div class="col-2">
-                    <label for="inputDuration" class="form-label">Duration (month)</label>
-                    <input type="number" class="form-control border-3" id="inputDuration" name="inputDuration" min="1"
-                        value="{{duration}}">
-                </div>
-                <div class="col-8">
-                    <label for="inputLanguage" class="form-label">Language(s)</label>
-                    <input type="text" class="form-control border-3" id="inputLanguage" name="inputLanguage" min="1"
-                        value="{{language}}">
-                </div>
-                <div class="col-12">
-                    <label for="inputPrerequisite" class="form-label">Prerequisite</label>
-                    <textarea class="form-control border-3" id="inputPrerequisite" name="inputPrerequisite"
-                        rows="3">{{prerequisite}}</textarea>
-                </div>
+                    </div>
+                    <div class="d-flex flex-row justify-content-center">
+                        <div class="card border-secondary col-11 mt-4">
+                            <div class="card-header text-bg-secondary fw-bold fs-5">
+                                Student
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex flex-row justify-content-between mb-3 ms-2 me-2">
+                                    <div class="col-1">
+                                        <label for="inputStudID" class="form-label">Student ID</label>
+                                        <input type="text" class="form-control border-3" id="inputStudID"
+                                            name="inputStudID" value="{{appdetails['studID']}}" disabled required>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="inputStudName" class="form-label">Student Name</label>
+                                        <input type="text" class="form-control border-3" id="inputStudName"
+                                            name="inputStudName" value="{{appdetails['studName']}}" disabled required>
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="inputStudLevel" class="form-label">Level of Study</label>
+                                        <input type="text" class="form-control border-3" id="inputStudLevel"
+                                            name="inputStudLevel" value="{{appdetails['studLevel']}}" disabled required>
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="inputStudProgramme" class="form-label">Programme</label>
+                                        <input type="text" class="form-control border-3" id="inputStudProgramme"
+                                            name="inputStudProgramme" value="{{appdetails['studProgramme']}}" disabled
+                                            required>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-row justify-content-between mb-3 ms-2 me-2">
+                                    <div class="col-1">
+                                        <label for="inputStudGender" class="form-label">Gender</label>
+                                        <input type="text" class="form-control border-3" id="inputStudGender"
+                                            name="inputStudGender" value="{{appdetails['studGender']}}" disabled
+                                            required>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="inputStudUniEmail" class="form-label">Email</label>
+                                        <input type="text" class="form-control border-3" id="inputStudUniEmail"
+                                            name="inputStudUniEmail" value="{{appdetails['studUniEmail']}}" disabled
+                                            required>
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="inputStudPhone" class="form-label">Phone Number</label>
+                                        <input type="text" class="form-control border-3" id="inputStudPhone"
+                                            name="inputStudPhone" value="{{appdetails['studPhone']}}" disabled required>
+                                    </div>
 
-                <div class="col-12">
-                    <label for="inputLocation" class="form-label">Location</label>
-                    <textarea class="form-control border-3" id="inputLocation" name="inputLocation"
-                        rows="3">{{location}}</textarea>
-                </div>
-                <div class="col-12">
-                    <label for="inputDescription" class="form-label">Description</label>
-                    <textarea class="form-control border-3" id="inputDescription" name="inputDescription"
-                        rows="7">{{description}}</textarea>
-                </div>
-                <div class="col-12 d-flex flex-row justify-content-end">
-                    <button type="reset" class="btn btn-secondary btn-lg me-4">Reset</button>
-                    <button type="submit" class="btn btn-primary btn-lg">Save</button>
-                </div>
-            </form>
+                                    <div class="col-2">
+                                        <label for="inputCGPA" class="form-label">CGPA</label>
+                                        <input type="text" class="form-control border-3" id="inputCGPA" name="inputCGPA"
+                                            value="{{appdetails['CGPA']}}" disabled required>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-row justify-content-between mb-3 ms-2 me-2">
+                                    <div class="col-4">
+                                        <a class="btn btn-light btn-lg" href="/preview/{{file[0]}}" target="_blank">view
+                                            resume</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-5 d-flex flex-row justify-content-end">
+                        <a class="btn btn-secondary me-4" id="backBtn">Back</a>
+                        {% if appdetails['appStatus'] == 'Pending' %}
+                        <button type="reset" class="btn btn-secondary d-none me-4" id="resetBtn">Reset</button>
+                        <button type="submit" class="btn btn-primary d-none" id="respondBtn">Respond</button>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-    <div class="col-10 mb-4">
-        <button class="btn btn-primary me-2" id="All">All</button>
-        <button class="btn btn-secondary me-2" id="Pending">Pending</button>
-        <button class="btn btn-success me-2" id="Accepted">Accepted</button>
-        <button class="btn btn-danger" id="Rejected">Rejected</button>
 
-        <table id='datatable' class='table table-hover' width='100%'>
-            <thead>
-                <tr>
-                    <th style="background-color: rgb(194, 194, 194); ">Date Applied</th>
-                    <th style="background-color: rgb(194, 194, 194); ">Student ID</th>
-                    <th style="background-color: rgb(194, 194, 194); ">Student Name</th>
-                    <th style="background-color: rgb(194, 194, 194); ">Student Level</th>
-                    <th style="background-color: rgb(194, 194, 194); ">Student Programme</th>
-                    <th style="background-color: rgb(194, 194, 194); ">CGPA</th>
-                    <th style="background-color: rgb(194, 194, 194); ">Status</th>
-                    <th style="background-color: rgb(194, 194, 194); "></th>
-                </tr>
-            </thead>
-        </table>
-    </div>
+
+</div>
 </div>
 <script>
     var getUrlParameter = function getUrlParameter(sParam) {
@@ -124,7 +202,41 @@
         }
         return false;
     };
+    var offerid = getUrlParameter('offerid');
+    if (offerid === false){
+        var a = document.getElementById('backBtn');
+        a.href = "/company/applications";
+    }
+    else{
+        var a = document.getElementById('backBtn');
+        a.href = "/company/offerdetails?id=" + getUrlParameter('offerid');
+    }
+    
 
+    $(document).ready(function () {
+        $("#inputAppStatus").change(function () {
+            if ($(this).val() === "Pending") {
+                $("#textbox-container").addClass("d-none");
+                $("#textbox-container").attr("required", false);
+                $("#resetBtn").addClass("d-none");
+                $("#respondBtn").addClass("d-none");
+            } else if ($(this).val() === "Accepted") {
+                $("#textbox-container").removeClass("d-none");
+                $("#textbox-container").attr("required", true);
+                $("#textbox-container").attr("required", true);
+                $("#resetBtn").removeClass("d-none");
+                $("#respondBtn").removeClass("d-none");
+            } else if ($(this).val() === "Rejected") {
+                $("#textbox-container").removeClass("d-none");
+                $("#textbox-container").attr("required", true);
+                $("#resetBtn").removeClass("d-none");
+                $("#respondBtn").removeClass("d-none");
+            }
+        });
 
+        $("#resetBtn").click(function () {
+            $("#inputAppStatus").val("{{appdetails['appStatus']}}").change();
+        });
+    });
 </script>
 {%endblock%}
