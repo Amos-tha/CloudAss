@@ -274,7 +274,7 @@ def apply_offer():
         cursor = db_conn.cursor()
 
     try:
-        cursor.execute(insert_sql, ('Pending', datetimeNow, studID, selectedOfferID))
+        cursor.execute(insert_sql, ("Pending", datetimeNow, studID, selectedOfferID))
         db_conn.commit()
         appID = cursor.lastrowid
 
