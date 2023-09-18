@@ -174,8 +174,8 @@
                     <div class="mt-5 d-flex flex-row justify-content-end">
                         <a class="btn btn-secondary me-4" id="backBtn">Back</a>
                         {% if appdetails['appStatus'] == 'Pending' %}
-                        <button type="reset" class="btn btn-secondary me-4" id="resetBtn">Reset</button>
-                        <button type="submit" class="btn btn-primary" id="respondBtn">Respond</button>
+                        <button type="reset" class="btn btn-secondary d-none me-4" id="resetBtn">Reset</button>
+                        <button type="submit" class="btn btn-primary d-none" id="respondBtn">Respond</button>
                         {% endif %}
                     </div>
                 </form>
@@ -211,12 +211,19 @@
             if ($(this).val() === "Pending") {
                 $("#textbox-container").addClass("d-none");
                 $("#textbox-container").attr("required", false);
+                $("#resetBtn").addClass("d-none");
+                $("#respondBtn").addClass("d-none");
             } else if ($(this).val() === "Accepted") {
                 $("#textbox-container").removeClass("d-none");
                 $("#textbox-container").attr("required", true);
+                $("#textbox-container").attr("required", true);
+                $("#resetBtn").removeClass("d-none");
+                $("#respondBtn").removeClass("d-none");
             } else if ($(this).val() === "Rejected") {
                 $("#textbox-container").removeClass("d-none");
                 $("#textbox-container").attr("required", true);
+                $("#resetBtn").removeClass("d-none");
+                $("#respondBtn").removeClass("d-none");
             }
         });
 
