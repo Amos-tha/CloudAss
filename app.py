@@ -239,15 +239,15 @@ def preview(file):
 @app.route("/student/offerDetails", methods=['GET','POST'])
 def view_offer_detaisl():
     if request.method == "GET":
-        compID = request.args.get("selectedComp")
+        selectedCompID = request.args.get("selectedComp")
 
     try:
         cursor = db_conn.cursor(pymysql.cursors.DictCursor)
-        cursor.execute("SELECT offerID, position, allowance, duration, prerequisite, language, location, datePosted, offerStatus, O.compID, compName FROM offer O, company C WHERE O.compID = C.compID")
+        cursor.execute("SELECT offerID, position, allowance, duration, prerequisite, language, location, datePosted, offerStatus, O.compID, compName FROM offer O, company C WHERE O.compID = C.compID AND O.compID = selectedCompID AND C.compID = selectedCompID")
         offerdetails = cursor.fetchall()
 
     except Exception as e:
-            print(e)
+            print(e)    
             return str(e)
 
     finally:
@@ -256,10 +256,10 @@ def view_offer_detaisl():
     s3 = boto3.client("s3")
     contents = []
     for offerdetail in offerdetails:
-        compID = offerdetail['compID']
+        compID = offerdetail['selectedCompID']
         for image in s3.list_objects(Bucket=custombucket)["Contents"]:
             file = image["Key"]
-            if file.startswith("comp-id-" + str(compID) + "_logo"):
+            if file.startswith("comp-id-" + str(selectedCompID) + "_logo"):
                 contents.append(file)
 
     return render_template('OfferDetails.html', offerdetails = offerdetails, contents=contents) 
