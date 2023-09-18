@@ -296,12 +296,13 @@ def apply_offer():
     if request.method == "POST":
         selectedOfferID = request.form['selectedOffer']
         studID = session["userid"]
+        print(studID)
         datetimeNow = datetime.datetime.now()
         insert_sql = "INSERT INTO application (appStatus, appliedDateTime, studID, offerID) VALUES (%s, %s, %s, %s)"
         cursor = db_conn.cursor()
 
     try:
-        cursor.execute(insert_sql, ("Pending", datetimeNow, studID, selectedOfferID))
+        cursor.execute(insert_sql, ("Pending", datetimeNow, str(studID), selectedOfferID))
         db_conn.commit()
         appID = cursor.lastrowid
 
