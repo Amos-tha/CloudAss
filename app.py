@@ -596,7 +596,7 @@ def comp_respond_app():
     )
     db_conn.commit()
     cursor.close()
-    return redirect(url_for("comp_offer_details", offerid=offerID, appid=appID))
+    return redirect(url_for("comp_app_details", offerid=offerID, appid=appID))
 
 
 @app.route("/company/addoffer", methods=["GET", "POST"])
