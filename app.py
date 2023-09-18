@@ -256,10 +256,10 @@ def view_offer_detaisl():
     s3 = boto3.client("s3")
     contents = []
     for offerdetail in offerdetails:
-        compID = offerdetail['selectedCompID']
+        compID = offerdetail['compID']
         for image in s3.list_objects(Bucket=custombucket)["Contents"]:
             file = image["Key"]
-            if file.startswith("comp-id-" + str(selectedCompID) + "_logo"):
+            if file.startswith("comp-id-" + str(compID) + "_logo"):
                 contents.append(file)
 
     return render_template('OfferDetails.html', offerdetails = offerdetails, contents=contents) 
