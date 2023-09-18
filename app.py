@@ -279,6 +279,7 @@ def apply_offer():
         appID = cursor.lastrowid
 
     except Exception as e: 
+            print(studID)
             return str(e)
 
     finally:
