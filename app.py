@@ -294,6 +294,7 @@ def view_offer_details():
 
 @app.route("/student/applyOffer", methods=['GET','POST'])
 def apply_offer():
+    msg = ""
     if request.method == "POST":
         selectedOfferID = request.form['selectedOffer']
         studID = session["userid"]
@@ -301,19 +302,20 @@ def apply_offer():
         insert_sql = "INSERT INTO application (appStatus, appliedDateTime, studID, offerID) VALUES (%s, %s, %s, %s)"
         cursor = db_conn.cursor()
 
-    try:
-        cursor.execute(insert_sql, ("Pending", datetimeNow, str(studID), selectedOfferID))
-        db_conn.commit()
-        appID = cursor.lastrowid
+        try:
+            cursor.execute(insert_sql, ("Pending", datetimeNow, str(studID), selectedOfferID))
+            db_conn.commit()
+            appID = cursor.lastrowid
+            msg = "You have successfully apply for the offer!"
 
-    except Exception as e: 
-            print(studID)
-            return str(e)
+        except Exception as e: 
+                msg = "You have successfully apply for the offer!"
+                return str(e)
 
-    finally:
-        cursor.close()
+        finally:
+            cursor.close()
 
-    return redirect(url_for("view_offer_details", selectedOffer=selectedOfferID))
+    return redirect(url_for("view_offer_details", selectedOffer=selectedOfferID, msg=msg))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)

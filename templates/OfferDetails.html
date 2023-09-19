@@ -4,19 +4,24 @@
 
 {% block content %}
 <div class="d-flex flex-row justify-content-center align-items-center mt-5">
+    {% if msg|length %}
+    <div class="alert alert-info alert-dismissible fade show">
+        <strong>Success!</strong> {{msg}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endif %}
     <div class="col-8">
         <div class="fs-2 fw-bold text-center mb-2">Offer Details</div>
         <form class="row g-3 align-items-center" action="/student/applyOffer" method="POST"
             enctype="multipart/form-data">
             <div class="card" style="width:100%">
-                <div class="card-header text-center">
-                    {{offerdetails['compName']}}
-                </div>
                 <div class="card-body row">
-                    <div class="col" style="margin-bottom: 10px; padding-bottom: 10px;"><img src="/previewImg/{{contents[0]}}" class="card-img-top" alt="{{contents}}">
+                    <div class="col" style="margin-bottom: 10px; padding-bottom: 10px;"><img
+                            src="/previewImg/{{contents[0]}}" class="card-img-top" alt="{{contents}}">
                     </div>
                     <div class="col">
-                        <h5 class="card-title text-center">Position: {{offerdetails['position']}}</h5>
+                        <h5 class="card-title">{{offerdetails['compName']}}</h5>
+                        <h5 class="card-title">Position: {{offerdetails['position']}}</h5>
                         <p class="card-text">Allowance: RM{{offerdetails['allowance']}}</p>
                         <p class="card-text">Duration: {{offerdetails['duration']}} months</p>
                         <p class="card-text">Prerequisite: {{offerdetails['prerequisite']}}</p>
