@@ -294,7 +294,7 @@ def view_offer_details():
 
 @app.route("/student/applyOffer", methods=['GET','POST'])
 def apply_offer():
-    msg = ""
+    msg = "You have successfully apply for the offer."
     if request.method == "POST":
         selectedOfferID = request.form['selectedOffer']
         studID = session["userid"]
@@ -306,10 +306,10 @@ def apply_offer():
             cursor.execute(insert_sql, ("Pending", datetimeNow, str(studID), selectedOfferID))
             db_conn.commit()
             appID = cursor.lastrowid
-            msg = "You have successfully apply for the offer!"
+            msg = "You have successfully apply for the offer."
 
         except Exception as e: 
-                msg = "You have successfully apply for the offer!"
+                msg = "Something went wrong."
                 return str(e)
 
         finally:
