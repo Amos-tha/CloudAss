@@ -268,6 +268,7 @@ def preview(file):
 def view_offer_details():
     if request.method == "GET":
         msg = request.args.get("msg")
+        print(msg)
         selectedOfferID = request.args.get("selectedOffer")
         print(selectedOfferID)
 
