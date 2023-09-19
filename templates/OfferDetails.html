@@ -4,13 +4,13 @@
 
 {% block content %}
 <div class="d-flex flex-row justify-content-center align-items-center mt-5">
-    {% if msg|length %}
-    <div class="alert alert-info alert-dismissible fade show">
-        <strong>Success!</strong> {{msg}}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    {% endif %}
     <div class="col-8">
+        {% if msg|length %}
+        <div class="alert alert-info alert-dismissible fade show">
+            <strong>Success!</strong> {{msg}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endif %}
         <div class="fs-2 fw-bold text-center mb-2">Offer Details</div>
         <form class="row g-3 align-items-center" action="/student/applyOffer" method="POST"
             enctype="multipart/form-data">
