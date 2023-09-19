@@ -266,8 +266,8 @@ def preview(file):
 
 @app.route("/student/offerDetails", methods=['GET','POST'])
 def view_offer_details():
-    msg = request.args.get["msg"]
     if request.method == "GET":
+        msg = request.args.get("msg")
         selectedOfferID = request.args.get("selectedOffer")
         print(selectedOfferID)
 
