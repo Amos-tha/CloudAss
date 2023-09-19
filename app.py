@@ -266,6 +266,7 @@ def preview(file):
 
 @app.route("/student/offerDetails", methods=['GET','POST'])
 def view_offer_details():
+    msg = request.args.get["msg"]
     if request.method == "GET":
         selectedOfferID = request.args.get("selectedOffer")
         print(selectedOfferID)
@@ -290,7 +291,7 @@ def view_offer_details():
         if file.startswith("comp-id-" + str(compID) + "_logo"):
             contents.append(file)
 
-    return render_template('OfferDetails.html', offerdetails = offerdetails, contents=contents) 
+    return render_template('OfferDetails.html', offerdetails = offerdetails, contents=contents, msg=msg )
 
 @app.route("/student/applyOffer", methods=['GET','POST'])
 def apply_offer():
@@ -309,7 +310,6 @@ def apply_offer():
             msg = "You have successfully apply for the offer."
 
         except Exception as e: 
-                msg = "Something went wrong."
                 return str(e)
 
         finally:
