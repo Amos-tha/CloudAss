@@ -374,5 +374,60 @@ def stud_update():
 
     return redirect(url_for("stud_view_details", msg=msg))
 
+@app.route("/student/viewDoc", methods=['GET','POST'])
+def stud_viewDoc_page():
+    return render_template('StudUploadDoc.html')
+
+@app.route("/student/uploadDoc", methods=['GET','POST'])
+def stud_uploadDoc():
+    if request.method == "POST":
+
+        studResume = request.files["inputResume"]
+        companyAcceptanceLetter = request.files["inputCompanyAcceptanceLetter"]
+        letterOfIdemnity = request.files["inputLetterOfIdemnity"]
+        acknowledgeForm = request.files["inputAcknowledgeForm"]
+
+        # if studResume.filename == "":
+        #     return "Please upload your resume!"
+        
+        # if companyAcceptanceLetter.filename == "":
+        #     return "Please upload your acceptance letter!"
+        
+        # if letterOfIdemnity.filename == "":
+        #     return "Please upload your resume!"
+        
+        # if acknowledgeForm.filename == "":
+        #     return "Please upload your resume!"
+
+        try:
+            cursor.execute(get_supervisorid_sql, superVisorName)
+            superVisorID = cursor.fetchone()
+            cursor.execute(insert_sql, (studID, studName, studIC, studPhone, studGender, studUniEmail, studPersonalEmail, studAddress, studLevel, studProgramme, studTutGrp, CGPA, superVisorID))
+            db_conn.commit()
+
+            resume_file = "stud-id-" + str(studID) + "_resume.pdf"
+            s3 = boto3.resource("s3")
+
+            try:
+                print("Data inserted in MySQL RDS... uploading resume to S3...")
+                s3.Bucket(custombucket).put_object(Key=resume_file, Body=studResume)
+                bucket_location = boto3.client("s3").get_bucket_location(
+                    Bucket=custombucket
+                )
+                s3_location = bucket_location["LocationConstraint"]
+
+                if s3_location is None:
+                    s3_location = ""
+                else:
+                    s3_location = "-" + s3_location
+
+            except Exception as e:
+                return str(e)
+
+        finally:
+            cursor.close()
+
+    return render_template("StudLogin.html", msg="")
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
