@@ -382,7 +382,8 @@ def stud_viewDoc_page():
 def stud_uploadDoc():
     if request.method == "POST":
 
-        studResume = request.files["inputResume"]
+        studID = session["userid"]
+
         companyAcceptanceLetter = request.files["inputCompanyAcceptanceLetter"]
         letterOfIdemnity = request.files["inputLetterOfIdemnity"]
         acknowledgeForm = request.files["inputAcknowledgeForm"]
@@ -399,35 +400,51 @@ def stud_uploadDoc():
         # if acknowledgeForm.filename == "":
         #     return "Please upload your resume!"
 
+
+        companyAcceptanceLetter_file = "stud-id-" + str(studID) + "_CAL.pdf"
+        letterOfIdemnity_file = "stud-id-" + str(studID) + "_LOI.pdf"
+        acknowledgeForm_file = "stud-id-" + str(studID) + "_AF.pdf"
+        s3 = boto3.resource("s3")
+
         try:
-            cursor.execute(get_supervisorid_sql, superVisorName)
-            superVisorID = cursor.fetchone()
-            cursor.execute(insert_sql, (studID, studName, studIC, studPhone, studGender, studUniEmail, studPersonalEmail, studAddress, studLevel, studProgramme, studTutGrp, CGPA, superVisorID))
-            db_conn.commit()
+            # check if document exist
+            if s3.Bucket(custombucket).headObject(companyAcceptanceLetter_file):
+                s3.Object(custombucket, companyAcceptanceLetter_file).delete()
+                s3.Bucket(custombucket).put_object(Key=companyAcceptanceLetter_file, Body=companyAcceptanceLetter)
+            else:
+                s3.Bucket(custombucket).put_object(Key=companyAcceptanceLetter_file, Body=companyAcceptanceLetter)
+            
+            # check if document exist
+            if s3.Bucket(custombucket).headObject(letterOfIdemnity_file):
+                s3.Object(custombucket, letterOfIdemnity_file).delete()
+                s3.Bucket(custombucket).put_object(Key=letterOfIdemnity_file, Body=letterOfIdemnity)
+            else:
+                s3.Bucket(custombucket).put_object(Key=letterOfIdemnity_file, Body=letterOfIdemnity)
 
-            resume_file = "stud-id-" + str(studID) + "_resume.pdf"
-            s3 = boto3.resource("s3")
+            # check if document exist
+            if s3.Bucket(custombucket).headObject(acknowledgeForm_file):
+                s3.Object(custombucket, acknowledgeForm_file).delete()
+                s3.Bucket(custombucket).put_object(Key=acknowledgeForm_file, Body=acknowledgeForm)
+            else:
+                s3.Bucket(custombucket).put_object(Key=acknowledgeForm_file, Body=acknowledgeForm)
 
-            try:
-                print("Data inserted in MySQL RDS... uploading resume to S3...")
-                s3.Bucket(custombucket).put_object(Key=resume_file, Body=studResume)
-                bucket_location = boto3.client("s3").get_bucket_location(
-                    Bucket=custombucket
-                )
-                s3_location = bucket_location["LocationConstraint"]
+            bucket_location = boto3.client("s3").get_bucket_location(
+                Bucket=custombucket
+            )
+            s3_location = bucket_location["LocationConstraint"]
 
-                if s3_location is None:
-                    s3_location = ""
-                else:
-                    s3_location = "-" + s3_location
+            if s3_location is None:
+                s3_location = ""
+            else:
+                s3_location = "-" + s3_location
+            
+            msg = "Documents uploaded."
 
-            except Exception as e:
-                return str(e)
+        except Exception as e:
+            return str(e)
 
-        finally:
-            cursor.close()
-
-    return render_template("StudLogin.html", msg="")
+    stud_viewDoc_page
+    return redirect(url_for("stud_viewDoc_page", msg=msg))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
