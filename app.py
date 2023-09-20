@@ -362,7 +362,7 @@ def stud_update():
         # studResume = request.files["inputResume"]
 
         get_supervisorid_sql = "SELECT superVisorID FROM supervisor WHERE superVisorName = (%s)"
-        insert_sql = "INSERT INTO student (studID, studName, studIC, studPhone, studGender, studUniEmail, studPersonalEmail, studAddress, studLevel, studProgramme, studTutGrp, CGPA, supervisorID)VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        update_sql = "UPDATE student SET studID = %s, studName = %s, studIC = %s, studPhone = %s, studGender = %s, studUniEmail = %s, studPersonalEmail = %s, studAddress = %s, studLevel = %s, studProgramme = %s, studTutGrp = %s, CGPA = %s, supervisorID = %s"
         cursor = db_conn.cursor()
 
         # if studResume.filename == "":
@@ -371,7 +371,7 @@ def stud_update():
         try:
             cursor.execute(get_supervisorid_sql, superVisorName)
             superVisorID = cursor.fetchone()
-            cursor.execute(insert_sql, (studID, studName, studIC, studPhone, studGender, studUniEmail, studPersonalEmail, studAddress, studLevel, studProgramme, studTutGrp, CGPA, superVisorID))
+            cursor.execute(update_sql, (studID, studName, studIC, studPhone, studGender, studUniEmail, studPersonalEmail, studAddress, studLevel, studProgramme, studTutGrp, CGPA, superVisorID))
             db_conn.commit()
 
             resume_file = "stud-id-" + str(studID) + "_resume.pdf"
