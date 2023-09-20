@@ -322,7 +322,7 @@ def stud_view_details():
 
     try:
         cursor = db_conn.cursor(pymysql.cursors.DictCursor)
-        cursor.execute("SELECT studID, studName, studIC, studPhone, studGender, studPersonalEmail, studAddress, studLevel, studProgramme, studTutGrp, CGPA, S.supervisorID, S.supervisorName FROM student S, supervisor V WHERE S.supervisorID = V.supervisorID AND studID = %s", (studID))
+        cursor.execute("SELECT studID, studName, studIC, studPhone, studGender, studPersonalEmail, studAddress, studLevel, studProgramme, studTutGrp, CGPA, S.supervisorID, V.supervisorName FROM student S, supervisor V WHERE S.supervisorID = V.supervisorID AND studID = %s", (studID))
         studDetails = cursor.fetchone()
 
     except Exception as e:
