@@ -376,6 +376,11 @@ def stud_update():
 
 @app.route("/student/viewDoc", methods=['GET','POST'])
 def stud_viewDoc_page():
+
+    msg = request.args.get("msg")
+    if msg is None:
+        msg = ''
+
     return render_template('StudUploadDoc.html')
 
 @app.route("/student/uploadDoc", methods=['GET','POST'])
