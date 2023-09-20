@@ -207,8 +207,7 @@ def stud_Register():
 
 @app.route("/viewOffers", methods=['GET','POST'])
 def viewoffers():
-    msg=""
-    msg = request.args.get("msg")
+    # msg = request.args.get("msg")
     try:
         cursor = db_conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute("SELECT offerID, position, allowance, duration, prerequisite, language, location, datePosted, offerStatus, O.compID, compName FROM offer O, company C WHERE O.compID = C.compID")
