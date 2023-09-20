@@ -207,7 +207,7 @@ def stud_Register():
 
 @app.route("/viewOffers", methods=['GET','POST'])
 def viewoffers():
-    msg = session['msg']
+    # msg = session['msg']
     try:
         cursor = db_conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute("SELECT offerID, position, allowance, duration, prerequisite, language, location, datePosted, offerStatus, O.compID, compName FROM offer O, company C WHERE O.compID = C.compID")
@@ -229,7 +229,7 @@ def viewoffers():
             if file.startswith("comp-id-" + str(compID) + "_logo"):
                 contents.append(file)
 
-    return render_template('ViewOffers.html', offers=offers, contents=contents, msg=msg) 
+    return render_template('ViewOffers.html', offers=offers, contents=contents) 
 
 @app.route("/student/login", methods=["GET", "POST"])
 def Stud_Login():
