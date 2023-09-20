@@ -408,25 +408,38 @@ def stud_uploadDoc():
 
         try:
             # check if document exist
-            if s3.Bucket(custombucket).headObject(companyAcceptanceLetter_file):
-                s3.Object(custombucket, companyAcceptanceLetter_file).delete()
-                s3.Bucket(custombucket).put_object(Key=companyAcceptanceLetter_file, Body=companyAcceptanceLetter)
+            try:
+                s3.Bucket(custombucket).Object(companyAcceptanceLetter_file).load
+            except:
+                if e.response['Error']['Code'] == "404":
+                    s3.Bucket(custombucket).put_object(Key=companyAcceptanceLetter_file, Body=companyAcceptanceLetter)
+                else:
+                    return str(e)
             else:
-                s3.Bucket(custombucket).put_object(Key=companyAcceptanceLetter_file, Body=companyAcceptanceLetter)
-            
-            # check if document exist
-            if s3.Bucket(custombucket).headObject(letterOfIdemnity_file):
-                s3.Object(custombucket, letterOfIdemnity_file).delete()
-                s3.Bucket(custombucket).put_object(Key=letterOfIdemnity_file, Body=letterOfIdemnity)
-            else:
-                s3.Bucket(custombucket).put_object(Key=letterOfIdemnity_file, Body=letterOfIdemnity)
+               s3.Object(custombucket, companyAcceptanceLetter_file).delete()
+               s3.Bucket(custombucket).put_object(Key=companyAcceptanceLetter_file, Body=companyAcceptanceLetter)
 
-            # check if document exist
-            if s3.Bucket(custombucket).headObject(acknowledgeForm_file):
-                s3.Object(custombucket, acknowledgeForm_file).delete()
-                s3.Bucket(custombucket).put_object(Key=acknowledgeForm_file, Body=acknowledgeForm)
+            try:
+                s3.Bucket(custombucket).Object(letterOfIdemnity_file).load
+            except:
+                if e.response['Error']['Code'] == "404":
+                    s3.Bucket(custombucket).put_object(Key=letterOfIdemnity_file, Body=letterOfIdemnity)
+                else:
+                    return str(e)
             else:
-                s3.Bucket(custombucket).put_object(Key=acknowledgeForm_file, Body=acknowledgeForm)
+               s3.Object(custombucket, letterOfIdemnity_file).delete()
+               s3.Bucket(custombucket).put_object(Key=letterOfIdemnity_file, Body=letterOfIdemnity)
+            
+            try:
+                s3.Bucket(custombucket).Object(letterOfIdemnity_file).load
+            except:
+                if e.response['Error']['Code'] == "404":
+                    s3.Bucket(custombucket).put_object(Key=acknowledgeForm_file, Body=acknowledgeForm)
+                else:
+                    return str(e)
+            else:
+               s3.Object(custombucket, acknowledgeForm_file).delete()
+               s3.Bucket(custombucket).put_object(Key=acknowledgeForm_file, Body=acknowledgeForm)
 
             bucket_location = boto3.client("s3").get_bucket_location(
                 Bucket=custombucket
