@@ -207,6 +207,7 @@ def stud_Register():
 
 @app.route("/viewOffers", methods=['GET','POST'])
 def viewoffers():
+    msg = request.args.get("msgSent")
     try:
         cursor = db_conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute("SELECT offerID, position, allowance, duration, prerequisite, language, location, datePosted, offerStatus, O.compID, compName FROM offer O, company C WHERE O.compID = C.compID")
@@ -228,7 +229,7 @@ def viewoffers():
             if file.startswith("comp-id-" + str(compID) + "_logo"):
                 contents.append(file)
 
-    return render_template('ViewOffers.html', offers = offers, contents=contents) 
+    return render_template('ViewOffers.html', offers=offers, contents=contents, msg=msg) 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -267,7 +268,6 @@ def preview(file):
 @app.route("/student/offerDetails", methods=['GET','POST'])
 def view_offer_details():
     if request.method == "GET":
-        msg = request.args.get("msgSent")
         selectedOfferID = request.args.get("selectedOffer")
 
     try:
@@ -290,11 +290,10 @@ def view_offer_details():
         if file.startswith("comp-id-" + str(compID) + "_logo"):
             contents.append(file)
 
-    return render_template('OfferDetails.html', offerdetails = offerdetails, contents=contents, msg=msg )
+    return render_template('OfferDetails.html', offerdetails = offerdetails, contents=contents)
 
 @app.route("/student/applyOffer", methods=['GET','POST'])
 def apply_offer():
-    msg = "You have successfully apply for the offer."
     if request.method == "POST":
         selectedOfferID = request.form['selectedOffer']
         studID = session["userid"]
@@ -314,7 +313,7 @@ def apply_offer():
         finally:
             cursor.close()
 
-    return redirect(url_for("view_offer_details", selectedOffer=selectedOfferID, msgSent=msg))
+    return redirect(url_for("viewoffers", msg=msg))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
