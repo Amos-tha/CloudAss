@@ -228,7 +228,6 @@ def viewoffers():
             if file.startswith("comp-id-" + str(compID) + "_logo"):
                 contents.append(file)
 
-    msg = request.args['msg']
     msg = session['msg']
     if msg == "":
         return render_template('ViewOffers.html', offers=offers, contents=contents) 
