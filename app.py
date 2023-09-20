@@ -145,11 +145,11 @@ def AddEmp():
     return render_template('AddEmpOutput.html', name=emp_name)
 
 @app.route("/student/studRegisterPage", methods=['GET','POST'])
-def stud_Register_Page():
+def stud_register_page():
     return render_template('RegisterStudent.html')
 
 @app.route("/student/studRegister", methods=['GET','POST'])
-def stud_Register():
+def stud_register():
     if request.method == "POST":
         studID = request.form['inputstudID']
         studUniEmail = request.form['inputUniEmail']
@@ -235,7 +235,7 @@ def viewoffers():
     return render_template('ViewOffers.html', offers=offers, contents=contents, msg=msg) 
 
 @app.route("/student/login", methods=["GET", "POST"])
-def Stud_Login():
+def stud_login():
     msg = ""
     cursor = db_conn.cursor()
     if request.method == "POST":
@@ -313,6 +313,33 @@ def apply_offer():
             cursor.close()
 
     return redirect(url_for("viewoffers", msg=msg))
+
+@app.route("/student/viewDetails", methods=['GET','POST'])
+def stud_view_details():
+
+    if request.method == "GET":
+        studID = session["userid"]
+
+    try:
+        cursor = db_conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("SELECT studID, studName, studIC, studPhone, studGender, studPersonalEmail, studAddress, studLevel, studProgramme, studTutGrp, CGPA, S.supervisorID, S.supervisorName FROM student S, supervisor V WHERE S.supervisorID = V.supervisorID AND studID = %s", (studID))
+        studDetails = cursor.fetchone()
+
+    except Exception as e:
+            return str(e)
+
+    finally:
+        cursor.close()
+
+    # s3 = boto3.client("s3")
+    # contents = []
+    # compID = offerdetails['compID']
+    # for image in s3.list_objects(Bucket=custombucket)["Contents"]:
+    #     file = image["Key"]
+    #     if file.startswith("comp-id-" + str(compID) + "_logo"):
+    #         contents.append(file)
+
+    return render_template('StudentDetails.html', studDetails = studDetails)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
