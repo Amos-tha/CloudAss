@@ -228,7 +228,8 @@ def viewoffers():
             if file.startswith("comp-id-" + str(compID) + "_logo"):
                 contents.append(file)
 
-    msg = request.args.get("msg")
+    msg = request.args['msg']
+    msg = session['msg']
     if msg == "":
         return render_template('ViewOffers.html', offers=offers, contents=contents) 
     else:
@@ -297,7 +298,6 @@ def view_offer_details():
 
 @app.route("/student/applyOffer", methods=['GET','POST'])
 def apply_offer():
-    msg=""
     if request.method == "POST":
         selectedOfferID = request.form['selectedOffer']
         studID = session["userid"]
@@ -309,7 +309,7 @@ def apply_offer():
             cursor.execute(insert_sql, ("Pending", datetimeNow, str(studID), selectedOfferID))
             db_conn.commit()
             appID = cursor.lastrowid
-            msg = "You have successfully apply for the offer."
+            session['msg'] = "You have successfully apply for the offer."
 
         except Exception as e: 
                 return str(e)
