@@ -213,7 +213,7 @@ def viewoffers():
     
     try:
         cursor = db_conn.cursor(pymysql.cursors.DictCursor)
-        cursor.execute("SELECT offerID, position, allowance, duration, prerequisite, language, location, datePosted, offerStatus, O.compID, compName FROM offer O, company C WHERE O.compID = C.compID AND offerStatus LIKE Active")
+        cursor.execute("SELECT offerID, position, allowance, duration, prerequisite, language, location, datePosted, offerStatus, O.compID, compName FROM offer O, company C WHERE O.compID = C.compID AND offerStatus LIKE %Active%")
         offers = cursor.fetchall()
 
     except Exception as e:
