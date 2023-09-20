@@ -317,6 +317,10 @@ def apply_offer():
 @app.route("/student/viewDetails", methods=['GET','POST'])
 def stud_view_details():
 
+    msg = request.args.get("msg")
+    if msg is None:
+        msg = ''
+
     if request.method == "GET":
         studID = session["userid"]
 
@@ -331,15 +335,7 @@ def stud_view_details():
     finally:
         cursor.close()
 
-    # s3 = boto3.client("s3")
-    # contents = []
-    # compID = offerdetails['compID']
-    # for image in s3.list_objects(Bucket=custombucket)["Contents"]:
-    #     file = image["Key"]
-    #     if file.startswith("comp-id-" + str(compID) + "_logo"):
-    #         contents.append(file)
-
-    return render_template('StudentDetails.html', studDetails = studDetails)
+    return render_template('StudentDetails.html', studDetails=studDetails, msg=msg)
 
 @app.route("/student/studUpdate", methods=['GET','POST'])
 def stud_update():
@@ -359,44 +355,24 @@ def stud_update():
         studPhone = request.form['inputPhone']
         studAddress = request.form['inputAddress']
 
-        # studResume = request.files["inputResume"]
-
         get_supervisorid_sql = "SELECT superVisorID FROM supervisor WHERE superVisorName = (%s)"
         update_sql = "UPDATE student SET studName = %s, studIC = %s, studPhone = %s, studGender = %s, studUniEmail = %s, studPersonalEmail = %s, studAddress = %s, studLevel = %s, studProgramme = %s, studTutGrp = %s, CGPA = %s, supervisorID = %s WHERE studID = %s" 
         cursor = db_conn.cursor()
-
-        # if studResume.filename == "":
-        #     return "Please upload your resume!"
 
         try:
             cursor.execute(get_supervisorid_sql, superVisorName)
             superVisorID = cursor.fetchone()
             cursor.execute(update_sql, (studName, studIC, studPhone, studGender, studUniEmail, studPersonalEmail, studAddress, studLevel, studProgramme, studTutGrp, CGPA, superVisorID, studID))
             db_conn.commit()
+            msg = "Information updated."
 
-            resume_file = "stud-id-" + str(studID) + "_resume.pdf"
-            s3 = boto3.resource("s3")
-
-            # try:
-            #     print("Data inserted in MySQL RDS... uploading resume to S3...")
-            #     s3.Bucket(custombucket).put_object(Key=resume_file, Body=studResume)
-            #     bucket_location = boto3.client("s3").get_bucket_location(
-            #         Bucket=custombucket
-            #     )
-            #     s3_location = bucket_location["LocationConstraint"]
-
-            #     if s3_location is None:
-            #         s3_location = ""
-            #     else:
-            #         s3_location = "-" + s3_location
-
-            # except Exception as e:
-            #     return str(e)
+        except Exception as e: 
+            return str(e)
 
         finally:
             cursor.close()
 
-    return redirect(url_for("stud_view_details"))
+    return redirect(url_for("stud_view_details", msg=msg))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
