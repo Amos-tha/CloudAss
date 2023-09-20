@@ -6,7 +6,7 @@
 <div class="d-flex flex-row justify-content-center align-items-center">
     <div class="col-8 mb-4">
         <div class="fs-2 fw-bold text-center mb-2">Student Details</div>
-        <form class="row g-3 align-items-center" action="/student/studRegister" method="POST" enctype="multipart/form-data">
+        <form class="row g-3 align-items-center" action="/student/studUpdate" method="POST" enctype="multipart/form-data">
             <div class="card text-center">
                 <div class="card-header">
                     Academic Information
@@ -65,7 +65,7 @@
                     </div>
                     <div class="row mb-3">
                         <label for="inputResume" class="col-sm-2 col-form-label">Student Resume</label>
-                        <input class="form-control border-3" type="file" id="inputResume" name="inputResume" accept=".pdf">
+                        <input class="form-control border-3" type="file" id="inputResume" name="inputResume" accept=".pdf" disabled>
                     </div>
                 </div>
             </div>
@@ -122,8 +122,8 @@
                     <div class="row mb-3">
                         <label for="inputAddress" class="col-sm-2 col-form-label">Address</label>
                         <div class="col-sm-10">
-                            <textarea class="form-control border-3" id="inputAddress" name="inputAddress" value="{{studDetails['studAddress']}}"
-                            required></textarea>
+                            <textarea class="form-control border-3" id="inputAddress" name="inputAddress"
+                            required>{{studDetails['studAddress']}}</textarea>
                         </div>
                     </div>
                 </div>
@@ -132,8 +132,8 @@
                 <button type="reset" class="btn btn-secondary btn-lg me-4">Reset Form</button>
                 <!-- <button type="submit" class="btn btn-primary btn-lg">Sign in</button> -->
                 <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
-                    data-bs-target="#staticBackdrop">Sign
-                    up</button>
+                    data-bs-target="#staticBackdrop">Update
+                    Details</button>
             </div>
 
             <!-- Modal -->
@@ -142,11 +142,11 @@
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirm Register?</h1>
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirm Update?</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            This registration form will be submitted to the database and you are not allowed to modify the information again.
+                            This update form will be submitted to the database, make sure all the information are correct.
                             Continue?
                         </div>
                         <div class="modal-footer">
