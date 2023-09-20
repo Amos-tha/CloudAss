@@ -15,14 +15,14 @@
                     <div class="row mb-3">
                         <label for="inputstudID" class="col-sm-2 col-form-label">Student ID</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control border-3" id="inputstudID" name="inputstudID"
+                            <input type="text" class="form-control border-3" id="inputstudID" name="inputstudID" placeholder="{{studDetails['studID']}}"
                             disabled>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="inputUniEmail" class="col-sm-2 col-form-label">Student University Email</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control border-3" id="inputUniEmail" name="inputUniEmail"
+                            <input type="email" class="form-control border-3" id="inputUniEmail" name="inputUniEmail" placeholder="{{studDetails['studUniEmail']}}"
                             disabled>
                         </div>
                     </div>
@@ -30,7 +30,7 @@
                         <label for="inputLevel" class="col-sm-2 col-form-label">Level</label>
                         <div class="col-sm-10">
                             <select class="form-select border-3" aria-label="Default select example" id="inputLevel" name="inputLevel" disabled>
-                                <option selected>Select a level</option>
+                                <option value="{{studDetails['studLevel']}}" selected>{{studDetails['studLevel']}}</option>
                                 <option value="Bachelor Degree">Bachelor Degree</option>
                                 <option value="Diploma">Diploma</option>
                             </select>
@@ -39,27 +39,27 @@
                     <div class="row mb-3">
                         <label for="inputProgramme" class="col-sm-2 col-form-label">Programme<span class="small"></label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control border-3" id="inputProgramme" name="inputProgramme"
+                            <input type="text" class="form-control border-3" id="inputProgramme" name="inputProgramme" placeholder="{{studDetails['studProgramme']}}"
                             disabled>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="inputTutGrp" class="col-sm-2 col-form-label">Tutorial Group</label>
                         <div class="col-sm-10">
-                            <input type="number" class="form-control border-3" id="inputTutGrp" name="inputTutGrp"
+                            <input type="number" class="form-control border-3" id="inputTutGrp" name="inputTutGrp" placeholder="{{studDetails['studTutGrp']}}"
                             disabled>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="inputCGPA" class="col-sm-2 col-form-label">CGPA</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control border-3" id="inputCGPA" name="inputCGPA" disabled>
+                            <input type="text" class="form-control border-3" id="inputCGPA" name="inputCGPA" placeholder="{{studDetails['CGPA']}}" disabled>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="inputSupervisor" class="col-sm-2 col-form-label">Supervisor Name</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control border-3" id="inputSupervisor" name="inputSupervisor"
+                            <input type="text" class="form-control border-3" id="inputSupervisor" name="inputSupervisor" placeholder="{{studDetails['V.supervisorName']}}"
                             disabled>
                         </div>
                     </div>
@@ -77,14 +77,14 @@
                     <div class="row mb-3">
                         <label for="inputName" class="col-sm-2 col-form-label">Full Name</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control border-3" id="inputName" name="inputName"
+                            <input type="text" class="form-control border-3" id="inputName" name="inputName" placeholder="{{studDetails['studName']}}"
                             disabled>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="inputIC" class="col-sm-2 col-form-label">NRIC</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control border-3" id="inputIC" name="inputIC"
+                            <input type="text" class="form-control border-3" id="inputIC" name="inputIC" placeholder="{{studDetails['studIC']}}"
                             disabled>
                         </div>
                     </div>
@@ -92,7 +92,7 @@
                         <label for="inputGender" class="col-sm-2 col-form-label">Gender</label>
                         <div class="col-sm-10">
                             <select class="form-select border-3" aria-label="Default select example" id="inputGender" name="inputGender" disabled>
-                                <option selected>Select a gender</option>
+                                <option value="{{studDetails['studGender']}}" selected>{{studDetails['studGender']}}</option>
                                 <option value="M">M</option>
                                 <option value="F">F</option>
                             </select>
@@ -108,21 +108,21 @@
                     <div class="row mb-3">
                         <label for="inputPersonalEmail" class="col-sm-2 col-form-label">Personal Email</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control border-3" id="inputPersonalEmail" name="inputPersonalEmail"
+                            <input type="email" class="form-control border-3" id="inputPersonalEmail" name="inputPersonalEmail" placeholder="{{studDetails['studPersonalEmail']}}"
                             disabled>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="inputPhone" class="col-sm-2 col-form-label">Phone Number</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control border-3" id="inputPhone" name="inputPhone"
+                            <input type="text" class="form-control border-3" id="inputPhone" name="inputPhone" placeholder="{{studDetails['studPhone']}}"
                             disabled>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="inputAddress" class="col-sm-2 col-form-label">Address</label>
                         <div class="col-sm-10">
-                            <textarea class="form-control border-3" id="inputAddress" name="inputAddress"
+                            <textarea class="form-control border-3" id="inputAddress" name="inputAddress" placeholder="{{studDetails['studAddress']}}"
                             disabled></textarea>
                         </div>
                     </div>
