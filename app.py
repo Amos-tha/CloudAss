@@ -207,6 +207,7 @@ def stud_Register():
 
 @app.route("/viewOffers", methods=['GET','POST'])
 def viewoffers():
+    msg = session['msg']
     try:
         cursor = db_conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute("SELECT offerID, position, allowance, duration, prerequisite, language, location, datePosted, offerStatus, O.compID, compName FROM offer O, company C WHERE O.compID = C.compID")
@@ -228,16 +229,7 @@ def viewoffers():
             if file.startswith("comp-id-" + str(compID) + "_logo"):
                 contents.append(file)
 
-    msg = request.args['msg'] 
-    msg = session['msg']
-    if msg == "":
-        return render_template('ViewOffers.html', offers=offers, contents=contents) 
-    else:
-        return render_template('ViewOffers.html', offers=offers, contents=contents, msg=msg) 
-
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    return render_template("StudLogin.html", msg="")
+    return render_template('ViewOffers.html', offers=offers, contents=contents, msg=msg) 
 
 @app.route("/student/login", methods=["GET", "POST"])
 def Stud_Login():
@@ -309,8 +301,8 @@ def apply_offer():
             cursor.execute(insert_sql, ("Pending", datetimeNow, str(studID), selectedOfferID))
             db_conn.commit()
             appID = cursor.lastrowid
-            msg = "You have successfully apply for the offer."
-            session['msg'] = msg
+            successMsg = "You have successfully apply for the offer."
+            session['msg'] = successMsg
 
         except Exception as e: 
                 return str(e)
@@ -318,7 +310,7 @@ def apply_offer():
         finally:
             cursor.close()
 
-    return redirect(url_for("viewoffers", msg=msg))
+    return redirect(url_for("viewoffers", msg=successMsg))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
