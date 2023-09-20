@@ -267,10 +267,8 @@ def preview(file):
 @app.route("/student/offerDetails", methods=['GET','POST'])
 def view_offer_details():
     if request.method == "GET":
-        msg = request.args.get("msg")
-        print(msg)
+        msg = request.args.get("msgSent")
         selectedOfferID = request.args.get("selectedOffer")
-        print(selectedOfferID)
 
     try:
         cursor = db_conn.cursor(pymysql.cursors.DictCursor)
@@ -316,7 +314,7 @@ def apply_offer():
         finally:
             cursor.close()
 
-    return redirect(url_for("view_offer_details", selectedOffer=selectedOfferID, msg=msg))
+    return redirect(url_for("view_offer_details", selectedOffer=selectedOfferID, msgSent=msg))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
