@@ -229,7 +229,7 @@ def viewoffers():
             if file.startswith("comp-id-" + str(compID) + "_logo"):
                 contents.append(file)
 
-    return render_template('ViewOffers.html', offers=offers, contents=contents, msg=msg) 
+    return render_template('ViewOffers.html', offers=offers, contents=contents) 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
