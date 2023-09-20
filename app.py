@@ -392,18 +392,15 @@ def stud_uploadDoc():
         companyAcceptanceLetter = request.files["inputCompanyAcceptanceLetter"]
         letterOfIdemnity = request.files["inputLetterOfIdemnity"]
         acknowledgeForm = request.files["inputAcknowledgeForm"]
-
-        # if studResume.filename == "":
-        #     return "Please upload your resume!"
         
-        # if companyAcceptanceLetter.filename == "":
-        #     return "Please upload your acceptance letter!"
+        if companyAcceptanceLetter.filename == "":
+            return "Please upload your company acceptance letter!"
         
-        # if letterOfIdemnity.filename == "":
-        #     return "Please upload your resume!"
+        if letterOfIdemnity.filename == "":
+            return "Please upload your letter of idemnity!"
         
-        # if acknowledgeForm.filename == "":
-        #     return "Please upload your resume!"
+        if acknowledgeForm.filename == "":
+            return "Please upload your parent's acknoledgement form!"
 
 
         companyAcceptanceLetter_file = "stud-id-" + str(studID) + "_CAL.pdf"
