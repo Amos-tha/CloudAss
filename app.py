@@ -308,7 +308,8 @@ def apply_offer():
             cursor.execute(insert_sql, ("Pending", datetimeNow, str(studID), selectedOfferID))
             db_conn.commit()
             appID = cursor.lastrowid
-            session['msg'] = "You have successfully apply for the offer."
+            msg = "You have successfully apply for the offer."
+            session['msg'] = msg
 
         except Exception as e: 
                 return str(e)
