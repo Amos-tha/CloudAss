@@ -486,5 +486,130 @@ def logout():
     session.clear()
     return redirect(url_for("home"))
 
+def list_files(filenames):
+    """
+    Function to list files in a given S3 bucket
+    """
+    s3 = boto3.client('s3')
+    contents = []
+    for image in s3.list_objects(Bucket=custombucket)['Contents']:
+        for filename in filenames:
+            s3_name = image['Key']
+            if(filename == s3_name):
+                contents.append(s3_name)
+
+    return contents
+
+@app.route("/stud/submission")
+def stud_submission():
+    filenames = []
+
+    try:
+        studid = session['userid']
+        cursor = db_conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("SELECT * FROM student s, progressReport p WHERE s.supervisorID = "
+                       + "p.supervisorID AND studID = %s", (studid))  
+        classworks = cursor.fetchall()
+        cursor.execute("SELECT * FROM submission WHERE studID = %s", (studid))
+        submissions = cursor.fetchall()
+
+        # get filename
+        for report in classworks:
+            filenames.append("report_" + str(report['reportID']) + "_" + str(report['studName']) + "_" + str(report['studID']) + ".pdf")
+
+        files = list_files(filenames)
+        print(filenames)
+        print(files)
+    
+    except Exception as e:
+        return str(e)
+    
+    finally:
+        cursor.close()
+
+    return render_template("StudSubmitReport.html", classworks=classworks, submissions=submissions, files=files)
+
+@app.route("/stud/submit/<reportid>", methods=["GET", "POST"])
+def submit(reportid):
+    pdf = request.files["inputPdf"]
+    studid = session['userid']
+    studName = session['username']
+    cursor = db_conn.cursor()
+    handInDate = datetime.now()
+    filenames = []
+
+    if pdf.filename == "":
+        return "Please select a pdf to submit"
+
+    try:
+        cursor.execute("INSERT INTO submission (handInDate, reportID, studID) VALUES (%s, %s, %s)", (handInDate, reportid, '2205123'))
+        db_conn.commit()
+        cursor.execute("SELECT * FROM student WHERE studID = %s", ('2205123'))  
+        students = cursor.fetchone()
+
+        for report in students:
+            filenames.append("report_" + str(report['reportID']) + "_" + str(report['studName']) + "_" + str(studid) + ".pdf")
+
+        files = list_files(filenames)
+        
+        # Uplaod image file in S3 #
+        report_file = "report_" + str(reportid) + "_" + str(students[1]) + "_" + str(students[0]) + ".pdf"
+        s3 = boto3.resource("s3")
+
+        print("Data inserted in MySQL RDS... uploading image to S3...")
+        s3.Bucket(custombucket).put_object(Key=report_file, Body=pdf, ContentType="application/pdf")
+        bucket_location = boto3.client("s3").get_bucket_location(
+            Bucket=custombucket
+        )
+        s3_location = bucket_location["LocationConstraint"]
+
+        if s3_location is None:
+            s3_location = ""
+        else:
+            s3_location = "-" + s3_location
+
+    except Exception as e:
+        return str(e)
+
+    finally:
+        cursor.close()
+
+    print("all modification done...")
+    return redirect(url_for('stud_submission'))
+
+@app.route("/stud/unsubmit/<reportid>", methods=["GET", "POST"])
+def unsubmit(reportid):
+    studid = session['userid']
+    name = session['username']
+    cursor = db_conn.cursor()
+
+    try:
+        cursor.execute("DELETE FROM submission WHERE reportID=%s AND studID=%s", (reportid, '2205123'))
+        db_conn.commit()
+        
+        # Delete image file in S3 #
+        print("Data deleted in MySQL RDS... deleteing image from S3...")
+        report_file = "report_" + str(reportid) + "_" + "Amos" + "_" + "2205123" + ".pdf"
+        s3 = boto3.resource("s3")
+        s3.Object(custombucket, report_file).delete()
+
+        bucket_location = boto3.client("s3").get_bucket_location(
+            Bucket=custombucket
+        )
+        s3_location = bucket_location["LocationConstraint"]
+
+        if s3_location is None:
+            s3_location = ""
+        else:
+            s3_location = "-" + s3_location
+
+    except Exception as e:
+        return str(e)
+
+    finally:
+        cursor.close()
+
+    return redirect(url_for('stud_submission'))
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)

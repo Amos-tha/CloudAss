@@ -1,0 +1,103 @@
+{% extends "studentLayout.html" %} {% block title %} Report Submission {%
+    endblock %} {% block content %} {% for classwork in classworks %}
+    <div class="card" id="card_accordion" style="margin: 10px">
+      <div
+        class="card-header text-bg-secondary"
+        data-bs-toggle="collapse"
+        data-bs-target="#classwork{{ classwork['reportName']}}"
+        aria-expanded="false"
+        aria-controls="classwork{{ classwork['reportName']}}"
+        style="cursor: pointer"
+      >
+        Report {{classwork['reportName']}} {{classwork['dueDate']}}
+      </div>
+      <div
+        class="card-body accordion-collapse collapse show"
+        id="classwork{{ classwork['reportName']}}"
+      >
+        {% for submitted in submissions if submitted['reportID'] ==
+        classwork['reportID'] %}
+        <form
+          class="row g-2"
+          action="/stud/unsubmit/{{classwork['reportID']}}"
+          autocomplete="on"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          <div class="d-flex flex-row">
+            <label class="fw-bold"
+              >Submitted Date: {{submitted['handInDate']}}</label
+            >
+          </div>
+    
+          <!-- Submitted Report -->
+          {% for file in files if submitted['reportID']|string + '_' +
+          classwork['studName'] in file %}
+          <label class="fw-bold"
+            >Report:
+            <a href="/preview/{{ file }}" target="_blank" class="fw-normal"
+              >{{file}}</a
+            >
+            <a href="/download/{{ file }}" class="fw-normal ms-2"
+              >Downloaod</a
+            ></label
+          >
+          {% endfor %}
+          <label class="fw-bold">Supervisor Remark: </label>
+          <div class="form-check">
+            <textarea class="form-control" row="5" name="remark">
+    {{submitted['remark'] if submitted['remark'] != None else ' '}}</textarea
+            >
+          </div>
+          <button type="submit" class="btn btn-primary">Unsubmit</button>
+        </form>
+        {% else %}
+        <form
+          class="row g-2"
+          action="/stud/submit/{{classwork['reportID']}}"
+          autocomplete="on"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          <div class="d-flex flex-row">
+            <label class="fw-bold">Submitted Date:</label>
+            <p class="ms-2"></p>
+          </div>
+          <label class="fw-bold">Supervisor Remark: </label>
+          <div class="form-check">
+            <textarea class="form-control" row="5" name="remark"></textarea>
+          </div>
+          <div class="col-6 mb-3">
+            <label for="inputPdf" class="form-label">Add Work</label>
+            <input
+              class="form-control border-2"
+              type="file"
+              id="inputPdf"
+              name="inputPdf"
+              accept=".pdf"
+              onchange="loadFile(event, 'pdfPreview')"
+            />
+            <embed
+              id="pdfPreview"
+              type="application/pdf"
+              width="300"
+              height="300"
+              title="Title of my pdf"
+              class="border border-3 mt-2"
+            />
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        {% endfor %}
+      </div>
+    </div>
+    <script>
+      var loadFile = function (event, frame) {
+        var output = document.getElementById(frame);
+        output.src = URL.createObjectURL(event.target.files[0]) + "#page=1";
+        output.onload = function () {
+          URL.revokeObjectURL(output.src); // free memory
+        };
+      };
+    </script>
+    {% endfor %} {% endblock %}
