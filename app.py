@@ -1434,9 +1434,9 @@ def submit(reportid):
         return "Please select a pdf to submit"
 
     try:
-        cursor.execute("INSERT INTO submission (handInDate, reportID, studID) VALUES (%s, %s, %s)", (handInDate, reportid, '2205123'))
+        cursor.execute("INSERT INTO submission (handInDate, reportID, studID) VALUES (%s, %s, %s)", (handInDate, reportid, studid))
         db_conn.commit()
-        cursor.execute("SELECT * FROM student WHERE studID = %s", ('2205123'))  
+        cursor.execute("SELECT * FROM student WHERE studID = %s", (studid))  
         students = cursor.fetchone()
 
         for report in students:
@@ -1476,12 +1476,12 @@ def unsubmit(reportid):
     cursor = db_conn.cursor()
 
     try:
-        cursor.execute("DELETE FROM submission WHERE reportID=%s AND studID=%s", (reportid, '2205123'))
+        cursor.execute("DELETE FROM submission WHERE reportID=%s AND studID=%s", (reportid, studid))
         db_conn.commit()
         
         # Delete image file in S3 #
         print("Data deleted in MySQL RDS... deleteing image from S3...")
-        report_file = "report_" + str(reportid) + "_" + "Amos" + "_" + "2205123" + ".pdf"
+        report_file = "report_" + str(reportid) + "_" + name + "_" + studid + ".pdf"
         s3 = boto3.resource("s3")
         s3.Object(custombucket, report_file).delete()
 

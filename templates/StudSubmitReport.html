@@ -11,10 +11,6 @@ endblock %} {% block content %} {% for classwork in classworks %}
     classwork['reportID'] %}
     <form class="row g-2" action="/stud/unsubmit/{{classwork['reportID']}}" autocomplete="on" method="POST"
       enctype="multipart/form-data">
-      <div class="d-flex flex-row">
-        <label class="fw-bold">Submitted Date: {{submitted['handInDate']}}</label>
-      </div>
-
       <!-- Submitted Report -->
       {% for file in files if submitted['reportID']|string + '_' +
       classwork['studName'] in file %}
