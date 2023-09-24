@@ -49,19 +49,6 @@ def StudLogin():
     return render_template("StudLogin.html")
 
 
-@app.route("/stud/submission")
-def stud_submission():
-    supid = session["userid"]
-    cursor = db_conn.cursor(pymysql.cursors.DictCursor)
-    cursor.execute("SELECT supervisorID FROM student WHERE studentID=%s", (supid))
-    cursor.execute(
-        "SELECT reportID, reportName, dueDate FROM progressReport WHERE supervisorID=%s",
-        (supid),
-    )
-    classworks = cursor.fetchall()
-    return render_template("StudSubmitReport.html", classworks=classworks)
-
-
 # SUPERVISOR SITE
 def list_files():
     """
