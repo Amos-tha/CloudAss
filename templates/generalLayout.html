@@ -16,11 +16,11 @@
             padding: 0;
         }
 
-        .navbar {
-            background: rgba(53, 58, 64);
-            padding: 16px;
-            display: flex;
-        }
+      .navbar {
+        background: rgba(53, 58, 64);
+        padding: 16px;
+        display: flex;
+      }
 
         .navleft {
             float: left;
@@ -41,34 +41,34 @@
             color: white;
         }
 
-        .navleft>.nav-link {
-            margin: 5px;
-            padding: 5px;
-            color: white;
-            text-decoration: none;
-        }
+      .navleft > .nav-link {
+        margin: 5px;
+        padding: 5px;
+        color: white;
+        text-decoration: none;
+      }
 
-        .navright>.nav-link {
-            margin: 5px;
-            padding: 5px;
-            color: white;
-            text-decoration: none;
-        }
+      .navright > .nav-link {
+        margin: 5px;
+        padding: 5px;
+        color: white;
+        text-decoration: none;
+      }
 
         .footercontainer {
             margin-top: auto;
             border-top: 1px solid;
         }
 
-        .footer {
-            margin: 10px;
-        }
+      .footer {
+        margin: 10px;
+      }
     </style>
     {% block style %}
     {% endblock %}
 </head>
 
-<body>
+  <body>
     <!-- Page navigation -->
     <div class="navbar">
         <div class="navleft">
@@ -83,18 +83,18 @@
         </div>
     </div>
     <!-- End of page navibation -->
-    {% block content %}
-    {% endblock %}
+    {% block content %} {% endblock %}
     <div class="footercontainer">
         <div class="footer">
-                <p>
-                    &copy;
-                    <script>document.write(new Date().getFullYear())</script> - TARUMT FOCS ITP
-                </p>
+            <p>
+                &copy;
+                <script>document.write(new Date().getFullYear())</script> - TARUMT FOCS ITP
+            </p>
         </div>
     </div>
-    <script src="../static/bootstrap.bundle.js"></script>
-    <script src="../static/popper.js"></script>
+    <script src="/static/bootstrap.bundle.js"></script>
+    <script src="/static/popper.js"></script>
+
 </body>
 
 </html>

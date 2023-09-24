@@ -1,0 +1,224 @@
+{%extends "compLayout.html"%}
+
+{% block title %}Offer Details{% endblock %}
+{% block head %}
+{{super()}}
+<link href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css' rel='stylesheet'
+    type='text/css'>
+<link href='https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+<script language="JavaScript" type="text/javascript" src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script language="JavaScript" type="text/javascript"
+    src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script language="JavaScript" type="text/javascript"
+    src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script language="JavaScript" type="text/javascript"
+    src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<style>
+    .dataTables_filter {
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column justify-content-center align-items-center">
+    <div class="d-flex flex-row justify-content-center align-items-center">
+        <div class="col-8 mb-4">
+            <div>
+                <a class="bi bi-chevron-left"
+                    style="font-size: 50px; position: absolute; text-decoration: none; color:black"
+                    href="/company/offers"></a>
+                <div class="fs-2 fw-bold text-center mb-2">Offer Details</div>
+            </div>
+            <form class="row g-3" action="/company/UpdateOfferDetails" method="POST" enctype="multipart/form-data">
+                <div class="col-2">
+                    <label for="inputOfferID" class="form-label">Offer ID</label>
+                    <input type="text" class="form-control border-3" id="inputOfferID" name="inputOfferID"
+                        value="{{offerID}}" disabled required>
+                    <input type="hidden" id="inputOfferID" name="inputOfferID" value="{{offerID}}" required>
+                </div>
+                <div class="col-2">
+                    {% if offerStatus == 'Pending' or offerStatus == 'Rejected' %}
+                    <label for="inputOfferStatus" class="form-label">Offer Status</label>
+                    <select class="form-select" aria-label="Default select example" id="inputOfferStatus"
+                        name="inputOfferStatus" disabled>
+                        <option value="{{offerStatus}}" SELECTED>{{offerStatus}}</option>
+                    </select>
+                    <input type="hidden" id="inputOfferStatus" name="inputOfferStatus" value="{{offerStatus}}" required>
+                    {% else %}
+                    <label for="inputOfferStatus" class="form-label">Offer Status</label>
+                    <select class="form-select" aria-label="Default select example" id="inputOfferStatus"
+                        name="inputOfferStatus">
+                        {% for tempStatus in ["Active","Revoked"] %}
+                        {% if offerStatus == tempStatus %}
+                        <option value="{{tempStatus}}" SELECTED>{{tempStatus}}</option>
+                        {% else %}
+                        <option value="{{tempStatus}}">{{tempStatus}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                    {% endif %}
+                    
+                </div>
+                <div class="col-3">
+                    <label for="inputDatePosted" class="form-label">Date Posted</label>
+                    <input type="text" class="form-control border-3" id="inputDatePosted" name="inputDatePosted"
+                        value="{{datePosted}}" required disabled>
+                    <input type="hidden" id="inputDatePosted" name="inputDatePosted" value="{{datePosted}}" required>
+                </div>
+                <div class="col-5">
+                    <label for="inputPosition" class="form-label">Position</label>
+                    <input type="text" class="form-control border-3" id="inputPosition" name="inputPosition"
+                        value="{{position}}" required disabled>
+                    <input type="hidden" id="inputPosition" name="inputPosition" value="{{position}}" required>
+                </div>
+                <div class="col-2">
+                    <label for="inputAllowance" class="form-label">Allowance (RM)<span class="small"></label>
+                    <input type="text" class="form-control border-3" id="inputAllowance" name="inputAllowance"
+                        placeholder="e.g. 2000.00, 800.00-2000.00" value="{{allowance}}" required disabled>
+                    <input type="hidden" id="inputAllowance" name="inputAllowance" value="{{allowance}}" required>
+                </div>
+                <div class="col-2">
+                    <label for="inputDuration" class="form-label">Duration (month)</label>
+                    <input type="number" class="form-control border-3" id="inputDuration" name="inputDuration" min="1"
+                        value="{{duration}}" disabled>
+                    <input type="hidden" id="inputDuration" name="inputDuration" value="{{duration}}" required>
+                </div>
+                <div class="col-8">
+                    <label for="inputLanguage" class="form-label">Language(s)</label>
+                    <input type="text" class="form-control border-3" id="inputLanguage" name="inputLanguage"
+                        value="{{language}}" disabled>
+                    <input type="hidden" id="inputLanguage" name="inputLanguage" value="{{language}}" required>
+                </div>
+                <div class="col-12">
+                    <label for="inputPrerequisite" class="form-label">Prerequisite</label>
+                    <textarea class="form-control border-3" id="inputPrerequisite" name="inputPrerequisite" rows="3"
+                        disabled>{{prerequisite}}</textarea>
+                    <input type="hidden" id="inputPrerequisite" name="inputPrerequisite" value="{{prerequisite}}"
+                        required>
+                </div>
+
+                <div class="col-12">
+                    <label for="inputLocation" class="form-label">Location</label>
+                    <textarea class="form-control border-3" id="inputLocation" name="inputLocation" rows="3"
+                        disabled>{{location}}</textarea>
+                    <input type="hidden" id="inputLocation" name="inputLocation" value="{{location}}" required>
+                </div>
+                <div class="col-12">
+                    <label for="inputDescription" class="form-label">Description</label>
+                    <textarea class="form-control border-3" id="inputDescription" name="inputDescription" rows="7"
+                        disabled>{{description}}</textarea>
+                    <input type="hidden" id="inputDescription" name="inputDescription" value="{{description}}" required>
+                </div>
+                {% if offerStatus != 'Pending' and offerStatus != 'Rejected' %}
+                <div class="col-12 d-flex flex-row justify-content-end">
+                    <button type="submit" class="btn btn-primary btn-lg">Save</button>
+                </div>
+                {% endif %}
+
+            </form>
+        </div>
+    </div>
+    {% if offerStatus != 'Pending' and offerStatus != 'Rejected' %}
+    <div class="col-10 mb-4">
+        <button class="btn btn-primary me-2" id="All">All</button>
+        <button class="btn btn-secondary me-2" id="Pending">Pending</button>
+        <button class="btn btn-success me-2" id="Accepted">Accepted</button>
+        <button class="btn btn-danger" id="Rejected">Rejected</button>
+
+        <table id='datatable' class='table table-hover' width='100%'>
+            <thead>
+                <tr>
+                    <th style="background-color: rgb(194, 194, 194); ">Date Applied</th>
+                    <th style="background-color: rgb(194, 194, 194); ">Student ID</th>
+                    <th style="background-color: rgb(194, 194, 194); ">Student Name</th>
+                    <th style="background-color: rgb(194, 194, 194); ">Student Level</th>
+                    <th style="background-color: rgb(194, 194, 194); ">Student Programme</th>
+                    <th style="background-color: rgb(194, 194, 194); ">CGPA</th>
+                    <th style="background-color: rgb(194, 194, 194); ">Status</th>
+                    <th style="background-color: rgb(194, 194, 194); ">Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    {% endif %}
+
+</div>
+<script>
+    var getUrlParameter = function getUrlParameter(sParam) {
+        var sPageURL = window.location.search.substring(1),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+            }
+        }
+        return false;
+    };
+
+    $(document).ready(function () {
+        var table = $('#datatable').DataTable({
+            'processing': true,
+            'serverSide': true,
+            'serverMethod': 'post',
+            'ajax': {
+                'url': '/company/GetOfferApplications?id=' + getUrlParameter('id'),
+            },
+            'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            searching: true,
+            sort: false,
+            'columnDefs': [
+                {
+                    defaultContent: '<button class="more_btn btn btn-secondary btn-sm">More</button>',
+                    targets: -1
+                },
+                {
+                    defaultContent: "-",
+                    targets: "_all"
+                },
+            ],
+            'columns': [
+                { data: 'appliedDateTime' },
+                { data: 'studID' },
+                { data: 'studName' },
+                { data: 'studLevel' },
+                { data: 'studProgramme' },
+                { data: 'CGPA' },
+                { data: 'appStatus' },
+                { data: null },
+            ]
+        });
+
+        table.on('click', 'button', function (e) {
+            let data = table.row(e.target.closest('tr')).data();
+            window.location.replace("/company/appdetails?offerid=" + getUrlParameter('id') + "&appid=" + data.appID);
+        });
+
+        $('#All').on('click', function () {
+            // Toggle the filter on the DataTable
+            table.search("").draw();
+        });
+
+        $('#Pending').on('click', function () {
+            // Toggle the filter on the DataTable
+            table.search("Pending").draw();
+        });
+
+        $('#Accepted').on('click', function () {
+            // Toggle the filter on the DataTable
+            table.search("Accepted").draw();
+        });
+
+        $('#Rejected').on('click', function () {
+            // Toggle the filter on the DataTable
+            table.search("Rejected").draw();
+        });
+    });
+</script>
+{%endblock%}
