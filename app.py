@@ -172,14 +172,13 @@ def update(submissionid):
 
 
 @app.route("/preview/<filename>", methods=["GET"])
-def preview(filename):
+def previewFile(filename):
     if request.method == "GET":
         s3 = boto3.resource("s3")
         file = s3.Object(custombucket, filename).get()
         response = make_response(file["Body"].read())
         response.headers["Content-Type"] = "application/pdf"
         return response
-
 
 @app.route("/download/<filename>", methods=["GET"])
 def download(filename):
