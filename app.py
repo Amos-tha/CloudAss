@@ -227,10 +227,6 @@ def CompDetails(compid):
             db_conn.commit()              
             return redirect(url_for("RegisteredComp"))
 
-@app.route("/admin/registredcomp", methods=['GET','POST'])
-def RegisteredComp():
-    return render_template("RegisteredComp.html")
-
 @app.route("/admin/compregistration", methods=['GET','POST'])
 def CompRequest():
     return render_template("CompRegistration.html")
