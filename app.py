@@ -85,7 +85,7 @@ def cleartext():
 def get_studs():
     try:
         supid = session["userid"]
-        cursor = db_conn.cursor(pymysql.cursors.DictCursor)
+        cursor = db_conn.cursor(cursors.DictCursor)
         cursor.execute("SELECT * FROM student WHERE supervisorID = %s", (supid))
         students = cursor.fetchall()
 
@@ -127,10 +127,10 @@ def previewReport(studid):
 
 @app.route("/supervisor/login", methods=["GET", "POST"])
 def sup_login():
-    cursor = db_conn.cursor()
     if request.method == "GET":
         return render_template("SupLogin.html", msg="")
     else:
+        cursor = db_conn.cursor()
         email = request.form["inputEmail"]
         password = request.form["inputPassword"]
         cursor.execute(
