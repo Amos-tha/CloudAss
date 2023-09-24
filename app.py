@@ -34,20 +34,6 @@ db_conn = connections.Connection(
     db=customdb,
     connect_timeout=86400,
 )
-
-def list_files(filenames):
-    """
-    Function to list files in a given S3 bucket
-    """
-    s3 = boto3.client('s3')
-    contents = []
-    for image in s3.list_objects(Bucket=custombucket)['Contents']:
-        for filename in filenames:
-            s3_name = image['Key']
-            if(filename == s3_name):
-                contents.append(s3_name)
-
-    return contents
     
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -63,17 +49,17 @@ def StudLogin():
     return render_template("StudLogin.html")
 
 # SUPERVISOR SITE
-def list_files():
+def list_files(filenames):
     """
     Function to list files in a given S3 bucket
     """
-    s3 = boto3.client("s3")
+    s3 = boto3.client('s3')
     contents = []
-    for image in s3.list_objects(Bucket=custombucket)["Contents"]:
-        file = image["Key"]
-        if file.endswith(".pdf"):
-            contents.append(file)
-        # contents.append(f'https://{custombucket}.s3.amazonaws.com/{image}')
+    for image in s3.list_objects(Bucket=custombucket)['Contents']:
+        for filename in filenames:
+            s3_name = image['Key']
+            if(filename == s3_name):
+                contents.append(s3_name)
 
     return contents
 
