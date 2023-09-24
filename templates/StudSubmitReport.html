@@ -1,10 +1,11 @@
 {% extends "studentLayout.html" %} {% block title %} Report Submission {%
 endblock %} {% block content %} {% for classwork in classworks %}
 <div class="card" id="card_accordion" style="margin: 10px">
-  <div class="card-header text-bg-secondary" data-bs-toggle="collapse"
+  <div class="card-header text-bg-secondary justify-content-between" data-bs-toggle="collapse"
     data-bs-target="#classwork{{ classwork['reportName']}}" aria-expanded="false"
     aria-controls="classwork{{ classwork['reportName']}}" style="cursor: pointer">
-    Report {{classwork['reportName']}} {{classwork['dueDate']}}
+    <div>Report {{classwork['reportName']}}</div>
+    <div>{{classwork['dueDate']}}</div>
   </div>
   <div class="card-body accordion-collapse collapse" id="classwork{{ classwork['reportName']}}">
     {% for submitted in submissions if submitted['reportID'] ==
@@ -21,7 +22,7 @@ endblock %} {% block content %} {% for classwork in classworks %}
       <label class="fw-bold">Report:
         <a href="/preview/{{ file }}" target="_blank" class="fw-normal">{{file}}</a>
         <a href="/download/{{ file }}" class="fw-normal ms-2"><img src="/static/media/download.jpg"
-            style="width:5%"></a></label>
+            style="width:1.5%"></a></label>
       {% endfor %}
       <fieldset disabled>
         <label class="fw-bold">Supervisor Remark: </label>
