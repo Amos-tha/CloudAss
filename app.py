@@ -100,7 +100,11 @@ def previewReport(studid):
         cursor.execute("SELECT * FROM student s, submission sb WHERE s.studID = sb.studID AND sb.studID = %s", (studid))
         reports = cursor.fetchall()
 
-        # contents = list_files
+        for report in reports:
+            filenames.append("report_" + str(report['reportID']) + "_" + str(report['studName']) + "_" + str(studid) + ".pdf")
+
+        files = list_files(filenames)
+        
 
     except Exception as e:
         return str(e)
@@ -109,7 +113,7 @@ def previewReport(studid):
         cursor.close()
 
     return render_template(
-        "SupViewReport.html", classworks=classworks, reports=reports, files="test"
+        "SupViewReport.html", classworks=classworks, reports=reports, files=files
     )
 
 
@@ -1409,7 +1413,7 @@ def stud_submission():
         for report in classworks:
             filenames.append("report_" + str(report['reportID']) + "_" + str(report['studName']) + "_" + str(report['studID']) + ".pdf")
 
-        # files = list_files(filenames)
+        files = list_files(filenames)
     
     except Exception as e:
         return str(e)
@@ -1437,10 +1441,10 @@ def submit(reportid):
         cursor.execute("SELECT * FROM student WHERE studID = %s", (str(studid)))  
         student = cursor.fetchone()
 
-        filenames.append("report_" + str(reportid) + "_" + str(student.studName) + "_" + str(student.studID) + ".pdf")
+        filenames.append("report_" + str(reportid) + "_" + str(student['studName']) + "_" + str(student['studID']) + ".pdf")
         
         # Uplaod image file in S3 #
-        report_file = "report_" + str(reportid) + "_" + str(student.studName) + "_" + str(student.studID) + ".pdf"
+        report_file = "report_" + str(reportid) + "_" + str(student['studName']) + "_" + str(student['studID']) + ".pdf"
         s3 = boto3.resource("s3")
 
         print("Data inserted in MySQL RDS... uploading image to S3...")
