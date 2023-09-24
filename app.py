@@ -1409,7 +1409,7 @@ def stud_submission():
         for report in classworks:
             filenames.append("report_" + str(report['reportID']) + "_" + str(report['studName']) + "_" + str(report['studID']) + ".pdf")
 
-        files = list_files(filenames)
+        # files = list_files(filenames)
     
     except Exception as e:
         return str(e)
@@ -1417,7 +1417,7 @@ def stud_submission():
     finally:
         cursor.close()
 
-    return render_template("StudSubmitReport.html", classworks=classworks, submissions=submissions, files=files)
+    return render_template("StudSubmitReport.html", classworks=classworks, submissions=submissions, files="test")
 
 @app.route("/stud/submit/<reportid>", methods=["GET", "POST"])
 def submit(reportid):
@@ -1435,12 +1435,9 @@ def submit(reportid):
         cursor.execute("INSERT INTO submission (handInDate, reportID, studID) VALUES (%s, %s, %s)", (handInDate, reportid, str(studid)))
         db_conn.commit()
         cursor.execute("SELECT * FROM student WHERE studID = %s", (str(studid)))  
-        students = cursor.fetchone()
+        student = cursor.fetchone()
 
-        for report in students:
-            print(students)
-            print(report)
-            filenames.append("report_" + str(report['reportID']) + "_" + str(report['studName']) + "_" + str(report['studID']) + ".pdf")
+        filenames.append("report_" + str(student.reportID) + "_" + str(student.studName) + "_" + str(student.studID) + ".pdf")
         
         # Uplaod image file in S3 #
         report_file = "report_" + str(reportid) + "_" + str(students[1]) + "_" + str(students[0]) + ".pdf"
