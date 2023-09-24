@@ -1,30 +1,39 @@
-{%extends "generalLayout.html"%}
+{%extends "studentLayout.html"%}
 
 {% block title %}Internship Offers{% endblock %}
 
 {% block content %}
 <div class="d-flex flex-row justify-content-center align-items-center mt-5">
-    <div class="col-5">
-        <div class="fs-2 fw-bold text-center mb-2">Internship Offers</div>
-        {% for offer in offers %}
-        <div class="card">
-            <div class="card-header">
-                {{offer['compName']}}
-            </div>
-            <div class="card-body">
-                <h5 class="card-title">Position: {{offer['position']}}</h5>
-                <h5 class="card-title">Allowance: RM{{offer['allowance']}}</h5>
-                <h5 class="card-title">Duration: {{offer['duration']}} months</h5>
-                <h5 class="card-title">Prerequisite: {{offer['prerequisite']}}</h5>
-                <h5 class="card-title">Language: {{offer['language']}}</h5>
-                <h5 class="card-title">Location: {{offer['location']}}</h5>
-                <h5 class="card-title">Date Posted: {{offer['datePosted']}}</h5>
-                <h5 class="card-title">Offer Status: {{offer['offerStatus']}}</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">View Offer</a>
-            </div>
+    <div class="col-8 text-center">
+        {% if msg|length %}
+        <div class="alert alert-info alert-dismissible fade show">
+            <strong>Success!</strong> {{msg}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
-        {% endfor %}
+        {% endif %}
+        <div class="fs-2 fw-bold text-center mb-2" style="padding-bottom: 10px;">Internship Offers</div>
+        <form class="row g-3 align-items-center" action="/student/offerDetails" method="GET"
+            enctype="multipart/form-data">
+        <div class="row">
+            {% for offer in offers %}
+            <div class="col-sm-6 col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-header">
+                        {{offer['compName']}}
+                    </div>
+                    <img src="/previewImg/{{contents[loop.index0]}}" class="card-img-top"
+                        alt="{{contents[loop.index0]}}">
+                    <div class="card-body">
+                        <h5 class="card-title">Position: <br>{{offer['position']}}</h5>
+                        <h5 class="card-title">Allowance: <br>RM{{offer['allowance']}}</h5>
+                        <h5 class="card-title">Duration: <br>{{offer['duration']}} months</h5>
+                        <button type="Submit" class="btn btn-primary" name="selectedOffer" value="{{offer['offerID']}}">View Offer</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        </form>
     </div>
 </div>
 {%endblock%}

@@ -1,0 +1,35 @@
+{%extends "studentLayout.html"%}
+
+{% block title %}Internship Offers{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-row justify-content-center align-items-center mt-5">
+    <div class="col-8">
+        <div class="fs-2 fw-bold text-center mb-2">Offer Details</div>
+        <form class="row g-3 align-items-center" action="/student/applyOffer" method="POST"
+            enctype="multipart/form-data">
+            <div class="card" style="width:100%">
+                <div class="card-body row">
+                    <div class="col" style="margin-bottom: 10px; padding-bottom: 10px;"><img
+                            src="/previewImg/{{contents[0]}}" class="card-img-top" alt="{{contents}}">
+                    </div>
+                    <div class="col">
+                        <h1 class="card-title">{{offerdetails['compName']}}</h1>
+                        <h3 class="card-title">Position: {{offerdetails['position']}}</h3>
+                        <br>
+                        <p class="card-text">Allowance: RM{{offerdetails['allowance']}}</p>
+                        <p class="card-text">Duration: {{offerdetails['duration']}} months</p>
+                        <p class="card-text">Prerequisite: {{offerdetails['prerequisite']}}</p>
+                        <p class="card-text">Language: {{offerdetails['language']}}</p>
+                        <p class="card-text">Location: {{offerdetails['location']}}</p>
+                        <p class="card-text">Date Posted: {{offerdetails['datePosted']}}</p>
+                        <p class="card-text">Offer Status: {{offerdetails['offerStatus']}}</p>
+                    </div>
+                    <button type="Submit" class="btn btn-primary" name="selectedOffer"
+                        value="{{offerdetails['offerID']}}">Apply Offer</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{%endblock%}

@@ -5,19 +5,26 @@
 {% block content %}
 <div class="d-flex flex-row justify-content-center align-items-center mt-5">
     <div class="col-5">
+        {% if msg|length %}
+        <div class="alert alert-danger alert-dismissible fade show">
+            <strong>Error!</strong> {{msg}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endif %}
+
         <div class="fs-2 fw-bold text-center mb-2">Student Login</div>
-        <form class="row g-3">
+        <form class="row g-3" action="/student/login" method="POST" enctype="multipart/form-data">
             <div class="col-12">
-                <label for="inputEmail" class="form-label">Email</label>
-                <input type="email" class="form-control border-3" id="inputEmail" required>
+                <label for="inputUniEmail" class="form-label">University Email</label>
+                <input type="email" class="form-control border-3" id="inputUniEmail" name="inputUniEmail" required>
             </div>
             <div class="col-12">
-                <label for="inputPassword" class="form-label">Password</label>
-                <input type="password" class="form-control border-3" id="inputPassword">
+                <label for="inputIC" class="form-label">NRIC</label>
+                <input type="text" class="form-control border-3" id="inputIC" name="inputIC">
             </div>
-            <p><a class="link-opacity-100" href="#">Sign Up</a></p>
             <div class="col-12 d-flex flex-row justify-content-end">
-                <button type="submit" class="btn btn-primary btn-lg">Sign in</button>
+                <a href="{{ url_for('stud_register_page') }}" class="btn btn-secondary btn-lg me-4">Register Account</a>
+                <button type="submit" class="btn btn-primary btn-lg">Login</button>
             </div>
         </form>
     </div>

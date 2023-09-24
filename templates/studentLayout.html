@@ -3,10 +3,9 @@
 
 <head>
     {% block head %}
-    <link rel="stylesheet" href="/static/bootstrapcss.css">
-    <title>{% block title %}{% endblock %} - My Webpage</title>
+    <link rel="stylesheet" href="../static/bootstrapcss.css">
+    <title>{% block title %}{% endblock %}</title>
     {% endblock %}
-
     <style>
         body {
             font: Roboto;
@@ -29,7 +28,7 @@
             width: 60%;
             margin: 5px;
             padding: 5px;
-            font-size: 20px;
+            font-size: 15px;
             color: white;
         }
 
@@ -38,7 +37,7 @@
             display: flex;
             margin: 5px;
             padding: 5px;
-            font-size: 20px;
+            font-size: 15px;
             color: white;
         }
 
@@ -57,7 +56,7 @@
         }
 
         .footercontainer {
-            margin-top:auto;
+            margin-top: auto;
             border-top: 1px solid;
         }
 
@@ -65,6 +64,8 @@
             margin: 10px;
         }
     </style>
+    {% block style %}
+    {% endblock %}
 </head>
 
 <body>
@@ -74,8 +75,10 @@
             <a class="nav-link" href="#">TARUMT FOCS</a>
         </div>
         <div class="navright">
-            <a class="nav-link" href="/company/applications">Applications</a> &nbsp;
-            <a class="nav-link" href="/company/offers">Offers</a> &nbsp;
+            <a class="nav-link" href="/viewOffers">Offers</a> &nbsp;
+            <a class="nav-link" href="/student/viewDetails">View Details</a> &nbsp;
+            <a class="nav-link" href="/stud/submission">Submit Report</a> &nbsp;
+            <a class="nav-link" href="/student/uploadDoc">Upload Docs</a> &nbsp;
             <a class="nav-link" href="/logout">Logout</a>
         </div>
     </div>
@@ -84,14 +87,14 @@
     {% endblock %}
     <div class="footercontainer">
         <div class="footer">
-            <p>
-                &copy;
-                <script>document.write(new Date().getFullYear())</script> - TARUMT FOCS ITP
-            </p>
+                <p>
+                    &copy;
+                    <script>document.write(new Date().getFullYear())</script> - TARUMT FOCS ITP
+                </p>
         </div>
     </div>
-    <script src="/static/bootstrap.bundle.js"></script>
-    <script src="/static/popper.js"></script>
+    <script src="../static/bootstrap.bundle.js"></script>
+    <script src="../static/popper.js"></script>
 </body>
 
 </html>

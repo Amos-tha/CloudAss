@@ -4,8 +4,9 @@
 <head>
     {% block head %}
     <link rel="stylesheet" href="/static/bootstrapcss.css">
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}{% endblock %} - My Webpage</title>
     {% endblock %}
+
     <style>
         body {
             font: Roboto;
@@ -16,11 +17,11 @@
             padding: 0;
         }
 
-      .navbar {
-        background: rgba(53, 58, 64);
-        padding: 16px;
-        display: flex;
-      }
+        .navbar {
+            background: rgba(53, 58, 64);
+            padding: 16px;
+            display: flex;
+        }
 
         .navleft {
             float: left;
@@ -28,7 +29,7 @@
             width: 60%;
             margin: 5px;
             padding: 5px;
-            font-size: 15px;
+            font-size: 20px;
             color: white;
         }
 
@@ -37,53 +38,51 @@
             display: flex;
             margin: 5px;
             padding: 5px;
-            font-size: 15px;
+            font-size: 20px;
             color: white;
         }
 
-      .navleft > .nav-link {
-        margin: 5px;
-        padding: 5px;
-        color: white;
-        text-decoration: none;
-      }
+        .navleft>.nav-link {
+            margin: 5px;
+            padding: 5px;
+            color: white;
+            text-decoration: none;
+        }
 
-      .navright > .nav-link {
-        margin: 5px;
-        padding: 5px;
-        color: white;
-        text-decoration: none;
-      }
+        .navright>.nav-link {
+            margin: 5px;
+            padding: 5px;
+            color: white;
+            text-decoration: none;
+        }
 
         .footercontainer {
-            margin-top: auto;
+            margin-top:auto;
             border-top: 1px solid;
         }
 
-      .footer {
-        margin: 10px;
-      }
+        .footer {
+            margin: 10px;
+        }
     </style>
-    {% block style %}
-    {% endblock %}
 </head>
 
-  <body>
+<body>
     <!-- Page navigation -->
     <div class="navbar">
         <div class="navleft">
-            <a class="nav-link" href="/">TARUMT FOCS</a>
+            <a class="nav-link" href="#">TARUMT FOCS</a>
         </div>
         <div class="navright">
-            <a class="nav-link" href="/company/login">Company</a> &nbsp;
-            <a class="nav-link" href="/admin/Login">Comittee</a> &nbsp;
-            <a class="nav-link" href="#">Uni Supervisor</a> &nbsp;
-            <a class="nav-link" href="/student/login">Student</a> &nbsp;
-            <a class="nav-link" href="/portfolio">Portfolio</a>
+            <a class="nav-link" href="/admin/compregistration">New Company</a> &nbsp;
+            <a class="nav-link" href="/admin/registredcomp">Registered Company</a> &nbsp;
+            <a class="nav-link" href="/admin/manageoffers">Offers</a> &nbsp; 
+            <a class="nav-link" href="/logout">Logout</a>
         </div>
     </div>
     <!-- End of page navibation -->
-    {% block content %} {% endblock %}
+    {% block content %}
+    {% endblock %}
     <div class="footercontainer">
         <div class="footer">
             <p>
@@ -92,9 +91,7 @@
             </p>
         </div>
     </div>
-    <script src="/static/bootstrap.bundle.js"></script>
-    <script src="/static/popper.js"></script>
-
+    
 </body>
 
 </html>

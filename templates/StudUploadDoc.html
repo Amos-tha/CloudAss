@@ -1,0 +1,76 @@
+{%extends "studentLayout.html"%}
+
+{% block title %}Student Upload Document{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-row justify-content-center align-items-center">
+    <div class="col-8 mb-4">
+        <!-- {% if msg|length %}
+        <div class="alert alert-info alert-dismissible fade show">
+            <strong>Success!</strong> {{msg}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endif %} -->
+        <div class="fs-2 fw-bold text-center mb-2">Student Document</div>
+        <form class="row g-3 align-items-center" action="/student/uploadDoc" method="POST" enctype="multipart/form-data">
+            <div class="card text-center">
+                <div class="card-header">
+                    Student Document
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <label for="inputCompanyAcceptanceLetter" class="col-sm-2 col-form-label">Company Acceptance Letter</label>
+                        <input class="form-control border-3" type="file" id="inputCompanyAcceptanceLetter" name="inputCompanyAcceptanceLetter" accept=".pdf">
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputLetterOfIdemnity" class="col-sm-2 col-form-label">Letter Of Indemnity</label>
+                        <input class="form-control border-3" type="file" id="inputLetterOfIdemnity" name="inputLetterOfIdemnity" accept=".pdf">
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputAcknowledgeForm" class="col-sm-2 col-form-label">Parent's Acknowledgement Form</label>
+                        <input class="form-control border-3" type="file" id="inputAcknowledgeForm" name="inputAcknowledgeForm" accept=".pdf">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 d-flex flex-row justify-content-end">
+                <!-- <button type="reset" class="btn btn-secondary btn-lg me-4">Reset Form</button> -->
+                <!-- <button type="submit" class="btn btn-primary btn-lg">Sign in</button> -->
+                <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop">Upload
+                    Document</button>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1"
+                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirm Upload?</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            All the documents will be submitted to the database.
+                            Continue?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary me-3" data-bs-dismiss="modal">Close</button>
+                            <button type="Submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    var loadFile = function (event, frame) {
+        var output = document.getElementById(frame);
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function () {
+            URL.revokeObjectURL(output.src) // free memory
+        }
+    };
+</script>
+{%endblock%}

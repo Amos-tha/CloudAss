@@ -1,12 +1,18 @@
-{%extends "generalLayout.html"%}
+{%extends "studentLayout.html"%}
 
-{% block title %}Student Registration{% endblock %}
+{% block title %}Student Details{% endblock %}
 
 {% block content %}
 <div class="d-flex flex-row justify-content-center align-items-center">
     <div class="col-8 mb-4">
-        <div class="fs-2 fw-bold text-center mb-2">Student Registration Form</div>
-        <form class="row g-3 align-items-center" action="/student/studRegister" method="POST" enctype="multipart/form-data">
+        {% if msg|length %}
+        <div class="alert alert-info alert-dismissible fade show">
+            <strong>Success!</strong> {{msg}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endif %}
+        <div class="fs-2 fw-bold text-center mb-2">Student Details</div>
+        <form class="row g-3 align-items-center" action="/student/studUpdate" method="POST" enctype="multipart/form-data">
             <div class="card text-center">
                 <div class="card-header">
                     Academic Information
@@ -15,62 +21,57 @@
                     <div class="row mb-3">
                         <label for="inputstudID" class="col-sm-2 col-form-label">Student ID</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control border-3" id="inputstudID" name="inputstudID"
-                                required>
+                            <input type="text" class="form-control border-3" id="inputstudID" name="inputstudID" value="{{studDetails['studID']}}"
+                            readonly="true">
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="inputUniEmail" class="col-sm-2 col-form-label">Student University Email</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control border-3" id="inputUniEmail" name="inputUniEmail"
-                                required>
+                            <input type="email" class="form-control border-3" id="inputUniEmail" name="inputUniEmail" value="{{studDetails['studUniEmail']}}"
+                            required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="inputLevel" class="col-sm-2 col-form-label">Level</label>
                         <div class="col-sm-10">
                             <select class="form-select border-3" aria-label="Default select example" id="inputLevel" name="inputLevel">
-                                <option selected>Select a level</option>
+                                <option value="{{studDetails['studLevel']}}" selected>{{studDetails['studLevel']}}</option>
                                 <option value="Bachelor Degree">Bachelor Degree</option>
                                 <option value="Diploma">Diploma</option>
                             </select>
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <label for="inputProgramme" class="col-sm-2 col-form-label">Programme<span class="small"> <br>(enter
-                                short form)</span></label>
+                        <label for="inputProgramme" class="col-sm-2 col-form-label">Programme<span class="small"></label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control border-3" id="inputProgramme" name="inputProgramme"
-                                required>
+                            <input type="text" class="form-control border-3" id="inputProgramme" name="inputProgramme" value="{{studDetails['studProgramme']}}"
+                            required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="inputTutGrp" class="col-sm-2 col-form-label">Tutorial Group</label>
                         <div class="col-sm-10">
-                            <input type="number" class="form-control border-3" id="inputTutGrp" name="inputTutGrp"
-                                required>
+                            <input type="number" class="form-control border-3" id="inputTutGrp" name="inputTutGrp" value="{{studDetails['studTutGrp']}}"
+                            required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="inputCGPA" class="col-sm-2 col-form-label">CGPA</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control border-3" id="inputCGPA" name="inputCGPA" required>
+                            <input type="text" class="form-control border-3" id="inputCGPA" name="inputCGPA" value="{{studDetails['CGPA']}}" required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="inputSupervisor" class="col-sm-2 col-form-label">Supervisor Name</label>
                         <div class="col-sm-10">
                             <select class="form-select border-3" aria-label="Default select example" id="inputSupervisor" name="inputSupervisor">
-                                <option selected>Select a supervisor</option>
+                                <option  value="{{studDetails['supervisorName']}}" selected>{{studDetails['supervisorName']}}</option>
                                 {% for supervisor in supervisors %}
                                 <option value="{{supervisor['supervisorName']}}">{{supervisor['supervisorName']}}</option>
                                 {% endfor %}
                             </select>
                         </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label for="inputResume" class="col-sm-2 col-form-label">Student Resume</label>
-                        <input class="form-control border-3" type="file" id="inputResume" name="inputResume" accept=".pdf">
                     </div>
                 </div>
             </div>
@@ -82,22 +83,22 @@
                     <div class="row mb-3">
                         <label for="inputName" class="col-sm-2 col-form-label">Full Name</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control border-3" id="inputName" name="inputName"
-                                required>
+                            <input type="text" class="form-control border-3" id="inputName" name="inputName" value="{{studDetails['studName']}}"
+                            required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="inputIC" class="col-sm-2 col-form-label">NRIC</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control border-3" id="inputIC" name="inputIC"
-                                required>
+                            <input type="text" class="form-control border-3" id="inputIC" name="inputIC" value="{{studDetails['studIC']}}"
+                            required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="inputGender" class="col-sm-2 col-form-label">Gender</label>
                         <div class="col-sm-10">
                             <select class="form-select border-3" aria-label="Default select example" id="inputGender" name="inputGender">
-                                <option selected>Select a gender</option>
+                                <option value="{{studDetails['studGender']}}" selected>{{studDetails['studGender']}}</option>
                                 <option value="M">M</option>
                                 <option value="F">F</option>
                             </select>
@@ -113,22 +114,22 @@
                     <div class="row mb-3">
                         <label for="inputPersonalEmail" class="col-sm-2 col-form-label">Personal Email</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control border-3" id="inputPersonalEmail" name="inputPersonalEmail"
-                                required>
+                            <input type="email" class="form-control border-3" id="inputPersonalEmail" name="inputPersonalEmail" value="{{studDetails['studPersonalEmail']}}"
+                            required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="inputPhone" class="col-sm-2 col-form-label">Phone Number</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control border-3" id="inputPhone" name="inputPhone"
-                                required>
+                            <input type="text" class="form-control border-3" id="inputPhone" name="inputPhone" value="{{studDetails['studPhone']}}"
+                            required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="inputAddress" class="col-sm-2 col-form-label">Address</label>
                         <div class="col-sm-10">
                             <textarea class="form-control border-3" id="inputAddress" name="inputAddress"
-                                required></textarea>
+                            required>{{studDetails['studAddress']}}</textarea>
                         </div>
                     </div>
                 </div>
@@ -137,8 +138,8 @@
                 <button type="reset" class="btn btn-secondary btn-lg me-4">Reset Form</button>
                 <!-- <button type="submit" class="btn btn-primary btn-lg">Sign in</button> -->
                 <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
-                    data-bs-target="#staticBackdrop">Sign
-                    Up</button>
+                    data-bs-target="#staticBackdrop">Update
+                    Details</button>
             </div>
 
             <!-- Modal -->
@@ -147,11 +148,12 @@
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirm Register?</h1>
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirm Update?</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            This registration form will be submitted to the database, make sure all the information are correct. Continue?
+                            This update form will be submitted to the database, make sure all the information are correct.
+                            Continue?
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary me-3" data-bs-dismiss="modal">Close</button>

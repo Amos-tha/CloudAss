@@ -1,4 +1,4 @@
-{%extends "compLayout.html"%}
+{%extends "adminLayout.html"%}
 
 {% block title %}Company Offers{% endblock %}
 {% block head %}
@@ -15,23 +15,20 @@
 {% endblock %}
 
 {% block content %}
-<div class="d-flex flex-column col-10 align-self-center mb-4">
+<div class="d-flex flex-column col-10 align-self-center">
     <div>
         <div class="fs-2 fw-bold mt-4 mb-3">Offers</div>
-    </div>
-    <div class="d-flex flex-row justify-content-end mb-4">
-        <a href="{{ url_for('comp_add_offer') }}" class="btn btn-primary btn-lg">Add New Offer</a>
     </div>
     <div>
         <table id='datatable' class='table table-hover' width='100%'>
             <thead>
                 <tr>
                     <th style="background-color: rgb(194, 194, 194); ">ID</th>
-                    <th style="background-color: rgb(194, 194, 194); ">Date Posted</th>
+                    <th style="background-color: rgb(194, 194, 194); ">Company Name</th>
                     <th style="background-color: rgb(194, 194, 194); ">Position</th>
                     <th style="background-color: rgb(194, 194, 194); ">Allowance</th>
                     <th style="background-color: rgb(194, 194, 194); ">Status</th>
-                    <th style="background-color: rgb(194, 194, 194); ">Action</th>
+                    <th style="background-color: rgb(194, 194, 194); ">Action</th>                    
                 </tr>
             </thead>
         </table>
@@ -44,7 +41,7 @@
             'serverSide': true,
             'serverMethod': 'post',
             'ajax': {
-                'url': '/company/GetOffers'
+                'url': '/admin/GetAllOffers'
             },
             'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, "All"]],
             searching: true,
@@ -52,9 +49,9 @@
             "serverSide": true,
             'columnDefs': [
                 {
-                    defaultContent: '<button class="btn btn-secondary btn-sm">More</button>',
+                    defaultContent: '<button class="btn btn-secondary btn-sm reject">Reject</button> <button class="btn btn-primary btn-sm accept">Accept</button>',
                     targets: -1
-                },
+                },              
                 {
                     defaultContent: "-",
                     targets: "_all"
@@ -62,17 +59,22 @@
             ],
             'columns': [
                 { data: 'offerID' },
-                { data: 'datePosted' },
-                { data: 'position' },
+                { data: 'companyName' },
+                { data: 'position' },                
                 { data: 'allowance' },
                 { data: 'offerStatus' },
-                { data: null }
+                { data: null}
             ]
         });
 
-        table.on('click', 'button', function (e) {
+        table.on('click', 'button.accept', function (e) {
             let data = table.row(e.target.closest('tr')).data();
-            window.location.replace("/company/offerdetails?id=" + data.offerID);
+            window.location.replace("/admin/acceptoffers/" + data.offerID);
+        });
+
+        table.on('click', 'button.reject', function (e) {
+            let data = table.row(e.target.closest('tr')).data();
+            window.location.replace("/admin/rejectoffers/" + data.offerID);
         });
     });
 </script>
