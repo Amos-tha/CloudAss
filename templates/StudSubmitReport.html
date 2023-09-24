@@ -9,7 +9,7 @@ endblock %} {% block content %} {% for classwork in classworks %}
     <div class="justify-content-between">Report {{classwork['reportName']}} Submitted</div>
   </div>
   <div class="card-body accordion-collapse collapse" id="classwork{{ classwork['reportName']}}">
-    <form class="row g-2" action="/stud/unsubmit/{{classwork['reportID']}}" autocomplete="on" method="POST"
+    <form class="row g-2 p-2" action="/stud/unsubmit/{{classwork['reportID']}}" autocomplete="on" method="POST"
       enctype="multipart/form-data">
       <!-- Submitted Report -->
       <div class="d-flex flex-row">
@@ -36,8 +36,7 @@ endblock %} {% block content %} {% for classwork in classworks %}
     <div class="card-header text-bg-secondary justify-content-between" data-bs-toggle="collapse"
       data-bs-target="#classwork{{ classwork['reportName']}}" aria-expanded="false"
       aria-controls="classwork{{ classwork['reportName']}}" style="cursor: pointer">
-      <div class="col-6">Report {{classwork['reportName']}}</div>
-      <div class="col-6">Due Date: {{classwork['dueDate']}}</div>
+      <div class="justify-content-between">Report {{classwork['reportName']}} Due Date: {{classwork['dueDate']}</div>
     </div>
     <form class="row g-2" action="/stud/submit/{{classwork['reportID']}}" autocomplete="on" method="POST"
       enctype="multipart/form-data">

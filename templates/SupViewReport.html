@@ -6,10 +6,10 @@
 
 {% for classwork in classworks %}
 <div class="card" style="margin: 10px">
-  <div class="card-header text-bg-secondary">
-    Report {{classwork['reportName']}} {{classwork['dueDate']}}
-  </div>
   {% for report in reports if report['reportID'] == classwork['reportID'] %}
+  <div class="card-header text-bg-secondary bg-success text-white">
+    <div class="justify-content-between">Report {{classwork['reportName']}} Submitted</div>
+  </div>
   <div class="card-body">
     <form class="row g-2" action="/update/report/{{report['submissionID']}}" autocomplete="on" method="POST"
       enctype="multipart/form-data">
@@ -52,6 +52,9 @@
 
   <!-- if havent submit -->
   {% else %}
+  <div class="card-header text-bg-secondary">
+    <div class="justify-content-between">Report {{classwork['reportName']}} Due Date: {{classwork['dueDate']}}</div>
+  </div>
   <fieldset disabled>
     <div class="card-body">
       <div class="d-flex flex-row">
