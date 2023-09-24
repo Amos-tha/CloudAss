@@ -5,12 +5,12 @@
 {% block content %}
 <div class="d-flex flex-row justify-content-center align-items-center">
     <div class="col-8 mb-4">
-        <!-- {% if msg|length %}
+        {% if msg|length %}
         <div class="alert alert-info alert-dismissible fade show">
             <strong>Success!</strong> {{msg}}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
-        {% endif %} -->
+        {% endif %}
         <div class="fs-2 fw-bold text-center mb-2">Student Document</div>
         <form class="row g-3 align-items-center" action="/student/uploadDoc" method="POST" enctype="multipart/form-data">
             <div class="card text-center">
