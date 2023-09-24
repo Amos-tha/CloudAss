@@ -81,12 +81,6 @@ endblock %} {% block content %} {% for classwork in classworks %}
         </form>
         {% endfor %}
       </div>
-      <div class="col-6 mb-3">
-        <label for="inputPdf" class="form-label">Add Work</label>
-        <input class="form-control border-2" type="file" id="inputPdf" name="inputPdf" accept=".pdf"
-          onchange="loadFile(event, 'pdfPreview')" />
-      </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
     </form>
     {% endfor %}
   </div>
