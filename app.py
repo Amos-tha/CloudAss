@@ -461,5 +461,9 @@ def stud_uploadDoc():
     stud_viewDoc_page
     return redirect(url_for("stud_viewDoc_page", msg=msg))
 
+@app.route("/portfolio", methods=['GET','POST'])
+def portfolio_page():
+    return render_template('Portfolio.html')
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
