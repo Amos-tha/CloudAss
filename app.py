@@ -392,7 +392,6 @@ def stud_update():
 
 @app.route("/student/viewDoc", methods=['GET','POST'])
 def stud_viewDoc_page():
-
     msg = request.args.get("msg")
     if msg is None:
         msg = ''
@@ -403,6 +402,7 @@ def stud_viewDoc_page():
 def stud_uploadDoc():
     if request.method == "POST":
 
+        msg = "Documents uploaded."
         studID = session["userid"]
 
         companyAcceptanceLetter = request.files["inputCompanyAcceptanceLetter"]
