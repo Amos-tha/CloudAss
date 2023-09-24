@@ -481,5 +481,10 @@ def stud_uploadDoc():
 def portfolio_page():
     return render_template('Portfolio.html')
 
+@app.route("/logout", methods=["GET", "POST"])
+def logout():
+    session.clear()
+    return redirect(url_for("home"))
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
