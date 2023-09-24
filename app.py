@@ -1,8 +1,8 @@
 
 import datetime
 from io import BytesIO
-from flask import Flask, render_template, request, redirect, send_file, session, url_for
-from pymysql import NULL, connections
+from flask import Flask, render_template, request, redirect, send_file, session, url_for, jsonify, json
+from pymysql import NULL, connections, cursors
 import os
 import boto3
 import pymysql
@@ -39,35 +39,267 @@ def comp_register():
 
 @app.route("/admin/compdetails/<compid>", methods=["GET",'POST'])
 def CompDetails(compid):
-    cursor = db_conn.cursor()
-    cursor.execute("SELECT * FROM company WHERE compID=%s" , (compid))
-    compDetails = cursor.fetchall()
-    cursor.close()
+    if request.method == 'GET':
+        cursor = db_conn.cursor()
+        cursor.execute("SELECT * FROM company WHERE compID=%s" , (compid))
+        compDetails = cursor.fetchall()
+        cursor.close()
 
-    s3 = boto3.client('s3')
-    contents = []
-    for image in s3.list_objects(Bucket=custombucket)['Contents']:
-        file = image['Key']
-        if(file.startswith('comp-id-'+compid)):
-            contents.append(file)    
-    return render_template('CompDetails.html', comp = compDetails, file = contents)
+    # s3 = boto3.client('s3')
+    # contents = []
+    # for image in s3.list_objects(Bucket=custombucket)['Contents']:
+    #     file = image['Key']
+    #     if(file.startswith('comp-id-'+compid)):
+    #         contents.append(file)    
+        return render_template('CompDetails.html', comp = compDetails, file = 'test')
         #return render_template('CompDetails.html', comp = compDetails)
+    elif request.method == 'POST' :
+        updateSql = "UPDATE company SET registerStatus=%s where compID=" + compid
+        cursor = db_conn.cursor()        
+        if request.form.get('reject') == 'reject':
+            cursor.execute(updateSql,('Rejected'))
+            db_conn.commit()            
+            return redirect(url_for("CompRequest"))
+        elif request.form.get('approve') == 'approve':
+            cursor.execute(updateSql,('Active'))
+            db_conn.commit()
+            return redirect(url_for("CompRequest"))               
+        elif request.form.get('activate') == 'activate':
+            cursor.execute(updateSql,('Active'))
+            db_conn.commit()             
+            return redirect(url_for("RegisteredComp"))            
+        elif request.form.get('deactivate') == 'deactivate':
+            cursor.execute(updateSql,('Deactivate'))        
+            db_conn.commit()              
+            return redirect(url_for("RegisteredComp"))
 
-@app.route("/admin/registredcomp", methods=['GET'])
+@app.route("/admin/registredcomp", methods=['GET','POST'])
 def RegisteredComp():
-    cursor = db_conn.cursor()
-    cursor.execute("SELECT compID,CompName,registerStatus FROM company WHERE registerStatus='active'")
-    company = cursor.fetchall()
-    cursor.close()
-    return render_template("RegisteredComp.html", comp = company)
+    return render_template("RegisteredComp.html")
 
-@app.route("/admin/compregistration", methods=['GET'])
+@app.route("/admin/compregistration", methods=['GET','POST'])
 def CompRequest():
+    return render_template("CompRegistration.html")
+
+@app.route("/admin/manageoffers", methods=['GET','POST'])
+def ManageOffers():
+    return render_template("AdminOffers.html")
+
+@app.route("/admin/acceptoffers/<offerid>", methods=['GET','POST'])
+def AcceptOffers(offerid):
     cursor = db_conn.cursor()
-    cursor.execute("SELECT compID,CompName,registerStatus FROM company WHERE registerStatus='pending'")
-    company = cursor.fetchall()
-    cursor.close()
-    return render_template("CompRegistration.html", comp = company)
+    cursor.execute(
+        "UPDATE offer SET offerStatus='Active' WHERE offerID=%s",(offerid)
+    )
+    db_conn.commit()
+    cursor.close()    
+    return redirect(url_for("ManageOffers"))
+
+@app.route("/admin/rejectoffers/<offerid>", methods=['GET','POST'])
+def RejectOffers(offerid):
+    cursor = db_conn.cursor()
+    cursor.execute(
+        "UPDATE offer SET offerStatus='Rejected' WHERE offerID=%s",(offerid)
+    )
+    db_conn.commit()
+    cursor.close()    
+    return redirect(url_for("ManageOffers"))
+
+@app.route("/admin/getpencomp", methods=["POST"])
+def Admin_Get_Pending_Comp():
+    try:
+        db_conn2 = connections.Connection(
+            host=customhost,
+            port=3306,
+            user=customuser,
+            password=custompass,
+            db=customdb,
+            cursorclass=cursors.DictCursor,
+        )
+        cursor = db_conn2.cursor()
+        if request.method == "POST":
+            draw = request.form["draw"]
+            row = int(request.form["start"])
+            rowperpage = int(request.form["length"])
+            searchValue = request.form["search[value]"]
+
+            ## Total number of records without filtering
+            cursor.execute("SELECT count(*) as allcount from company WHERE registerStatus='Pending'")
+            rsallcount = cursor.fetchone()
+            totalRecords = rsallcount["allcount"]
+            searchValue = "%" + searchValue + "%"
+            ## Total number of records with filtering
+            cursor.execute(
+                "SELECT count(*) as allcount from company WHERE registerStatus='Pending' AND compName LIKE %s",(searchValue))
+            rsallcount = cursor.fetchone()
+            totalRecordwithFilter = rsallcount["allcount"]
+
+            ## Fetch records
+            if searchValue == "":
+                cursor.execute("SELECT * FROM company WHERE registerStatus='Pending' order by registerStatus desc limit %s, %s;",(row, rowperpage))
+            else:
+                cursor.execute(
+                    "SELECT * FROM company WHERE registerStatus='Pending' AND compName LIKE %s order by registerStatus desc limit %s, %s;",(searchValue,row,rowperpage))
+            offerlist = cursor.fetchall()
+            data = []
+            for row in offerlist:
+                data.append(
+                    {
+                        "compID": row["compID"],
+                        "compName": row["compName"],
+                        "status": row["registerStatus"],
+                    }
+                )
+            response = {
+                "draw": draw,
+                "iTotalRecords": totalRecords,
+                "iTotalDisplayRecords": totalRecordwithFilter,
+                "aaData": data,
+            }
+            return jsonify(response)
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        db_conn2.close()
+
+@app.route("/admin/getrecomp", methods=["POST"])
+def Admin_Get_Resgistered_Comp():
+    try:
+        db_conn2 = connections.Connection(
+            host=customhost,
+            port=3306,
+            user=customuser,
+            password=custompass,
+            db=customdb,
+            cursorclass=cursors.DictCursor,
+        )
+        cursor = db_conn2.cursor()
+        if request.method == "POST":
+            draw = request.form["draw"]
+            row = int(request.form["start"])
+            rowperpage = int(request.form["length"])
+            searchValue = request.form["search[value]"]
+
+            ## Total number of records without filtering
+            cursor.execute("SELECT count(*) as allcount from company WHERE registerStatus!='Pending'")
+            rsallcount = cursor.fetchone()
+            totalRecords = rsallcount["allcount"]
+            searchValue = "%" + searchValue + "%"
+            ## Total number of records with filtering
+            cursor.execute(
+                "SELECT count(*) as allcount from company WHERE registerStatus!='Pending' AND compName LIKE %s",(searchValue))
+            rsallcount = cursor.fetchone()
+            totalRecordwithFilter = rsallcount["allcount"]
+
+            ## Fetch records
+            if searchValue == "":
+                cursor.execute("SELECT * FROM company WHERE registerStatus!='Pending' order by registerStatus desc limit %s, %s;",(row, rowperpage))
+            else:
+                cursor.execute(
+                    "SELECT * FROM company WHERE registerStatus!='Pending' AND compName LIKE %s order by registerStatus desc limit %s, %s;",(searchValue,row,rowperpage))
+            offerlist = cursor.fetchall()
+            data = []
+            for row in offerlist:
+                data.append(
+                    {
+                        "compID": row["compID"],
+                        "compName": row["compName"],
+                        "status": row["registerStatus"],
+                    }
+                )
+            response = {
+                "draw": draw,
+                "iTotalRecords": totalRecords,
+                "iTotalDisplayRecords": totalRecordwithFilter,
+                "aaData": data,
+            }
+            return jsonify(response)
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        db_conn2.close()
+
+@app.route("/admin/GetAllOffers", methods=["POST"])
+def Admin_Get_All_Offers():
+    try:
+        db_conn2 = connections.Connection(
+            host=customhost,
+            port=3306,
+            user=customuser,
+            password=custompass,
+            db=customdb,
+            cursorclass=cursors.DictCursor,
+        )
+        cursor = db_conn2.cursor()
+        if request.method == "POST":
+            draw = request.form["draw"]
+            row = int(request.form["start"])
+            rowperpage = int(request.form["length"])
+            searchValue = request.form["search[value]"]
+
+            ## Total number of records without filtering
+            cursor.execute(
+                "SELECT count(*) as allcount from offer,company WHERE offerStatus='Pending' AND offer.compID = company.compID")
+            rsallcount = cursor.fetchone()
+            totalRecords = rsallcount["allcount"]
+
+            ## Total number of records with filtering
+            likeString = "%" + searchValue + "%"
+            cursor.execute(
+                "SELECT count(*) as allcount from offer,company WHERE (position LIKE %s OR location LIKE %s OR prerequisite LIKE %s OR language LIKE %s OR allowance LIKE %s) AND offerStatus='Pending' AND offer.compID = company.compID",
+                (likeString, likeString, likeString, likeString, likeString),
+            )
+            rsallcount = cursor.fetchone()
+            totalRecordwithFilter = rsallcount["allcount"]
+
+            ## Fetch records
+            if searchValue == "":
+                cursor.execute(
+                    "SELECT * FROM offer,company WHERE offerStatus='Pending' AND offer.compID = company.compID ORDER BY offerStatus asc, datePosted desc limit %s, %s;",
+                    (row, rowperpage),
+                )
+                offerlist = cursor.fetchall()
+            else:
+                cursor.execute(
+                    "SELECT * FROM offer,company WHERE (position LIKE %s OR location LIKE %s OR prerequisite LIKE %s OR language LIKE %s OR allowance LIKE %s) AND offerStatus='Pending' AND offer.compID = company.compID ORDER BY offerStatus asc, datePosted desc limit %s, %s;",
+                    (
+                        likeString,
+                        likeString,
+                        likeString,
+                        likeString,
+                        likeString,
+                        row,
+                        rowperpage,
+                    ),
+                )
+                offerlist = cursor.fetchall()
+
+            data = []
+            for row in offerlist:
+                print(row["offerID"])
+                data.append(
+                    {
+                        "offerID": row["offerID"],
+                        "companyName": row['compName'],
+                        "position": row["position"],
+                        "allowance": row["allowance"],
+                        "offerStatus": row["offerStatus"],
+                    }
+                )
+            response = {
+                "draw": draw,
+                "iTotalRecords": totalRecords,
+                "iTotalDisplayRecords": totalRecordwithFilter,
+                "aaData": data,
+            }
+            return jsonify(response)
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        db_conn2.close()
 
 @app.route("/company/Register", methods=['GET','POST'])
 def Comp_Register():
@@ -120,6 +352,27 @@ def Comp_Register():
         cursor.close()
 
     return redirect("/")
+
+@app.route("/admin/Login", methods=["GET", "POST"])
+def Admin_Login():
+    msg = ""
+    cursor = db_conn.cursor()
+    if request.method == "POST":
+        email = request.form["inputEmail"]
+        password = request.form["inputPassword"]
+        cursor.execute(
+            "SELECT * FROM committee WHERE committeeEmail=%s AND committePassword=%s",
+            (email, password),
+        )
+        record = cursor.fetchone()
+        if record:
+            session["loggedin"] = True
+            session["userid"] = record[0]
+            session["username"] = record[1]
+            return redirect(url_for("CompRequest"))
+        else:
+            msg = "Incorrect email/password.Try again!"
+    return render_template("AdminLogin.html", msg=msg)
 
 @app.route("/company/login", methods=['GET','POST'])
 def comp_login():
