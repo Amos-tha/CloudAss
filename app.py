@@ -1441,7 +1441,7 @@ def submit(reportid):
     studid = session['userid']
     studName = session['username']
     cursor = db_conn.cursor()
-    handInDate = datetime.now()
+    handInDate = datetime.datetime.now()
     filenames = []
 
     if pdf.filename == "":
