@@ -1437,10 +1437,10 @@ def submit(reportid):
         cursor.execute("SELECT * FROM student WHERE studID = %s", (str(studid)))  
         student = cursor.fetchone()
 
-        filenames.append("report_" + str(student.reportID) + "_" + str(student.studName) + "_" + str(student.studID) + ".pdf")
+        filenames.append("report_" + str(reportid) + "_" + str(student.studName) + "_" + str(student.studID) + ".pdf")
         
         # Uplaod image file in S3 #
-        report_file = "report_" + str(reportid) + "_" + str(students[1]) + "_" + str(students[0]) + ".pdf"
+        report_file = "report_" + str(reportid) + "_" + str(student.studName) + "_" + str(student.studID) + ".pdf"
         s3 = boto3.resource("s3")
 
         print("Data inserted in MySQL RDS... uploading image to S3...")
