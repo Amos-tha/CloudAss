@@ -455,22 +455,6 @@ def Admin_Get_All_Offers():
         cursor.close()
         db_conn2.close()
 
-@app.route("/admin/compdetails/<compid>", methods=["GET", "POST"])
-def CompDetails(compid):
-    cursor = db_conn.cursor()
-    cursor.execute("SELECT * FROM company WHERE compID=%s", (compid))
-    compDetails = cursor.fetchall()
-    cursor.close()
-
-    s3 = boto3.client("s3")
-    contents = []
-    for image in s3.list_objects(Bucket=custombucket)["Contents"]:
-        file = image["Key"]
-        if file.startswith("comp-id-" + compid):
-            contents.append(file)
-    return render_template("CompDetails.html", comp=compDetails, file=contents)
-    # return render_template('CompDetails.html', comp = compDetails)
-
 @app.route("/admin/registredcomp", methods=["GET"])
 def RegisteredComp():
     cursor = db_conn.cursor()
