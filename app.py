@@ -96,6 +96,7 @@ def submit(reportid):
     studName = session['username']
     cursor = db_conn.cursor()
     handInDate = datetime.now()
+    filenames = []
 
     if pdf.filename == "":
         return "Please select a pdf to submit"
@@ -106,7 +107,7 @@ def submit(reportid):
         cursor.execute("SELECT * FROM student WHERE studID = %s", ('2205123'))  
         students = cursor.fetchone()
 
-        for report in reports:
+        for report in students:
             filenames.append("report_" + str(report['reportID']) + "_" + str(report['studName']) + "_" + str(studid) + ".pdf")
 
         files = list_files(filenames)
