@@ -1410,8 +1410,6 @@ def stud_submission():
             filenames.append("report_" + str(report['reportID']) + "_" + str(report['studName']) + "_" + str(report['studID']) + ".pdf")
 
         files = list_files(filenames)
-        print(filenames)
-        print(files)
     
     except Exception as e:
         return str(e)
@@ -1440,6 +1438,8 @@ def submit(reportid):
         students = cursor.fetchone()
 
         for report in students:
+            print(students)
+            print(report)
             filenames.append("report_" + str(report['reportID']) + "_" + str(report['studName']) + "_" + str(report['studID']) + ".pdf")
         
         # Uplaod image file in S3 #
