@@ -469,6 +469,7 @@ def stud_uploadDoc():
                 s3_location = "-" + s3_location
             
             msg = "Documents uploaded."
+            print(msg)
 
         except Exception as e:
             return str(e)
