@@ -3,11 +3,10 @@ endblock %} {% block content %} {% for classwork in classworks %}
 <div class="card" id="card_accordion" style="margin: 10px">
   {% for submitted in submissions if submitted['reportID'] ==
   classwork['reportID'] %}
-  <div class="card-header text-bg-secondary justify-content-between" data-bs-toggle="collapse"
+  <div class="card-header text-bg-secondary bg-success text-white" data-bs-toggle="collapse"
     data-bs-target="#classwork{{ classwork['reportName']}}" aria-expanded="false"
     aria-controls="classwork{{ classwork['reportName']}}" style="cursor: pointer">
-    <div class="col-6">Report {{classwork['reportName']}}</div>
-    <div class="col-6">Submitted</div>
+    <div class="justify-content-between">Report {{classwork['reportName']}} Submitted</div>
   </div>
   <div class="card-body accordion-collapse collapse" id="classwork{{ classwork['reportName']}}">
     <form class="row g-2" action="/stud/unsubmit/{{classwork['reportID']}}" autocomplete="on" method="POST"
