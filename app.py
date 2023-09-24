@@ -1387,11 +1387,6 @@ def stud_uploadDoc():
 def portfolio_page():
     return render_template('Portfolio.html')
 
-@app.route("/logout", methods=["GET", "POST"])
-def logout():
-    session.clear()
-    return redirect(url_for("home"))
-
 def list_files(filenames):
     """
     Function to list files in a given S3 bucket
