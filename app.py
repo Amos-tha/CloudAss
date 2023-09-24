@@ -342,6 +342,8 @@ def stud_view_details():
         cursor = db_conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute("SELECT studID, studName, studIC, studPhone, studGender, studUniEmail, studPersonalEmail, studAddress, studLevel, studProgramme, studTutGrp, CGPA, S.supervisorID, V.supervisorName FROM student S, supervisor V WHERE S.supervisorID = V.supervisorID AND studID = %s", (studID))
         studDetails = cursor.fetchone()
+        cursor.execute("SELECT supervisorName FROM supervisor")
+        supervisors = cursor.fetchall()
 
     except Exception as e:
             return str(e)
@@ -349,7 +351,7 @@ def stud_view_details():
     finally:
         cursor.close()
 
-    return render_template('StudentDetails.html', studDetails=studDetails, msg=msg)
+    return render_template('StudentDetails.html', studDetails=studDetails, msg=msg, supervisors=supervisors)
 
 @app.route("/student/studUpdate", methods=['GET','POST'])
 def stud_update():
