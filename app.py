@@ -1434,15 +1434,13 @@ def submit(reportid):
         return "Please select a pdf to submit"
 
     try:
-        cursor.execute("INSERT INTO submission (handInDate, reportID, studID) VALUES (%s, %s, %s)", (handInDate, reportid, studid))
+        cursor.execute("INSERT INTO submission (handInDate, reportID, studID) VALUES (%s, %s, %s)", (handInDate, reportid, str(studid)))
         db_conn.commit()
-        cursor.execute("SELECT * FROM student WHERE studID = %s", (studid))  
+        cursor.execute("SELECT * FROM student WHERE studID = %s", (str(studid)))  
         students = cursor.fetchone()
 
         for report in students:
-            filenames.append("report_" + str(report['reportID']) + "_" + str(report['studName']) + "_" + str(studid) + ".pdf")
-
-        files = list_files(filenames)
+            filenames.append("report_" + str(report['reportID']) + "_" + str(report['studName']) + "_" + str(report['studID']) + ".pdf")
         
         # Uplaod image file in S3 #
         report_file = "report_" + str(reportid) + "_" + str(students[1]) + "_" + str(students[0]) + ".pdf"
