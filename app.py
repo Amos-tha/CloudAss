@@ -432,6 +432,7 @@ def stud_uploadDoc():
                     s3.Bucket(custombucket).put_object(Key=companyAcceptanceLetter_file, Body=companyAcceptanceLetter)
                 else:
                     return str(e)
+                    print("1")
             else:
                s3.Object(custombucket, companyAcceptanceLetter_file).delete()
                s3.Bucket(custombucket).put_object(Key=companyAcceptanceLetter_file, Body=companyAcceptanceLetter)
@@ -443,6 +444,7 @@ def stud_uploadDoc():
                     s3.Bucket(custombucket).put_object(Key=letterOfIdemnity_file, Body=letterOfIdemnity)
                 else:
                     return str(e)
+                    print("2")
             else:
                s3.Object(custombucket, letterOfIdemnity_file).delete()
                s3.Bucket(custombucket).put_object(Key=letterOfIdemnity_file, Body=letterOfIdemnity)
@@ -454,9 +456,11 @@ def stud_uploadDoc():
                     s3.Bucket(custombucket).put_object(Key=acknowledgeForm_file, Body=acknowledgeForm)
                 else:
                     return str(e)
+                    print("3")
             else:
                s3.Object(custombucket, acknowledgeForm_file).delete()
                s3.Bucket(custombucket).put_object(Key=acknowledgeForm_file, Body=acknowledgeForm)
+
 
             bucket_location = boto3.client("s3").get_bucket_location(
                 Bucket=custombucket
@@ -469,8 +473,7 @@ def stud_uploadDoc():
                 s3_location = "-" + s3_location
             
             msg = "Documents uploaded."
-            print(msg)
-
+        
         except Exception as e:
             return str(e)
 
