@@ -23,7 +23,6 @@
       <th scope="col">Contact</th>
       <th scope="col">Company Name</th>
       <th scope="col">Action</th>
-      <th scope="col">Report</th>
     </tr>
   </thead>
   <tbody class="stud-list">
@@ -32,15 +31,14 @@
       <th scope="row">{{loop.index}}</th>
       <td>{{stud["studName"]}}</td>
       <td>{{'Male' if stud["studGender"] == 'M' else 'Female' }}</td>
-      <td>programme</td>
+      <td>{{stud['studProgramme']}}</td>
       <td>{{stud["studPhone"]}}</td>
-      <td>@mdo</td>
-      <td>@mdo</td>
+      <td>Senyum ABC</td>
       <td>
         <a
           href="/supervisor/view/report/{{stud['studID']}}"
-          class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-          >Details</a
+          class="btn btn-info"
+          >More</a
         >
       </td>
     </tr>
