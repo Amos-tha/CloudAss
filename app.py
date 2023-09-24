@@ -74,8 +74,7 @@ def get_studs():
     try:
         supid = session["userid"]
         cursor = db_conn.cursor(cursors.DictCursor)
-        cursor.execute("SELECT * FROM student WHERE" +
-                        "supervisorID = %s", (supid))
+        cursor.execute("SELECT * FROM student WHERE supervisorID = %s", (supid))
                         
         students = cursor.fetchall()
 
