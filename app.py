@@ -601,5 +601,10 @@ def viewoffers():
 
     return render_template('ViewOffers.html', offers = offers) 
 
+@app.route("/logout", methods=["GET", "POST"])
+def logout():
+    session.clear()
+    return redirect(url_for("home"))
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
