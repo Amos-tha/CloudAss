@@ -11,6 +11,7 @@ from flask import (
     json,
     send_file,
 )
+import pymysql
 from pymysql import NULL, connections, cursors
 import os
 import boto3
