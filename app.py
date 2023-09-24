@@ -1,3 +1,4 @@
+
 import datetime
 from io import BytesIO
 from flask import Flask, render_template, request, redirect, send_file, session, url_for
@@ -6,6 +7,7 @@ import os
 import boto3
 import pymysql
 from config import *
+from io import BytesIO
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "amos-itp"
@@ -21,7 +23,7 @@ db_conn = connections.Connection(
     db=customdb
 )
 output = {}
-table = 'employee'
+table = 'company'
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
@@ -34,6 +36,38 @@ def about():
 @app.route("/company/register", methods=['GET','POST'])
 def comp_register():
     return render_template('RegisterComp.html')
+
+@app.route("/admin/compdetails/<compid>", methods=["GET",'POST'])
+def CompDetails(compid):
+    cursor = db_conn.cursor()
+    cursor.execute("SELECT * FROM company WHERE compID=%s" , (compid))
+    compDetails = cursor.fetchall()
+    cursor.close()
+
+    s3 = boto3.client('s3')
+    contents = []
+    for image in s3.list_objects(Bucket=custombucket)['Contents']:
+        file = image['Key']
+        if(file.startswith('comp-id-'+compid)):
+            contents.append(file)    
+    return render_template('CompDetails.html', comp = compDetails, file = contents)
+        #return render_template('CompDetails.html', comp = compDetails)
+
+@app.route("/admin/registredcomp", methods=['GET'])
+def RegisteredComp():
+    cursor = db_conn.cursor()
+    cursor.execute("SELECT compID,CompName,registerStatus FROM company WHERE registerStatus='active'")
+    company = cursor.fetchall()
+    cursor.close()
+    return render_template("RegisteredComp.html", comp = company)
+
+@app.route("/admin/compregistration", methods=['GET'])
+def CompRequest():
+    cursor = db_conn.cursor()
+    cursor.execute("SELECT compID,CompName,registerStatus FROM company WHERE registerStatus='pending'")
+    company = cursor.fetchall()
+    cursor.close()
+    return render_template("CompRegistration.html", comp = company)
 
 @app.route("/company/Register", methods=['GET','POST'])
 def Comp_Register():
