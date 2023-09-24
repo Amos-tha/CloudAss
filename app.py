@@ -392,9 +392,9 @@ def stud_update():
 
 @app.route("/student/viewDoc", methods=['GET','POST'])
 def stud_viewDoc_page():
-    msg = request.args.get("msg")
-    if msg is None:
-        msg = ''
+    # msg = request.args.get("msg")
+    # if msg is None:
+    #     msg = ''
 
     return render_template('StudUploadDoc.html', msg=msg)
 
@@ -422,8 +422,6 @@ def stud_uploadDoc():
         letterOfIdemnity_file = "stud-id-" + str(studID) + "_LOI.pdf"
         acknowledgeForm_file = "stud-id-" + str(studID) + "_AF.pdf"
         s3 = boto3.resource("s3")
-
-        msg=''
 
         try:
             # check if document exist
@@ -471,13 +469,13 @@ def stud_uploadDoc():
             else:
                 s3_location = "-" + s3_location
             
-            msg = "Documents uploaded."
+            #msg = "Documents uploaded."
         
         except Exception as e:
             return str(e)
 
     stud_viewDoc_page
-    return redirect(url_for("stud_viewDoc_page", msg=msg))
+    return redirect(url_for("stud_viewDoc_page"))
 
 @app.route("/portfolio", methods=['GET','POST'])
 def portfolio_page():
