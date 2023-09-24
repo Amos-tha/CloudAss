@@ -87,7 +87,7 @@ def get_studs():
 
 
 @app.route("/supervisor/view/report/<studid>", methods=["GET"])
-def previewReport(studid):
+def view_report(studid):
     filenames = []
     try:
         supid = session["userid"]
@@ -159,7 +159,7 @@ def update(submissionid):
     finally:
         cursor.close()
 
-    return "Save successfully"
+    return redirect(url_for("view_report"))
 
 
 @app.route("/preview/<filename>", methods=["GET"])

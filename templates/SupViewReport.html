@@ -1,5 +1,5 @@
-{% extends "supervisorLayout.html" %} 
-{% block title %} Progress Report {% endblock%} 
+{% extends "supervisorLayout.html" %}
+{% block title %} Progress Report {% endblock%}
 {% block content %}
 
 <!-- loop the total submission needed -->
@@ -11,31 +11,16 @@
   </div>
   {% for report in reports if report['reportID'] == classwork['reportID'] %}
   <div class="card-body">
-    <form
-      class="row g-2"
-      action="/update/report/{{report['submissionID']}}"
-      autocomplete="on"
-      method="POST"
-      enctype="multipart/form-data"
-    >
+    <form class="row g-2" action="/update/report/{{report['submissionID']}}" autocomplete="on" method="POST"
+      enctype="multipart/form-data">
       <div class="d-flex flex-row">
         <label class="fw-bold">Status: </label>
         <div class="px-2">
-          <input
-            class="form-check-input"
-            type="radio"
-            name="reportStatus"
-            value="Approve"
-          />
+          <input class="form-check-input" type="radio" name="reportStatus" value="Approve" />
           <label class="form-label"> Approve </label>
         </div>
         <div class="px-2">
-          <input
-            class="form-check-input"
-            type="radio"
-            name="reportStatus"
-            value="Reject"
-          />
+          <input class="form-check-input" type="radio" name="reportStatus" value="Reject" />
           <label class="form-label"> Reject </label>
         </div>
         <div class="col d-flex flex-row justify-content-end">
@@ -43,15 +28,9 @@
         </div>
       </div>
       {% for file in files if report['reportID']|string + '_' + report['studName'] in file%}
-      <label class="fw-bold"
-        >Report:
-        <a href="/preview/{{ file }}" target="_blank" class="fw-normal"
-          >{{file}}</a
-        >
-        <a href="/download/{{ file }}" class="fw-normal ms-2"
-          >Downloaod</a
-        ></label
-      >
+      <label class="fw-bold">Report:
+        <a href="/preview/{{ file }}" target="_blank" class="fw-normal">{{file}}</a>
+        <a href="/download/{{ file }}" class="fw-normal ms-2">Downloaod</a></label>
       {% endfor %}
 
       <div class="d-flex flex-row">
@@ -61,8 +40,7 @@
       <label class="fw-bold">Supervisor Remark: </label>
       <div class="form-check">
         <textarea class="form-control" row="5" name="remark">
-{{report['remark'] if report['remark'] != None else ' '}}</textarea
-        >
+{{report['remark'] if report['remark'] != None else ' '}}</textarea>
         <div class="d-flex flex-row justify-content-between">
           <span class="small">[Maximum 500 characters] </span>
           <a href="">Clear</a>
@@ -73,37 +51,39 @@
 
   <!-- if havent submit -->
   {% else %}
-  <div class="card-body">
-    <div class="d-flex flex-row">
-      <label class="fw-bold">Status: </label>
-      <div class="px-2">
-        <input class="form-check-input" type="radio" value="Approve" disabled />
-        <label class="form-label"> Approve </label>
+  <fieldset disabled>
+    <div class="card-body">
+      <div class="d-flex flex-row">
+        <label class="fw-bold">Status: </label>
+        <div class="px-2">
+          <input class="form-check-input" type="radio" value="Approve" disabled />
+          <label class="form-label"> Approve </label>
+        </div>
+        <div class="px-2">
+          <input class="form-check-input" type="radio" value="Reject" disabled />
+          <label class="form-label"> Reject </label>
+        </div>
+        <div class="col d-flex flex-row justify-content-end">
+          <button type="submit" class="btn btn-primary btn-sm" disabled>
+            Save
+          </button>
+        </div>
       </div>
-      <div class="px-2">
-        <input class="form-check-input" type="radio" value="Reject" disabled />
-        <label class="form-label"> Reject </label>
-      </div>
-      <div class="col d-flex flex-row justify-content-end">
-        <button type="submit" class="btn btn-primary btn-sm" disabled>
-          Save
-        </button>
-      </div>
-    </div>
 
-    <label class="fw-bold">Report:</label>
-    <div class="d-flex flex-row">
-      <label class="fw-bold">Submitted Date:</label>
-    </div>
-    <label class="fw-bold">Supervisor Remark: </label>
-    <div class="form-check">
-      <textarea class="form-control" row="5"></textarea>
-      <div class="d-flex flex-row justify-content-between">
-        <span class="small">[Maximum 500 characters] </span>
-        <a href="">Clear</a>
+      <label class="fw-bold">Report:</label>
+      <div class="d-flex flex-row">
+        <label class="fw-bold">Submitted Date:</label>
+      </div>
+      <label class="fw-bold">Supervisor Remark: </label>
+      <div class="form-check">
+        <textarea class="form-control" row="5" disabled></textarea>
+        <div class="d-flex flex-row justify-content-between">
+          <span class="small">[Maximum 500 characters] </span>
+          <a href="">Clear</a>
+        </div>
       </div>
     </div>
-  </div>
+  </fieldset>
   {% endfor %}
 </div>
 {% endfor %} {% endblock %}
