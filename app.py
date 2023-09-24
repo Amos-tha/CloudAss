@@ -397,7 +397,7 @@ def stud_viewDoc_page():
     if msg is None:
         msg = ''
 
-    return render_template('StudUploadDoc.html')
+    return render_template('StudUploadDoc.html', msg=msg)
 
 @app.route("/student/uploadDoc", methods=['GET','POST'])
 def stud_uploadDoc():
