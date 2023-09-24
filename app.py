@@ -151,6 +151,7 @@ def stud_register_page():
         cursor = db_conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute("SELECT supervisorName FROM supervisor")
         supervisors = cursor.fetchall()
+        print(supervisors)
 
     except Exception as e:
             print(e)
