@@ -330,8 +330,8 @@ def Comp_Login():
     return render_template("CompLogin.html", msg=msg)
 
 
-@app.route("/company/Logout", methods=["GET", "POST"])
-def Comp_Logout():
+@app.route("/logout", methods=["GET", "POST"])
+def logout():
     session.clear()
     return redirect(url_for("home"))
 
