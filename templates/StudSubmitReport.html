@@ -9,7 +9,7 @@ endblock %} {% block content %} {% for classwork in classworks %}
     <div class="justify-content-between">Report {{classwork['reportName']}} Submitted</div>
   </div>
   <div class="card-body accordion-collapse collapse" id="classwork{{ classwork['reportName']}}">
-    <form class="row g-2 p-2" action="/stud/unsubmit/{{classwork['reportID']}}" autocomplete="on" method="POST"
+    <form class="row g-2 p-5" action="/stud/unsubmit/{{classwork['reportID']}}" autocomplete="on" method="POST"
       enctype="multipart/form-data">
       <!-- Submitted Report -->
       <div class="d-flex flex-row">
@@ -30,7 +30,7 @@ endblock %} {% block content %} {% for classwork in classworks %}
             {{submitted['remark'] if submitted['remark'] != None else ' '}}</textarea>
         </div>
       </fieldset>
-      <button type="submit" class="btn btn-primary">Unsubmit</button>
+      <button type="submit" class="btn btn-primary btn-sm">Unsubmit</button>
     </form>
     {% else %}
     <div class="card-header text-bg-secondary justify-content-between" data-bs-toggle="collapse"
@@ -58,7 +58,7 @@ endblock %} {% block content %} {% for classwork in classworks %}
         <embed id="pdfPreview" type="application/pdf" width="300" height="300" title="Title of my pdf"
           class="border border-3 mt-2" />
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" class="btn btn-primary btn-sm">Submit</button>
     </form>
     {% endfor %}
   </div>
