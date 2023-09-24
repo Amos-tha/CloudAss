@@ -11,18 +11,18 @@
     <div class="justify-content-between">Report {{classwork['reportName']}} Submitted</div>
   </div>
   <div class="card-body">
-    <form class="row g-2 p-3" action="/update/report/{{report['submissionID']}}" autocomplete="on" method="POST"
+    <form class="row g-2 p-2" action="/update/report/{{report['submissionID']}}" autocomplete="on" method="POST"
       enctype="multipart/form-data">
       <div class="d-flex flex-row">
         <label class="fw-bold">Status: </label>
         <div class="px-2">
           <input class="form-check-input" type="radio" name="reportStatus" value="Approved" {% if
-            report['gender'] =='Approved' %}checked{% endif %}/>
+            report['status'] =='Approved' %}checked{% endif %}/>
           <label class="form-label"> Approve </label>
         </div>
         <div class="px-2">
           <input class="form-check-input" type="radio" name="reportStatus" value="Rejected" {% if
-            report['gender'] =='Rejected' %}checked{% endif %}/>
+            report['status'] =='Rejected' %}checked{% endif %}/>
           <label class="form-label"> Reject </label>
         </div>
         <div class="col d-flex flex-row justify-content-end">
