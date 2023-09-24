@@ -454,6 +454,9 @@ def CompRequest():
     cursor.close()
     return render_template("CompRegistration.html", comp=company)
 
+@app.route("/company/register", methods=["GET", "POST"])
+def comp_register():
+    return render_template("CompRegister.html")
 
 @app.route("/company/Register", methods=["GET", "POST"])
 def Comp_Register():
