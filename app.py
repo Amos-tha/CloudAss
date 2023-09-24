@@ -402,7 +402,6 @@ def stud_viewDoc_page():
 def stud_uploadDoc():
     if request.method == "POST":
 
-        msg = "Documents uploaded."
         studID = session["userid"]
 
         companyAcceptanceLetter = request.files["inputCompanyAcceptanceLetter"]
