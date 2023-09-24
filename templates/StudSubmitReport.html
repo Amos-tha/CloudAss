@@ -1,15 +1,15 @@
 {% extends "studentLayout.html" %} {% block title %} Report Submission {%
 endblock %} {% block content %} {% for classwork in classworks %}
 <div class="card" id="card_accordion" style="margin: 10px">
+  {% for submitted in submissions if submitted['reportID'] ==
+  classwork['reportID'] %}
   <div class="card-header text-bg-secondary justify-content-between" data-bs-toggle="collapse"
     data-bs-target="#classwork{{ classwork['reportName']}}" aria-expanded="false"
     aria-controls="classwork{{ classwork['reportName']}}" style="cursor: pointer">
-    <div>Report {{classwork['reportName']}}</div>
-    <div>{{classwork['dueDate']}}</div>
+    <div class="col-6">Report {{classwork['reportName']}}</div>
+    <div class="col-6">Submitted</div>
   </div>
   <div class="card-body accordion-collapse collapse" id="classwork{{ classwork['reportName']}}">
-    {% for submitted in submissions if submitted['reportID'] ==
-    classwork['reportID'] %}
     <form class="row g-2" action="/stud/unsubmit/{{classwork['reportID']}}" autocomplete="on" method="POST"
       enctype="multipart/form-data">
       <!-- Submitted Report -->
@@ -34,6 +34,12 @@ endblock %} {% block content %} {% for classwork in classworks %}
       <button type="submit" class="btn btn-primary">Unsubmit</button>
     </form>
     {% else %}
+    <div class="card-header text-bg-secondary justify-content-between" data-bs-toggle="collapse"
+      data-bs-target="#classwork{{ classwork['reportName']}}" aria-expanded="false"
+      aria-controls="classwork{{ classwork['reportName']}}" style="cursor: pointer">
+      <div class="col-6">Report {{classwork['reportName']}}</div>
+      <div class="col-6">Due Date: {{classwork['dueDate']}}</div>
+    </div>
     <form class="row g-2" action="/stud/submit/{{classwork['reportID']}}" autocomplete="on" method="POST"
       enctype="multipart/form-data">
       <div class="d-flex flex-row">
