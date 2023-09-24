@@ -431,8 +431,8 @@ def stud_uploadDoc():
                 if e.response['Error']['Code'] == "404":
                     s3.Bucket(custombucket).put_object(Key=companyAcceptanceLetter_file, Body=companyAcceptanceLetter)
                 else:
-                    return str(e)
                     print("1")
+                    return str(e)
             else:
                s3.Object(custombucket, companyAcceptanceLetter_file).delete()
                s3.Bucket(custombucket).put_object(Key=companyAcceptanceLetter_file, Body=companyAcceptanceLetter)
@@ -443,8 +443,8 @@ def stud_uploadDoc():
                 if e.response['Error']['Code'] == "404":
                     s3.Bucket(custombucket).put_object(Key=letterOfIdemnity_file, Body=letterOfIdemnity)
                 else:
-                    return str(e)
                     print("2")
+                    return str(e)
             else:
                s3.Object(custombucket, letterOfIdemnity_file).delete()
                s3.Bucket(custombucket).put_object(Key=letterOfIdemnity_file, Body=letterOfIdemnity)
@@ -455,8 +455,8 @@ def stud_uploadDoc():
                 if e.response['Error']['Code'] == "404":
                     s3.Bucket(custombucket).put_object(Key=acknowledgeForm_file, Body=acknowledgeForm)
                 else:
-                    return str(e)
                     print("3")
+                    return str(e)
             else:
                s3.Object(custombucket, acknowledgeForm_file).delete()
                s3.Bucket(custombucket).put_object(Key=acknowledgeForm_file, Body=acknowledgeForm)
