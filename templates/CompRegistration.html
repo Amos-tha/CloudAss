@@ -65,7 +65,7 @@
 
 		table.on('click', 'button', function (e) {
 			let data = table.row(e.target.closest('tr')).data();
-			window.location.replace("/admin/compdetails/" + data.compID);
+			window.location.href("/admin/compdetails/" + data.compID);
 		});
 	});
 </script>
