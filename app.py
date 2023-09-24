@@ -146,7 +146,20 @@ def AddEmp():
 
 @app.route("/student/studRegisterPage", methods=['GET','POST'])
 def stud_register_page():
-    return render_template('RegisterStudent.html')
+
+    try:
+        cursor = db_conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("SELECT supervisorName FROM supervisor")
+        supervisors = cursor.fetchall()
+
+    except Exception as e:
+            print(e)
+            return str(e)
+
+    finally:
+        cursor.close()
+
+    return render_template('RegisterStudent.html', supervisors=supervisors)
 
 @app.route("/student/studRegister", methods=['GET','POST'])
 def stud_register():
