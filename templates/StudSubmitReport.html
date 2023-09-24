@@ -33,7 +33,7 @@ endblock %} {% block content %} {% for classwork in classworks %}
       <button type="submit" class="btn btn-primary btn-sm">Unsubmit</button>
     </form>
     {% else %}
-    <div class="card-header text-bg-secondary justify-content-between" data-bs-toggle="collapse"
+    <div class="card-header text-bg-secondary" data-bs-toggle="collapse"
       data-bs-target="#classwork{{ classwork['reportName']}}" aria-expanded="false"
       aria-controls="classwork{{ classwork['reportName']}}" style="cursor: pointer">
       <div class="justify-content-between">Report {{classwork['reportName']}} Due Date: {{classwork['dueDate']}}</div>
