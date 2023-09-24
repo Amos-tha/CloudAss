@@ -20,7 +20,7 @@ endblock %} {% block content %} {% for classwork in classworks %}
       classwork['studName'] in file %}
       <label class="fw-bold">Report:
         <a href="/preview/{{ file }}" target="_blank" class="fw-normal">{{file}}</a>
-        <a href="/download/{{ file }}" class="fw-normal ms-2">Downloaod</a></label>
+        <a href="/download/{{ file }}" class="fw-normal ms-2"><img class="w-25" src="/static/media/download.jpg"></a></label>
       {% endfor %}
       <fieldset disabled>
         <label class="fw-bold">Supervisor Remark: </label>
