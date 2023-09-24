@@ -36,7 +36,7 @@ endblock %} {% block content %} {% for classwork in classworks %}
     <div class="card-header text-bg-secondary justify-content-between" data-bs-toggle="collapse"
       data-bs-target="#classwork{{ classwork['reportName']}}" aria-expanded="false"
       aria-controls="classwork{{ classwork['reportName']}}" style="cursor: pointer">
-      <div class="justify-content-between">Report {{classwork['reportName']}} Due Date: {{classwork['dueDate']}</div>
+      <div class="justify-content-between">Report {{classwork['reportName']}} Due Date: {{classwork['dueDate']}}</div>
     </div>
     <form class="row g-2" action="/stud/submit/{{classwork['reportID']}}" autocomplete="on" method="POST"
       enctype="multipart/form-data">
