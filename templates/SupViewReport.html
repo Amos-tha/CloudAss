@@ -8,7 +8,10 @@
 <div class="card" style="margin: 10px">
   {% for report in reports if report['reportID'] == classwork['reportID'] %}
   <div class="card-header text-bg-secondary bg-success text-white">
-    <div class="justify-content-between">Report {{classwork['reportName']}} Submitted</div>
+    <div class="d-flex flex-row justify-content-between">
+      <label>Report {{classwork['reportName']}}</label>
+      <p class="text-black"><strong>Submitted</strong></p>
+    </div>
   </div>
   <div class="card-body">
     <form class="row g-2 p-2" action="/update/report/{{report['submissionID']}}" autocomplete="on" method="POST"
@@ -36,7 +39,7 @@
             style="width:1.5%"></a></label>
       {% endfor %}
 
-      <div class="d-flex flex-row">
+      <div class="d-flex flex-row justify-content-between">
         <label class="fw-bold">Submitted Date:</label>
         <p class="ms-2">{{report['handInDate'].strftime('%Y-%m-%d')}}</p>
       </div>
@@ -46,7 +49,6 @@
 {{report['remark'] if report['remark'] != None else ' '}}</textarea>
         <div class="d-flex flex-row justify-content-between">
           <span class="small">[Maximum 500 characters] </span>
-          <a href="">Clear</a>
         </div>
       </div>
     </form>
