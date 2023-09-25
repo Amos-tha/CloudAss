@@ -190,14 +190,13 @@ def CompDetails(compid):
         cursor.execute("SELECT * FROM company WHERE compID=%s" , (compid))
         compDetails = cursor.fetchall()
         cursor.close()
-    # s3 = boto3.client('s3')
-    # contents = []
-    # for image in s3.list_objects(Bucket=custombucket)['Contents']:
-    #     file = image['Key']
-    #     if(file.startswith('comp-id-'+compid)):
-    #         contents.append(file)    
+        s3 = boto3.client('s3')
+        contents = []
+        for image in s3.list_objects(Bucket=custombucket)['Contents']:
+            file = image['Key']
+            if(file.startswith('comp-id-'+compid)):
+                contents.append(file)    
         return render_template('CompDetails.html', comp = compDetails, file = 'test')
-        #return render_template('CompDetails.html', comp = compDetails)
     elif request.method == 'POST' :
         updateSql = "UPDATE company SET registerStatus=%s where compID=" + compid
         cursor = db_conn.cursor()        
