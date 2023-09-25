@@ -1391,6 +1391,7 @@ def qs_page():
 def je_page():
     return render_template('LJE.html')
 
+@app.route("/portfolio/kw")
 def kw_page():
     return render_template('HKW.html')
 
