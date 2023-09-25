@@ -76,8 +76,11 @@ def get_studs():
         supid = session["userid"]
         cursor = db_conn.cursor(cursors.DictCursor)
         cursor.execute("SELECT * FROM student WHERE supervisorID = %s", (supid))
-                        
         students = cursor.fetchall()
+        cursor.execute("SELECT DISTINCT * FROM application a " + 
+                        "LEFT JOIN offer o ON a.offerID = o.offerID " +
+                        "LEFT JOIN company c ON o.compID = c.compID")
+        offers = cursor.fetchall()
 
     except Exception as e:
         return str(e)
@@ -85,7 +88,7 @@ def get_studs():
     finally:
         cursor.close()
 
-    return render_template("SupMyITP.html", students=students)
+    return render_template("SupMyITP.html", students=students, offers = offers)
 
 
 @app.route("/supervisor/view/report/<studid>", methods=["GET"])

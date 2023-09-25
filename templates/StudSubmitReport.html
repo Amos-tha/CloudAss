@@ -1,87 +1,88 @@
 {% extends "studentLayout.html" %} {% block title %} Report Submission {%
-endblock %} {% block content %} {% for classwork in classworks %}
-<div class="card" id="card_accordion" style="margin: 10px">
-  {% for submitted in submissions if submitted['reportID'] ==
-  classwork['reportID'] %}
-  <div class="card-header text-bg-secondary bg-success text-white" data-bs-toggle="collapse"
-    data-bs-target="#classwork{{ classwork['reportName']}}" aria-expanded="false"
-    aria-controls="classwork{{ classwork['reportName']}}" style="cursor: pointer">
-    <div class="d-flex flex-row justify-content-between">
-      <label>Report {{classwork['reportName']}}</label>
-      <p class="text-black"><strong>Submitted</strong></p>
-    </div>
-  </div>
-  <div class="card-body accordion-collapse collapse" id="classwork{{ classwork['reportName']}}">
-    <form class="row g-2 p-2" action="/stud/unsubmit/{{classwork['reportID']}}" autocomplete="on" method="POST"
-      enctype="multipart/form-data">
-      <!-- Submitted Report -->
+  endblock %} {% block content %} 
+  {% for classwork in classworks %}
+  <div class="card" id="card_accordion" style="margin: 10px">
+    {% for submitted in submissions if submitted['reportID'] ==
+    classwork['reportID'] %}
+    <div class="card-header text-bg-secondary bg-success text-white" data-bs-toggle="collapse"
+      data-bs-target="#classwork{{ classwork['reportName']}}" aria-expanded="false"
+      aria-controls="classwork{{ classwork['reportName']}}" style="cursor: pointer">
       <div class="d-flex flex-row justify-content-between">
-        <label class="fw-bold">Submitted Date: {{submitted['handInDate']}}</label>
-        <p class="ms-2">Status: <strong>{{submitted['status'] if submitted['status'] != None else "Pending"}}</strong>
-        </p>
+        <label>Report {{classwork['reportName']}}</label>
+        <p class="text-black"><strong>Submitted</strong></p>
       </div>
-      {% for file in files if submitted['reportID']|string + '_' +
-      classwork['studName'] in file %}
-      <label class="fw-bold">Report:
-        <a href="/preview/{{ file }}" target="_blank"
-          class="fw-normal link-offset-2 link-underline link-underline-opacity-0">{{file}}</a>
-        <a href="/download/{{ file }}" class="fw-normal ms-2"><img src="/static/media/download.jpg"
-            style="width:1.5%"></a></label>
+    </div>
+    <div class="card-body accordion-collapse collapse" id="classwork{{ classwork['reportName']}}">
+      <form class="row g-2 p-2" action="/stud/unsubmit/{{classwork['reportID']}}" autocomplete="on" method="POST"
+        enctype="multipart/form-data">
+        <!-- Submitted Report -->
+        <div class="d-flex flex-row justify-content-between">
+          <label class="fw-bold">Submitted Date: {{submitted['handInDate']}}</label>
+          <p class="ms-2">Status: <strong>{{submitted['status'] if submitted['status'] != None else "Pending"}}</strong>
+          </p>
+        </div>
+        {% for file in files if submitted['reportID']|string + '_' +
+        classwork['studName'] in file %}
+        <label class="fw-bold">Report:
+          <a href="/preview/{{ file }}" target="_blank"
+            class="fw-normal link-offset-2 link-underline link-underline-opacity-0">{{file}}</a>
+          <a href="/download/{{ file }}" class="fw-normal ms-2"><img src="/static/media/download.jpg"
+              style="width:1.5%"></a></label>
+        {% endfor %}
+        <fieldset disabled>
+          <label class="fw-bold">Remark from Supervisor: </label>
+          <div class="form-check">
+            <textarea class="form-control" row="5" name="remark" disabled>
+              {{submitted['remark'] if submitted['remark'] != None else ' '}}</textarea>
+          </div>
+        </fieldset>
+        <button type="submit" class="btn btn-primary btn-sm">Unsubmit</button>
+      </form>
+    </div>
+    {% else %}
+    <div class="card-header text-bg-secondary" data-bs-toggle="collapse"
+      data-bs-target="#classwork{{ classwork['reportName']}}" aria-expanded="false"
+      aria-controls="classwork{{ classwork['reportName']}}" style="cursor: pointer">
+  
+      <div class="d-flex flex-row justify-content-between">
+        <label>Report {{classwork['reportName']}}</label>
+        <p>Due Date: {{classwork['dueDate']}}</p>
+      </div>
+    </div>
+    <div class="card-body accordion-collapse collapse" id="classwork{{ classwork['reportName']}}">
+      <form class="row g-2 p-2" action="/stud/submit/{{classwork['reportID']}}" autocomplete="on" method="POST"
+        enctype="multipart/form-data">
+        <div class="d-flex flex-row justify-content-between">
+          <label class="fw-bold">Submitted Date:</label>
+        </div>
+        <fieldset disabled>
+          <label class="fw-bold">Remark from Supervisor: </label>
+          <div class="form-check">
+            <textarea class="form-control" row="5" name="remark" disabled></textarea>
+          </div>
+        </fieldset>
+  
+        <div class="col-6 mb-3">
+          <label for="inputPdf" class="form-label fw-bold">Add Work:</label>
+          <input class="form-control border-2" type="file" id="inputPdf" name="inputPdf" accept=".pdf"
+            onchange="loadFile(event, '{{classwork['reportName']}}')" />
+            <iframe id="pdfPreview{{classwork['reportName']}}" src="" width="300" height="300" frameborder="0"
+            scrolling="no" title="Title of my pdf" class="border border-3 mt-2"></iframe>
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+      </form>
       {% endfor %}
-      <fieldset disabled>
-        <label class="fw-bold">Remark from Supervisor: </label>
-        <div class="form-check">
-          <textarea class="form-control" row="5" name="remark" disabled>
-            {{submitted['remark'] if submitted['remark'] != None else ' '}}</textarea>
-        </div>
-      </fieldset>
-      <button type="submit" class="btn btn-primary btn-sm">Unsubmit</button>
-    </form>
-  </div>
-  {% else %}
-  <div class="card-header text-bg-secondary" data-bs-toggle="collapse"
-    data-bs-target="#classwork{{ classwork['reportName']}}" aria-expanded="false"
-    aria-controls="classwork{{ classwork['reportName']}}" style="cursor: pointer">
-
-    <div class="d-flex flex-row justify-content-between">
-      <label>Report {{classwork['reportName']}}</label>
-      <p>Due Date: {{classwork['dueDate']}}</p>
+      </form>
     </div>
   </div>
-  <div class="card-body accordion-collapse collapse" id="classwork{{ classwork['reportName']}}">
-    <form class="row g-2 p-2" action="/stud/submit/{{classwork['reportID']}}" autocomplete="on" method="POST"
-      enctype="multipart/form-data">
-      <div class="d-flex flex-row justify-content-between">
-        <label class="fw-bold">Submitted Date:</label>
-      </div>
-      <fieldset disabled>
-        <label class="fw-bold">Remark from Supervisor: </label>
-        <div class="form-check">
-          <textarea class="form-control" row="5" name="remark" disabled></textarea>
-        </div>
-      </fieldset>
-
-      <div class="col-6 mb-3">
-        <label for="inputPdf" class="form-label fw-bold">Add Work:</label>
-        <input class="form-control border-2" type="file" id="inputPdf" name="inputPdf" accept=".pdf"
-          onchange="loadFile(event, '{{classwork['reportName']}}')" />
-          <iframe id="pdfPreview{{classwork['reportName']}}" src="" width="300" height="300" frameborder="0"
-          scrolling="no" title="Title of my pdf" class="border border-3 mt-2"></iframe>
-      </div>
-      <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-    </form>
-    {% endfor %}
-    </form>
-  </div>
-</div>
-<script>
-  var loadFile = function (event, reportName) {
-    var iframeid = 'pdfPreview' + reportName; // Construct the embed element's id
-    var output = document.getElementById(iframeid);
-    output.src = URL.createObjectURL(event.target.files[0]) + "#page=1";
-    output.onload = function () {
-      URL.revokeObjectURL(output.src); // free memory
+  <script>
+    var loadFile = function (event, reportName) {
+      var iframeid = 'pdfPreview' + reportName; // Construct the embed element's id
+      var output = document.getElementById(iframeid);
+      output.src = URL.createObjectURL(event.target.files[0]) + "#page=1";
+      output.onload = function () {
+        URL.revokeObjectURL(output.src); // free memory
+      };
     };
-  };
-</script>
-{% endfor %} {% endblock %}
+  </script>
+  {% endfor %} {% endblock %}
