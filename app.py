@@ -10,6 +10,7 @@ from flask import (
     jsonify,
     json,
     send_file,
+    flash,
 )
 import pymysql
 from pymysql import NULL, connections, cursors
@@ -179,9 +180,6 @@ def download(filename):
         output = f"/media/{filename}"
         s3.Bucket(bucket).download_file(Key=filename, Filename=output)
         return send_file(output, as_attachment=True)
-
-
-@app.route("/company/register", methods=["GET", "POST"])
 
 @app.route("/admin/compdetails/<compid>", methods=["GET",'POST'])
 def CompDetails(compid):
@@ -559,7 +557,7 @@ def comp_login():
 @app.route("/company/Login", methods=["GET", "POST"])
 def Comp_Login():
     msg = ""
-    cursor = db_conn.cursor()
+    cursor = db_conn.cursor(cursors.DictCursor)
     if request.method == "POST":
         email = request.form["inputEmail"]
         password = request.form["inputPassword"]
@@ -569,10 +567,18 @@ def Comp_Login():
         )
         record = cursor.fetchone()
         if record:
-            session["loggedin"] = True
-            session["userid"] = record[0]
-            session["username"] = record[1]
-            return redirect(url_for("comp_applications"))
+            if record["registerStatus"] == "Active":
+                session["loggedin"] = True
+                session["userid"] = record["compID"]
+                session["username"] = record["compName"]
+                flash("Login Successful.", category="Active")
+                return redirect(url_for("comp_applications"))
+            elif record["registerStatus"] == "Rejected":
+                flash("Your Company Registration has been rejected.", category="Rejected")
+                return redirect(url_for("comp_login"))
+            elif record["registerStatus"] == "Pending":
+                flash("Your Company Registration has not been accepted yet.", category="Pending")
+                return redirect(url_for("comp_login"))
         else:
             msg = "Incorrect email/password.Try again!"
     return render_template("CompLogin.html", msg=msg)
