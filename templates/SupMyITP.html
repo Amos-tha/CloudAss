@@ -29,11 +29,8 @@
       {% set accepted_offers = "" %}
       {% for offer in offers if offer["studID"] == stud["studID"] and offer["appStatus"] == 'Accepted' %}
       {% set accepted_offers = offer["compName"] %}
-      {% set haiya = ""%}
       {% endfor %}
-      <td>{{ accepted_offers }}</td>
       {% if accepted_offers%}
-      {% set test = "" %}
       <td>{{ accepted_offers }}</td>
       {% else %}
       {% set test = "" %}
