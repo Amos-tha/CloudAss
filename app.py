@@ -109,7 +109,7 @@ def view_report():
         for report in reports:
             filenames.append("report_" + str(report['reportID']) + "_" + str(report['studName']) + "_" + str(studid) + ".pdf")
 
-        # files = list_files(filenames)
+        files = list_files(filenames)
         
 
     except Exception as e:
@@ -119,7 +119,7 @@ def view_report():
         cursor.close()
 
     return render_template(
-        "SupViewReport.html", classworks=classworks, reports=reports, files="files"
+        "SupViewReport.html", classworks=classworks, reports=reports, files=files
     )
 
 
