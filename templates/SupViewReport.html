@@ -14,7 +14,7 @@
     </div>
   </div>
   <div class="card-body">
-    <form class="row g-2 p-2" action="/update/report/{{report['submissionID']}}" autocomplete="on" method="POST"
+    <form class="row g-2 p-2" action="{{url_for('update', submissionid=report['submissionID'], studid=report['studID'])}}" autocomplete="on" method="POST"
       enctype="multipart/form-data">
       <div class="d-flex flex-row">
         <label class="fw-bold">Status: </label>
@@ -59,7 +59,7 @@
   <div class="card-header text-bg-secondary">
     <div class="d-flex flex-row justify-content-between">
       <label>Report {{classwork['reportName']}}</label>
-      <p class="text-black">Due Date: {{classwork['dueDate']}}</p>
+      <p class="text-white">Due Date: {{classwork['dueDate']}}</p>
     </div>
   </div>
   <fieldset disabled>

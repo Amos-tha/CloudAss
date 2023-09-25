@@ -109,7 +109,7 @@ def view_report():
         for report in reports:
             filenames.append("report_" + str(report['reportID']) + "_" + str(report['studName']) + "_" + str(studid) + ".pdf")
 
-        files = list_files(filenames)
+        # files = list_files(filenames)
         
 
     except Exception as e:
@@ -119,7 +119,7 @@ def view_report():
         cursor.close()
 
     return render_template(
-        "SupViewReport.html", classworks=classworks, reports=reports, files=files
+        "SupViewReport.html", classworks=classworks, reports=reports, files="files"
     )
 
 
@@ -146,8 +146,10 @@ def sup_login():
             return render_template("SupLogin.html", msg=msg)
 
 
-@app.route("/update/report/<submissionid>", methods=["GET", "POST"])
-def update(submissionid):
+@app.route("/update/report", methods=["GET", "POST"])
+def update():
+    studid = request.args.get("studid")
+    submissionid = request.args.get("submissionid")
     status = request.form["reportStatus"]
     remark = request.form["remark"]
     cursor = db_conn.cursor()
@@ -165,7 +167,7 @@ def update(submissionid):
     finally:
         cursor.close()
 
-    return redirect(url_for("view_report"))
+    return redirect(url_for("view_report", studid=studid))
 
 
 @app.route("/preview/<filename>", methods=["GET"])
@@ -1428,7 +1430,7 @@ def stud_submission():
             filenames.append("report_" + str(report['reportID']) + "_" + str(report['studName']) + "_" + str(report['studID']) + ".pdf")
 
         files = list_files(filenames)
-        print(files)
+        # print(files)
     
     except Exception as e:
         return str(e)
