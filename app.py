@@ -959,7 +959,7 @@ def Comp_Add_Offer():
     language = request.form["inputLanguage"]
     location = request.form["inputLocation"]
     description = request.form["inputDescription"]
-    datePosted = datetime.now()
+    datePosted = datetime.datetime.now()
     offerStatus = "Pending"
     compID = session["userid"]
 
