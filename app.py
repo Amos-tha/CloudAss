@@ -195,7 +195,8 @@ def CompDetails(compid):
         for image in s3.list_objects(Bucket=custombucket)['Contents']:
             file = image['Key']
             if(file.startswith('comp-id-'+compid)):
-                contents.append(file)    
+                contents.append(file)
+        print("qishun" + file)
         return render_template('CompDetails.html', comp = compDetails, file = file)
     elif request.method == 'POST' :
         updateSql = "UPDATE company SET registerStatus=%s where compID=" + compid
