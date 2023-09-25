@@ -26,15 +26,12 @@
       <td>{{'Male' if stud["studGender"] == 'M' else 'Female' }}</td>
       <td>{{stud['studProgramme']}}</td>
       <td>{{stud["studPhone"]}}</td>
-      {% set accepted_offers = "" %}
+      {% set ns = namespace(found=false) %}
       {% for offer in offers if offer["studID"] == stud["studID"] and offer["appStatus"] == 'Accepted' %}
-      {% set accepted_offers = offer["compName"] %}
+      <td>{{ offer['compName'] }}</td>
+      {% set ns.found = true %}
       {% endfor %}
-      {% if accepted_offers%}
-      <td>{{ accepted_offers }}</td>
-      {% else %}
-      {% set test = "" %}
-      {{ accepted_offers }}
+      {% if ns.found == false %}
       <td>No company</td>
       {% endif %}
       <td>
