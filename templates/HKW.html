@@ -1,0 +1,164 @@
+{%extends "adminLayout.html"%}
+{% block title %}Portfolio Details{% endblock %}
+{% block head %}
+{{super()}}
+<link href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css' rel='stylesheet'
+    type='text/css'>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+{% endblock %}
+{% block content %}
+<div class="container p-5">
+    <!-- ======= About Section ======= -->
+    <section id="about" class="about-mf sect-pt4 route">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="box-shadow-full">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-sm-6 col-md-5">
+                                        <div class="about-img">
+                                            <img src="/static/media/KW.jpg" class="card-img-top" alt="img"
+                                                style="width: 200px; height: 250px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-7">
+                                        <div class="about-info">
+                                            <p><span class="title-s">Name: </span> <span>Ho Kin Weng</span></p>
+                                            <p><span class="title-s">Profile: </span> <span>Web Developer</span></p>
+                                            <p><span class="title-s">Email: </span>
+                                                <span>ho.kin.weng@example.com</span>
+                                            </p>
+                                            <p><span class="title-s">Phone: </span> <span>(123) 456-7890</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="skill-mf">
+                                    <p class="title-s">Skill</p>
+                                    <!-- Replace with Ho Kin Weng's skills and percentages -->
+                                    <span>HTML</span> <span class="pull-right">85%</span>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" style="width: 85%;"
+                                            aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <span>CSS3</span> <span class="pull-right">75%</span>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" style="width: 75%"
+                                            aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <!-- Add more skills and percentages as needed -->
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="about-me pt-4 pt-md-0">
+                                    <div class="title-box-2">
+                                        <h5 class="title-left">
+                                            About me
+                                        </h5>
+                                    </div>
+                                    <p class="lead">
+                                        Hello, I'm Ho Kin Weng, a creative web developer with a passion for crafting
+                                        unique online experiences.
+                                        My journey in web development began with a fascination for turning lines of code
+                                        into captivating websites.
+                                        Today, I bring that passion to every project I work on.
+                                    </p>
+                                    <p class="lead">
+                                        With a strong foundation in HTML, CSS, JavaScript, and PHP, I specialize in
+                                        developing responsive and
+                                        user-friendly websites. I believe that the web is a canvas where art and
+                                        technology converge, and I strive
+                                        to create digital masterpieces that not only look stunning but also function
+                                        seamlessly.
+                                    </p>
+                                    <p class="lead">
+                                        When I'm not coding, you'll find me exploring the world of design, experimenting
+                                        with new development
+                                        frameworks, or capturing the beauty of life through my camera lens. I thrive on
+                                        creativity and am always
+                                        ready to take on new challenges.
+                                    </p>
+                                    <!-- Add Ho Kin Weng's bio and additional information here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section><!-- End About Section -->
+
+    <!-- ======= Services Section ======= -->
+    <section id="services" class="services-mf pt-5 route">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="title-box text-center">
+                        <h3 class="title-a">
+                            Services
+                        </h3>
+                        <p class="subtitle-a">
+                            Here's what I can offer:
+                        </p>
+                        <div class="line-mf"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="service-box">
+                        <div class="service-ico">
+                            <span class="ico-circle"><i class="bi bi-globe"></i></span>
+                        </div>
+                        <div class="service-content">
+                            <h2 class="s-title">Web Hosting</h2>
+                            <p class="s-description text-center">
+                                I provide reliable web hosting solutions to ensure your website is always online. From
+                                shared hosting to dedicated servers, your data is safe with us.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="service-box">
+                        <div class="service-ico">
+                            <span class="ico-circle"><i class="bi bi-shield"></i></span>
+                        </div>
+                        <div class="service-content">
+                            <h2 class="s-title">Security Services</h2>
+                            <p class="s-description text-center">
+                                Your website's security is my priority. I offer security audits, malware removal, and
+                                firewall setup to protect your online presence.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="service-box">
+                        <div class="service-ico">
+                            <span class="ico-circle"><i class="bi bi-headset"></i></span>
+                        </div>
+                        <div class="service-content">
+                            <h2 class="s-title">Customer Support</h2>
+                            <p class="s-description text-center">
+                                Need assistance? I provide 24/7 customer support to address your website-related queries
+                                and concerns. Your satisfaction is my priority.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Add more services as needed -->
+            </div>
+        </div>
+    </section>    
+</div>
+
+<!-- Vendor JS Files -->
+<script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+<script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+<script src="assets/vendor/typed.js/typed.umd.js"></script>
+<script src="assets/vendor/php-email-form/validate.js"></script>
+{%endblock%}

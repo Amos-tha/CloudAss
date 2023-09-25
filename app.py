@@ -1383,19 +1383,21 @@ def stud_uploadDoc():
 def portfolio_page():
     return render_template('Portfolio.html')
 
-def list_files(filenames):
-    """
-    Function to list files in a given S3 bucket
-    """
-    s3 = boto3.client('s3')
-    contents = []
-    for image in s3.list_objects(Bucket=custombucket)['Contents']:
-        for filename in filenames:
-            s3_name = image['Key']
-            if(filename == s3_name):
-                contents.append(s3_name)
+@app.route("/portfolio/qs")
+def qs_page():
+    return render_template('WQS.html')
 
-    return contents
+@app.route("/portfolio/je")
+def je_page():
+    return render_template('LJE.html')
+
+def kw_page():
+    return render_template('HKW.html')
+
+@app.route("/portfolio/amos")
+def amos_page():
+    return render_template('AMOS.html')
+
 
 @app.route("/stud/submission")
 def stud_submission():
