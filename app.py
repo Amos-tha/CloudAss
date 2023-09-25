@@ -196,8 +196,7 @@ def CompDetails(compid):
             file = image['Key']
             if(file.startswith('comp-id-'+compid)):
                 contents.append(file)
-        print("qishun" + file)
-        return render_template('CompDetails.html', comp = compDetails, file = file)
+        return render_template('CompDetails.html', comp = compDetails, file = contents)
     elif request.method == 'POST' :
         updateSql = "UPDATE company SET registerStatus=%s where compID=" + compid
         cursor = db_conn.cursor()        
