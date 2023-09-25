@@ -26,6 +26,7 @@
       <td>{{'Male' if stud["studGender"] == 'M' else 'Female' }}</td>
       <td>{{stud['studProgramme']}}</td>
       <td>{{stud["studPhone"]}}</td>
+      {% set numcol =  %}
       {% for offer in offers if offer["studID"] == stud["studID"]%}
       {% if offer["appStatus"] == 'Accepted'%}
       <td>{{offer["compName"]}}</td>
@@ -36,7 +37,7 @@
       <td>No company</td>
       {% endif %}
       <td>
-        <a href="/supervisor/view/report/{{stud['studID']}}" class="btn btn-info">More</a>
+        <a href="{{url_for('view_report', studid=stud['studID'])}}" class="btn btn-info">More</a>
       </td>
     </tr>
     {% else %}

@@ -91,10 +91,11 @@ def get_studs():
     return render_template("SupMyITP.html", students=students, offers = offers)
 
 
-@app.route("/supervisor/view/report/<studid>", methods=["GET"])
-def view_report(studid):
+@app.route("/supervisor/view/report", methods=["GET"])
+def view_report():
     filenames = []
     try:
+        studid = request.args.get('studid')
         supid = session["userid"]
         cursor = db_conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute(
