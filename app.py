@@ -1416,8 +1416,8 @@ def stud_submission():
         for report in classworks:
             filenames.append("report_" + str(report['reportID']) + "_" + str(report['studName']) + "_" + str(report['studID']) + ".pdf")
 
-        files = list_files(filenames)
-        print(files)
+        # files = list_files(filenames)
+        # print(files)
     
     except Exception as e:
         return str(e)
@@ -1425,7 +1425,7 @@ def stud_submission():
     finally:
         cursor.close()
 
-    return render_template("StudSubmitReport.html", classworks=classworks, submissions=submissions, files=files)
+    return render_template("StudSubmitReport.html", classworks=classworks, submissions=submissions, files="files")
 
 @app.route("/stud/submit/<reportid>", methods=["GET", "POST"])
 def submit(reportid):
